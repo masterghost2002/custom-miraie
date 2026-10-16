@@ -1,6 +1,6 @@
 # CHILL-001 — Tasks
 
-- [ ] Task 1: Gate helpers — walk `src/`, read files, git staged/changed lists, report format, exit codes
+- [x] Task 1: Gate helpers — walk `src/`, read files, git staged/changed lists, report format, exit codes
       Check: `node --test scripts/lib/gate.test.mjs`
       Files: scripts/lib/gate.mjs, scripts/lib/gate.test.mjs
 - [ ] Task 2: check:style-policy (hex/rgb/hsl outside src/theme; arbitrary `[..px]` classes)
