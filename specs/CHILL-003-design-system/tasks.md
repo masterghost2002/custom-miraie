@@ -24,7 +24,7 @@
 - [x] Task 8: `TabBar`
       Check: AC-9
       Files: src/ui/tab-bar.tsx
-- [ ] Task 9: `_gallery` route
+- [x] Task 9: `_gallery` route
       Check: AC-11 — screenshots in the PR next to Style.dc.html
       Files: src/app/_gallery.tsx
 - [ ] Task 10: STOP and run /review
