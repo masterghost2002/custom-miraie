@@ -9,7 +9,7 @@
 - [x] Task 3: check:design-source (first-line `// Design:` note in src/features/** and src/ui/**)
       Check: AC-3 fixtures
       Files: scripts/check-design-source.mjs (+ .test.mjs)
-- [ ] Task 4: check:feature (every non-test file in src/ui and src/features/**/{screen,components/*} has a test)
+- [x] Task 4: check:feature (every non-test file in src/ui and src/features/**/{screen,components/*} has a test)
       Check: AC-2 fixtures
       Files: scripts/check-feature.mjs (+ .test.mjs)
 - [ ] Task 5: check:testid and check:ui-mock-policy

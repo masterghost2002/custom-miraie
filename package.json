@@ -70,7 +70,8 @@
     "prepare": "husky",
     "gates:test": "node --test \"scripts/**/*.test.mjs\"",
     "check:style-policy": "node scripts/check-style-policy.mjs",
-    "check:design-source": "node scripts/check-design-source.mjs"
+    "check:design-source": "node scripts/check-design-source.mjs",
+    "check:feature": "node scripts/check-feature.mjs"
   },
   "private": true,
   "packageManager": "pnpm@10.33.0",
