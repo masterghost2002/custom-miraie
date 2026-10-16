@@ -1,7 +1,7 @@
 /** @jest-environment node */
 // The MQTT session against a real aedes broker on localhost (CHILL-002 AC-7).
 import { createMqttSession, generateClientId, type CloseReason } from '../mqtt/session';
-import type { SocketFactory, SocketHandlers } from '../mqtt/socket';
+import type { SocketFactory, SocketHandlers } from '../mqtt/socket-types';
 import { nodeTcpSocketFactory } from '../mqtt/socket.node';
 import { startBroker, type TestBroker } from '../test-support/broker-process';
 

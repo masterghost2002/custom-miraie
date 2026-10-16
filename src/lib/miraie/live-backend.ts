@@ -18,7 +18,7 @@ import {
 } from './errors';
 import { buildCommandMessage, connectionStatusTopic, controlTopic, statusTopic } from './messages';
 import { createMqttSession, type CloseReason, type MqttSession } from './mqtt/session';
-import type { SocketFactory } from './mqtt/socket';
+import type { SocketFactory } from './mqtt/socket-types';
 import { fetchHome, fetchStatus, type RawStatus } from './rest';
 import { parseStatus } from './status';
 import type { AcDevice, ConnectionState, CredentialStore, StoredCredentials } from './types';

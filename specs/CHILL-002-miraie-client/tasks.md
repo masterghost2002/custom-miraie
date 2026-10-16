@@ -21,7 +21,7 @@
 - [x] Task 7: Live backend: re-login once, signed-out event, 5 s REST fallback
       Check: AC-8, AC-9
       Files: src/lib/miraie/{backend,live-backend}.ts, `__tests__/live-backend.test.ts`
-- [ ] Task 8: react-native-tcp-socket TLS socket, chosen at runtime (never imported on web/Expo Go)
+- [x] Task 8: react-native-tcp-socket TLS socket, chosen at runtime (never imported on web/Expo Go)
       Check: typecheck; on-device check in CHILL-011
       Files: src/lib/miraie/mqtt/socket.native.ts
 - [ ] Task 9: Demo backend

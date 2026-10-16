@@ -3,7 +3,7 @@
 import net from 'node:net';
 import tls from 'node:tls';
 
-import type { MqttSocket, SocketFactory, SocketHandlers } from './socket';
+import type { MqttSocket, SocketFactory, SocketHandlers } from './socket-types';
 
 function wire(socket: net.Socket, handlers: SocketHandlers, connectEvent: string): MqttSocket {
   socket.once(connectEvent, () => handlers.onConnect());

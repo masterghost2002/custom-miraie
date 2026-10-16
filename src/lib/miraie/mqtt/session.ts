@@ -5,7 +5,7 @@
 import { MQTT_HOST, MQTT_KEEPALIVE, MQTT_PORT } from '../constants';
 import type { ConnectionState } from '../types';
 import { Decoder, encode, type OutgoingPacket, type Packet } from './codec';
-import type { MqttSocket, SocketFactory } from './socket';
+import type { MqttSocket, SocketFactory } from './socket-types';
 import { utf8Decode, utf8Encode } from './utf8';
 
 export type CloseReason =
