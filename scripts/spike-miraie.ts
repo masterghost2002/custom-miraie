@@ -6,6 +6,10 @@
 //   pnpm spike:miraie --write-test    also flips the first online AC's display light and back
 //
 // Prints no password, token, home id or raw payload. Run it only on your own laptop.
+//
+// TLS trusts Node's bundled CAs only — never the system store — so a TLS-intercepting proxy
+// (Zscaler on the work Mac) can't read your MirAIe password: run it off the corporate network or
+// with *.miraie.in on the proxy's SSL-bypass list. `--use-system-ca` is for package installs only.
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -44,7 +48,21 @@ function describe(status: AcStatus): string {
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/** Why this process would trust more than Node's bundled CAs, or null. */
+function extraTrust(): string | null {
+  const flags = [process.env.NODE_OPTIONS ?? '', ...process.execArgv].join(' ');
+  if (/--use-(system|openssl|bundled-and-system)-ca/.test(flags)) return 'a --use-*-ca flag';
+  if (process.env.NODE_EXTRA_CA_CERTS) return 'NODE_EXTRA_CA_CERTS';
+  return null;
+}
+
 async function main() {
+  const trust = extraTrust();
+  if (trust) {
+    console.error(`Refusing to send your MirAIe password: ${trust} adds extra trusted CAs.`);
+    console.error('Run `pnpm spike:miraie` (it clears them), off the corporate network.');
+    process.exit(1);
+  }
   const env = { ...readEnvLocal(), ...process.env };
   const loginId = env.MIRAIE_LOGIN_ID;
   const password = env.MIRAIE_PASSWORD;
