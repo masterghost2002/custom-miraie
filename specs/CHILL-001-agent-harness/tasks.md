@@ -12,7 +12,7 @@
 - [x] Task 4: check:feature (every non-test file in src/ui and src/features/**/{screen,components/*} has a test)
       Check: AC-2 fixtures
       Files: scripts/check-feature.mjs (+ .test.mjs)
-- [ ] Task 5: check:testid and check:ui-mock-policy
+- [x] Task 5: check:testid and check:ui-mock-policy
       Check: AC-4, AC-5 fixtures
       Files: scripts/check-testid.mjs, scripts/check-ui-mock-policy.mjs (+ tests)
 - [ ] Task 6: check:env-policy and check:secrets

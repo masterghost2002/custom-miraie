@@ -71,7 +71,9 @@
     "gates:test": "node --test \"scripts/**/*.test.mjs\"",
     "check:style-policy": "node scripts/check-style-policy.mjs",
     "check:design-source": "node scripts/check-design-source.mjs",
-    "check:feature": "node scripts/check-feature.mjs"
+    "check:feature": "node scripts/check-feature.mjs",
+    "check:testid": "node scripts/check-testid.mjs",
+    "check:ui-mock-policy": "node scripts/check-ui-mock-policy.mjs"
   },
   "private": true,
   "packageManager": "pnpm@10.33.0",
