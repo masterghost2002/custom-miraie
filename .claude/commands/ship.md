@@ -9,7 +9,8 @@ Decide whether the current branch can ship ($ARGUMENTS).
    - every task in the ticket's `tasks.md` is ticked and every open question is answered
    - `pnpm typecheck`, `pnpm lint`, `pnpm test -- --coverage` pass (coverage at or above the
      thresholds in `jest.config.js`)
-   - `pnpm gates` passes, including `check:review` (planned in CHILL-001; until it exists, say so)
+   - `pnpm gates:test` and `pnpm gates:push` pass (`gates:push` = every gate in `pnpm gates` plus
+     `check:review`, so the review stamp must match this exact change)
 2. In ONE message, start three agents in parallel on `git diff $(git merge-base origin/main HEAD)`:
    - `code-reviewer` — correctness, clarity, structure, performance, design fidelity
    - `security-auditor` — credentials, TLS, what leaves the phone, secrets in the bundle

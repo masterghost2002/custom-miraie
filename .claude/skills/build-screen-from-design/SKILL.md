@@ -23,7 +23,7 @@ script's `renderVals()` gives every state and the copy for each state.
    → `rounded-card`; `font-size:13px` → `text-support`. If a value has no token or class, STOP and
    ask; once agreed, add it to `src/theme/tokens.ts` / `tailwind.config.js` under CHILL-003 and
    to `docs/design-map.md`. Never write a raw hex/rgb or a `[..px]` class
-   (`check:style-policy`, planned).
+   (`check:style-policy`).
 3. **Compose `src/ui` primitives** (`Glass`, `Text`, `IconButton`, `SegmentedPill`, `Toggle`,
    `PowerPill`, `PrimaryButton`, `TabBar`, `Breeze`, `AcUnit`, `AcDisplay`, `AirParticles`,
    `Screen`). Need a new primitive? It's a CHILL-003 task with its own test, not a one-off inside a
@@ -36,7 +36,7 @@ script's `renderVals()` gives every state and the copy for each state.
    ```ts
    // Design: none — Settings has no board; layout reuses Rooms list cards (CHILL-010)
    ```
-   `check:design-source` (planned) fails a file without it.
+   `check:design-source` (and the PreToolUse hook) fails a file without it.
 5. **Implement every state the board's script supports** — e.g. Climate: on/off (`is-off`),
    mode = fan locks the temperature (`—`), eco forces 26°, eco and powerchill are exclusive,
    fan speed drives particle and fan-icon speed. Copy comes from the script's strings, put in the

@@ -15,6 +15,6 @@ Fix this bug: $ARGUMENTS
      breaks one
 3. Run it and confirm it fails because of the bug (paste the failure line in your reply).
 4. Fix the code, not the test. Run the test until it passes, then
-   `pnpm test -- <related paths>`, `pnpm typecheck`, `pnpm lint` (and `pnpm gates` once it exists).
+   `pnpm test -- <related paths>`, `pnpm typecheck`, `pnpm lint` and `pnpm gates`.
 5. Commit: `fix(scope): subject (CHILL-NNN)`.
 6. Reply with the root cause in one sentence, the failing → passing test name and the commit hash.

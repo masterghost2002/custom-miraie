@@ -24,7 +24,7 @@ Build the next task for ticket $ARGUMENTS.
    - `pnpm test -- <paths of the related tests>`
    - `pnpm typecheck`
    - `pnpm lint`
-   - `pnpm gates` (once CHILL-001 has added it; until then say it doesn't exist yet)
+   - `pnpm gates` (all source and repo gates; `check:review` runs only before a push)
    - UI tasks: open the web preview at 390×844 (`pnpm start:demo`, press w) and compare it with
      the board
 6. Tick the task in tasks.md (`- [x]`) and commit both the change and the tick:

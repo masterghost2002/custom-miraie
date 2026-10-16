@@ -21,7 +21,7 @@ pnpm start                   # Metro; iPhone via Expo Go until CHILL-011, then t
 pnpm start:demo              # same, against the in-memory demo MirAIe (no account)
 pnpm web                     # web preview (demo backend only) at http://localhost:8081
 pnpm typecheck && pnpm lint && pnpm test
-pnpm gates                   # every rule below in parallel; pnpm gates:test tests the gates
+pnpm gates                   # source + repo rules in parallel (commit-msg: on commit; review: on push)
 ```
 
 On this Mac, Node needs `NODE_OPTIONS=--use-system-ca` (Zscaler) for `expo install` and fetches.
