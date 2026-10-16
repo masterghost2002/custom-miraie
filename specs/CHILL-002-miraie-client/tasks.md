@@ -9,7 +9,7 @@
 - [x] Task 3: REST sign-in with login-ID kind detection and error types
       Check: AC-1, AC-2 with a fake fetch
       Files: src/lib/miraie/{auth,rest}.ts, `__tests__/auth.test.ts`
-- [ ] Task 4: `getHome` (homes → spaces → devices → details → status), zod-validated
+- [x] Task 4: `getHome` (homes → spaces → devices → details → status), zod-validated
       Check: AC-3
       Files: src/lib/miraie/rest.ts, `__tests__/rest.test.ts`
 - [ ] Task 5: MQTT 3.1 codec
