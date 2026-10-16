@@ -12,6 +12,7 @@ module.exports = {
     '!src/**/*.d.ts',
     '!src/app/**', // route files only compose feature screens; the screens are tested
     '!src/lib/miraie/mqtt/socket.native.ts', // binds react-native-tcp-socket; exercised on device
+    '!src/lib/miraie/test-support/**', // test helpers (local aedes broker), not app code
   ],
   // Final target from day one (playbook: raising it later is painful).
   coverageThreshold: {

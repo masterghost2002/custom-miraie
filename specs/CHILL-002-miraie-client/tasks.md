@@ -15,7 +15,7 @@
 - [x] Task 5: MQTT 3.1 codec
       Check: AC-6 against mqtt-packet
       Files: src/lib/miraie/mqtt/codec.ts, `__tests__/codec.test.ts`
-- [ ] Task 6: MQTT session (connect, subscribe, publish, keep-alive, reconnect hook) + Node socket
+- [x] Task 6: MQTT session (connect, subscribe, publish, keep-alive, reconnect hook) + Node socket
       Check: AC-7 against aedes
       Files: src/lib/miraie/mqtt/{session,socket.node}.ts, `__tests__/session.test.ts`
 - [ ] Task 7: Live backend: re-login once, signed-out event, 5 s REST fallback
