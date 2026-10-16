@@ -15,7 +15,7 @@ import {
 
 import type { MiraieBackend } from '../backend';
 import type { AcStatus, BackendEvent, ConnectionState } from '../types';
-import { queryKeys } from './query-keys';
+import { clearMiraieCache, queryKeys } from './query-keys';
 
 const BackendContext = createContext<MiraieBackend | null>(null);
 
@@ -35,8 +35,14 @@ export function BackendProvider({
   children: ReactNode;
 }) {
   const [client] = useState(() => queryClient ?? createQueryClient());
+  const previousBackend = useRef(backend);
 
   useEffect(() => {
+    // A different backend (demo ↔ live, or a new account's) must not see the old one's data.
+    if (previousBackend.current !== backend) {
+      previousBackend.current = backend;
+      void clearMiraieCache(client);
+    }
     // Children's effects (the first getHome) run before ours, so start from the current state.
     let hasConnected = backend.getConnectionState() === 'connected';
     let dropped = false;
@@ -47,7 +53,10 @@ export function BackendProvider({
         if (previous) client.setQueryData<AcStatus>(key, { ...previous, ...event.status });
         return;
       }
-      if (event.type !== 'connection') return;
+      if (event.type === 'signed-out') {
+        void clearMiraieCache(client);
+        return;
+      }
       if (event.state === 'disconnected' && hasConnected) dropped = true;
       if (event.state === 'connected') {
         // Pushes sent while we were away are lost: catch up from REST.

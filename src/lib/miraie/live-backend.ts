@@ -307,6 +307,17 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
     );
   }
 
+  async function loadHome() {
+    const started = epoch;
+    const loaded = await withToken((token) => fetchHome(token, { fetch }));
+    if (!sameAccount(started)) throw new SignedOutError();
+    homeId = loaded.home.homeId;
+    devices = loaded.home.devices;
+    raw = { ...loaded.rawStatuses };
+    ensureSession();
+    return loaded.home;
+  }
+
   // ── the interface ────────────────────────────────────────────────────────────────────
 
   return {
@@ -337,16 +348,7 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
 
     getConnectionState: () => session?.state ?? 'disconnected',
 
-    async getHome() {
-      const started = epoch;
-      const loaded = await withToken((token) => fetchHome(token, { fetch }));
-      if (!sameAccount(started)) throw new SignedOutError();
-      homeId = loaded.home.homeId;
-      devices = loaded.home.devices;
-      raw = { ...loaded.rawStatuses };
-      ensureSession();
-      return loaded.home;
-    },
+    getHome: loadHome,
 
     async getStatus(deviceId) {
       const started = epoch;
@@ -360,6 +362,8 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
 
     async send(deviceId, command) {
       if (!credentials) throw new SignedOutError();
+      // Signed in again since the home was loaded (or never loaded): load it, then send.
+      if (devices.length === 0) await loadHome();
       const device = devices.find((d) => d.id === deviceId);
       if (!device) throw new DeviceNotFoundError(deviceId);
       const known = raw[deviceId];

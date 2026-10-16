@@ -5,7 +5,7 @@ import { act, renderHook, waitFor } from '@testing-library/react-native';
 import type { ReactNode } from 'react';
 
 import type { MiraieBackend } from '../../backend';
-import { createDemoBackend, type DemoSeed } from '../../demo/demo-backend';
+import { createDemoBackend, demoDevice, type DemoSeed } from '../../demo/demo-backend';
 import { DeviceOfflineError, MiraieNetworkError } from '../../errors';
 import type { BackendEvent } from '../../types';
 import {
@@ -14,7 +14,9 @@ import {
   useBackendEvents,
   useConnectionState,
 } from '../backend-provider';
+import { queryKeys } from '../query-keys';
 import { useAcCommand, useSendCommand } from '../use-ac-command';
+import { useSignIn, useSignOut } from '../use-account';
 import { useAcStatus } from '../use-ac-status';
 import { useHome } from '../use-home';
 
@@ -27,12 +29,16 @@ afterEach(async () => {
 function setup(seed: DemoSeed = {}) {
   const backend = createDemoBackend({ latencyMs: 30, ...seed });
   // Count REST-like reads, to prove the cache is used instead of the network.
-  const calls = { getStatus: 0 };
+  const calls = { getStatus: 0, getHome: 0 };
   const counted: MiraieBackend = {
     ...backend,
     getStatus: (id) => {
       calls.getStatus++;
       return backend.getStatus(id);
+    },
+    getHome: () => {
+      calls.getHome++;
+      return backend.getHome();
     },
   };
   const queryClient = new QueryClient({
@@ -250,5 +256,89 @@ describe('React glue', () => {
     }
     const { result } = await renderHook(() => useHome(), { wrapper: Providers });
     await waitFor(() => expect(result.current.data?.homeId).toBe('demo-home'));
+  });
+});
+
+describe('React glue — accounts and the cache', () => {
+  it('given sign out and sign in again, then the home is fetched again and commands work', async () => {
+    const { wrapper, calls, queryClient } = setup({ latencyMs: 60_000 });
+    const { result } = await renderHook(
+      () => ({
+        home: useHome(),
+        bed: useAcStatus('bed'),
+        signIn: useSignIn(),
+        signOut: useSignOut(),
+        send: useSendCommand(),
+      }),
+      { wrapper },
+    );
+    await waitFor(() => expect(result.current.home.data?.devices).toHaveLength(3));
+    const loads = calls.getHome;
+
+    await act(() => result.current.signOut.mutateAsync());
+    expect(queryClient.getQueryData(queryKeys.home)).toBeUndefined();
+    expect(queryClient.getQueryData(queryKeys.status('bed'))).toBeUndefined();
+
+    await act(() =>
+      result.current.signIn.mutateAsync({ loginId: 'b@example.com', password: 'demo' }),
+    );
+    await waitFor(() => expect(result.current.home.data?.devices).toHaveLength(3));
+    expect(calls.getHome).toBeGreaterThan(loads);
+
+    await act(() => result.current.send('bed', { kind: 'power', on: false }));
+    await waitFor(() => expect(result.current.bed?.power).toBe(false));
+  });
+
+  it('given a wrong password, when useSignIn runs, then the error is exposed and nothing is cleared', async () => {
+    const { wrapper, queryClient } = setup();
+    const { result } = await renderHook(() => ({ home: useHome(), signIn: useSignIn() }), {
+      wrapper,
+    });
+    await waitFor(() => expect(result.current.home.data).toBeDefined());
+
+    await act(async () => {
+      await result.current.signIn
+        .mutateAsync({ loginId: '9876543210', password: 'wrong' })
+        .catch(() => {});
+    });
+
+    await waitFor(() => expect(result.current.signIn.error?.name).toBe('WrongCredentialsError'));
+    expect(queryClient.getQueryData(queryKeys.home)).toBeDefined();
+  });
+
+  it('given MirAIe signs the user out, then the cached home and statuses are dropped', async () => {
+    const { wrapper, backend, queryClient } = setup();
+    const { result } = await renderHook(() => useHome(), { wrapper });
+    await waitFor(() => expect(result.current.data).toBeDefined());
+
+    await act(() => backend.simulate.expireSession());
+
+    expect(queryClient.getQueryData(queryKeys.home)).toBeUndefined();
+    expect(queryClient.getQueryData(queryKeys.status('bed'))).toBeUndefined();
+  });
+
+  it('given the backend is replaced, then nothing cached from the old one is kept', async () => {
+    const queryClient = new QueryClient({
+      defaultOptions: { queries: { retry: false, gcTime: Infinity } },
+    });
+    const first = createDemoBackend();
+    const second = createDemoBackend({ devices: [demoDevice({ id: 'hall', room: 'Hall' })] });
+    cleanups.push(() => queryClient.clear());
+    let current: MiraieBackend = first;
+    function Providers({ children }: { children: ReactNode }) {
+      return (
+        <BackendProvider backend={current} queryClient={queryClient}>
+          {children}
+        </BackendProvider>
+      );
+    }
+    const { result, rerender } = await renderHook(() => useHome(), { wrapper: Providers });
+    await waitFor(() => expect(result.current.data?.devices).toHaveLength(3));
+
+    current = second;
+    await rerender({});
+
+    await waitFor(() => expect(result.current.data?.devices.map((d) => d.id)).toEqual(['hall']));
+    expect(queryClient.getQueryData(queryKeys.status('bed'))).toBeUndefined();
   });
 });

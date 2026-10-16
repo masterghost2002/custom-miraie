@@ -355,6 +355,18 @@ describe('live backend — commands and pushes', () => {
     );
   });
 
+  it('given sign out and sign in again, when a command is sent before getHome, then the home is loaded first and the command goes out', async () => {
+    const { backend } = await setup({ brokerPasswords: ['token-2'] });
+    await backend.getHome();
+    await backend.signOut();
+    await backend.signIn('9876543210', 'secret');
+
+    await backend.send('bed', { kind: 'power', on: false });
+
+    const publish = await broker.waitFor((e) => e.event === 'publish');
+    expect(publish).toMatchObject({ topic: 't/bed/control' });
+  });
+
   it('given a device id, when getStatus runs, then it reads the status over REST', async () => {
     const { backend } = await setup();
     await expect(backend.getStatus('bed')).resolves.toMatchObject({ power: true, targetTemp: 24 });
