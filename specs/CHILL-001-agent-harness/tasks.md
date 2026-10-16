@@ -6,7 +6,7 @@
 - [x] Task 2: check:style-policy (hex/rgb/hsl outside src/theme; arbitrary `[..px]` classes)
       Check: AC-1 fixtures pass/fail as expected
       Files: scripts/check-style-policy.mjs (+ .test.mjs), scripts/**fixtures**/style-policy/**
-- [ ] Task 3: check:design-source (first-line `// Design:` note in src/features/** and src/ui/**)
+- [x] Task 3: check:design-source (first-line `// Design:` note in src/features/** and src/ui/**)
       Check: AC-3 fixtures
       Files: scripts/check-design-source.mjs (+ .test.mjs)
 - [ ] Task 4: check:feature (every non-test file in src/ui and src/features/**/{screen,components/*} has a test)
