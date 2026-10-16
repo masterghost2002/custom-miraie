@@ -4,7 +4,7 @@
 import { z } from 'zod';
 
 import { HTTP_CLIENT_ID, LOGIN_URL } from './constants';
-import { MiraieNetworkError, NotRegisteredError, WrongCredentialsError } from './errors';
+import { errorName, MiraieNetworkError, NotRegisteredError, WrongCredentialsError } from './errors';
 
 export type LoginKind = 'email' | 'mobile' | 'username';
 
@@ -60,8 +60,8 @@ export async function signIn(
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
-  } catch (cause) {
-    throw new MiraieNetworkError("Couldn't reach MirAIe", undefined, { cause });
+  } catch (error) {
+    throw new MiraieNetworkError(`Couldn't reach MirAIe (${errorName(error)})`);
   }
 
   if (response.status === 401) throw new WrongCredentialsError();

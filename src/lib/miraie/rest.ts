@@ -5,7 +5,7 @@
 import { z } from 'zod';
 
 import { DEVICE_DETAILS_URL, HOMES_URL, statusUrl } from './constants';
-import { MiraieNetworkError, UnauthorizedError } from './errors';
+import { errorName, MiraieNetworkError, UnauthorizedError } from './errors';
 import { parseStatus } from './status';
 import type { AcDevice, AcStatus, Home } from './types';
 
@@ -72,17 +72,18 @@ async function getJson(url: string, accessToken: string, fetch: typeof globalThi
       method: 'GET',
       headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
     });
-  } catch (cause) {
-    throw new MiraieNetworkError("Couldn't reach MirAIe", undefined, { cause });
+  } catch (error) {
+    throw new MiraieNetworkError(`Couldn't reach MirAIe (${errorName(error)})`);
   }
   if (response.status === 401) throw new UnauthorizedError();
   if (!response.ok) throw new MiraieNetworkError('MirAIe request failed', response.status);
   try {
     return (await response.json()) as unknown;
-  } catch (cause) {
-    throw new MiraieNetworkError('MirAIe sent a reply that is not JSON', response.status, {
-      cause,
-    });
+  } catch (error) {
+    throw new MiraieNetworkError(
+      `MirAIe sent a reply that is not JSON (${errorName(error)})`,
+      response.status,
+    );
   }
 }
 

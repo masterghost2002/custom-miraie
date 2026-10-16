@@ -126,4 +126,15 @@ describe('signIn', () => {
     expect(String(error)).not.toContain('hunter2');
     expect(JSON.stringify(error)).not.toContain('hunter2');
   });
+
+  it('given the network fails, then the error keeps only the failure name, not the raw error', async () => {
+    const fetch = (async () => {
+      throw new TypeError('request to https://auth.miraie.in failed: password=hunter2');
+    }) as typeof globalThis.fetch;
+    const error = (await signIn('9876543210', 'hunter2', { fetch }).catch(
+      (e: unknown) => e,
+    )) as Error;
+    expect(error.cause).toBeUndefined();
+    expect(error.message).not.toContain('hunter2');
+  });
 });

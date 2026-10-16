@@ -198,4 +198,22 @@ describe('fetchStatus', () => {
     const fetch = (async () => new Response('<html>', { status: 200 })) as typeof globalThis.fetch;
     await expect(fetchStatus('t', 'd', { fetch })).rejects.toBeInstanceOf(MiraieNetworkError);
   });
+
+  it('given a reply body that is not JSON, when it fails, then the error carries no part of the body', async () => {
+    const body = '<html>accessToken=leaked-token-123</html>';
+    const fetch = (async () => new Response(body, { status: 200 })) as typeof globalThis.fetch;
+    const error = (await fetchStatus('t', 'd', { fetch }).catch((e: unknown) => e)) as Error;
+    expect(error.cause).toBeUndefined();
+    expect(`${error.message} ${String(error)}`).not.toContain('leaked-token-123');
+  });
+
+  it('given the network fails, then the error keeps only the failure name, not the raw error', async () => {
+    const fetch = (async () => {
+      throw new TypeError('connect ECONNREFUSED https://app.miraie.in/?token=leaked-token-123');
+    }) as typeof globalThis.fetch;
+    const error = (await fetchStatus('t', 'd', { fetch }).catch((e: unknown) => e)) as Error;
+    expect(error.cause).toBeUndefined();
+    expect(error.message).toContain('TypeError');
+    expect(error.message).not.toContain('leaked-token-123');
+  });
 });

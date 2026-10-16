@@ -1,11 +1,17 @@
 // Errors the MirAIe client throws. Screens pick their message by class (CHILL-004 Q1).
-// Messages never include credentials, tokens or payloads.
+// Messages never include credentials, tokens or payloads, and no raw underlying error is attached
+// as `cause` (its message can quote a URL or a reply body) — only its name, via `errorName`.
 
 export class MiraieError extends Error {
-  constructor(message: string, options?: { cause?: unknown }) {
-    super(message, options);
+  constructor(message: string) {
+    super(message);
     this.name = new.target.name;
   }
+}
+
+/** The class name of whatever was thrown, safe to put in a message. */
+export function errorName(error: unknown): string {
+  return error instanceof Error ? error.name : 'unknown error';
 }
 
 /** Login answered 401: the ID and password don't match. */
@@ -25,8 +31,8 @@ export class NotRegisteredError extends MiraieError {
 /** No network, a server error, or a reply we can't read. `status` is the HTTP status if any. */
 export class MiraieNetworkError extends MiraieError {
   readonly status: number | undefined;
-  constructor(message: string, status?: number, options?: { cause?: unknown }) {
-    super(message, options);
+  constructor(message: string, status?: number) {
+    super(message);
     this.status = status;
   }
 }
