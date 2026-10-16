@@ -1,15 +1,22 @@
-import { render, screen } from '@testing-library/react-native';
-import { View } from 'react-native';
+import { render } from '@testing-library/react-native';
+
+import { drawnPaths, lucidePaths } from '@/test-support/drawing';
 
 import { ModeIcon } from '../mode-icon';
 
 describe('ModeIcon', () => {
-  it.each(['cool', 'dry', 'fan', 'heat', 'auto'] as const)('draws the %s glyph', async (mode) => {
-    await render(
-      <View accessible accessibilityLabel={mode}>
-        <ModeIcon mode={mode} color="currentColor" />
-      </View>,
-    );
-    expect(screen.getByLabelText(mode)).not.toBeEmptyElement();
+  it.each([
+    ['cool', 'snowflake'],
+    ['dry', 'droplet'],
+    ['fan', 'fan'],
+    ['heat', 'sun'],
+  ] as const)('draws the %s mode as the Lucide %s glyph', async (mode, glyph) => {
+    await render(<ModeIcon mode={mode} color="currentColor" />);
+    expect(drawnPaths()).toEqual(lucidePaths(glyph));
+  });
+
+  it('draws auto as the board’s circle-A glyph', async () => {
+    await render(<ModeIcon mode="auto" color="currentColor" />);
+    expect(drawnPaths()).toEqual(['M8.5 16 12 7.5 15.5 16', 'M9.8 13h4.4']);
   });
 });

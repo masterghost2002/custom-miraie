@@ -63,3 +63,18 @@ it('AC-2: given the Bedroom AC is on, when the user turns it off, then it shows 
   expect(await screen.findByText('Air conditioner · Standby')).toBeTruthy();
 });
 ```
+
+## Decorative drawings (the one exception to rule 3)
+
+The AC unit, its display, air particles, drips, the breeze and icon glyphs are hidden from
+VoiceOver on purpose, so they can't be found by role or label — and adding labels only for tests
+is wrong (the label would be invented wording nobody hears). Test them through the host tree the
+real component renders, with the shared helpers in `src/test-support/drawing.ts`:
+
+- `animatedViews(key)` + `toHaveAnimatedStyle` / `animatedStyle()` on fake timers
+  (`setUpTests()` runs in `jest.setup.ts`) — e.g. the vent narrows, the knob ends at x, dots move;
+- `drawnPaths()` vs `lucidePaths('snowflake')` — the right glyph is drawn;
+- `viewsSized(w, h)` — a drawing has the board size.
+
+Every such test must fail when the behaviour breaks: compare before/after, never "something
+rendered". Interactive things are still found by role, label or text.

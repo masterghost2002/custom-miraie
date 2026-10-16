@@ -43,3 +43,14 @@ export function viewsSized(width: number, height: number): Node[] {
     return merged.width === width && merged.height === height;
   });
 }
+
+/** Width, height and stroke of every SVG drawn on screen (icons). */
+export function drawnSvgs(): { width: number; height: number; strokeWidth: number }[] {
+  return screen.container
+    .queryAll((n) => n.type === 'RNSVGSvgView')
+    .map((n) => ({
+      width: n.props.bbWidth as number,
+      height: n.props.bbHeight as number,
+      strokeWidth: n.props.strokeWidth as number,
+    }));
+}

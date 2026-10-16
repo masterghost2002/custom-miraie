@@ -18,8 +18,9 @@ describe('AcUnitTile', () => {
   it('drips three drops of cold air while the AC is on', async () => {
     await render(<AcUnitTile on />);
     expect(drips()).toHaveLength(3);
+    const before = JSON.stringify(drips()[0]?.props.jestAnimatedStyle.value);
     await act(async () => jest.advanceTimersByTime(400));
-    expect(drips()[0]).not.toHaveAnimatedStyle({ transform: [{ translateY: 0 }] });
+    expect(JSON.stringify(drips()[0]?.props.jestAnimatedStyle.value)).not.toBe(before);
   });
 
   it('stops dripping when the AC is off', async () => {
