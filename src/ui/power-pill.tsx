@@ -16,8 +16,8 @@ import { fixed } from '@/theme/tokens';
 import { Text } from './text';
 
 const knobEasing = Easing.bezier(0.3, 1.3, 0.5, 1);
-/** Knob 44 + 4 inset on each side. */
-const KNOB_SPAN = 48;
+/** The knob (44) sits 4 pt in from either end, so it travels the width minus 52. */
+const KNOB_INSETS = 52;
 
 export type PowerPillProps = {
   on: boolean;
@@ -50,7 +50,7 @@ export function PowerPill({
     fade.set(withTiming(on ? 1 : 0, { duration: 300 }));
   }, [on, progress, fade]);
 
-  const travel = Math.max(0, width - KNOB_SPAN);
+  const travel = Math.max(0, width - KNOB_INSETS);
   const knob = useAnimatedStyle(() => ({
     transform: [{ translateX: progress.get() * travel }],
     backgroundColor: interpolateColor(fade.get(), [0, 1], [tokens.track, tokens.accent]),

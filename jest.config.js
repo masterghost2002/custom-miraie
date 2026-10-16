@@ -18,6 +18,7 @@ module.exports = {
     // Exclusions — each needs a reason (docs/engineering-rules.md#tests):
     '!src/**/*.d.ts',
     '!src/app/**', // route files only compose feature screens; the screens are tested
+    '!src/test-support/**', // helpers used only by tests
     '!src/lib/miraie/mqtt/socket.native.ts', // binds react-native-tcp-socket; exercised on device
   ],
   // Final target from day one (playbook: raising it later is painful).
