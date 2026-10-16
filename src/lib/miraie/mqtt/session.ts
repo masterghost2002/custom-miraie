@@ -9,7 +9,10 @@ import type { MqttSocket, SocketFactory } from './socket-types';
 import { utf8Decode, utf8Encode } from './utf8';
 
 export type CloseReason =
-  /** CONNACK with a non-zero return code: 4 = bad username/password, 5 = not authorised. */
+  /**
+   * CONNACK with a non-zero return code. Only 4 (bad username/password) and 5 (not authorised)
+   * are about the credentials; 1–3 (protocol, client id, server unavailable) are not.
+   */
   | { kind: 'refused'; returnCode: number }
   /** The network or the broker ended the connection, or it stopped answering. */
   | { kind: 'dropped' }

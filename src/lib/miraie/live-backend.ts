@@ -225,7 +225,9 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
   function onClose(reason: CloseReason) {
     if (!session || !credentials) return;
     if (reason.kind === 'closed') return;
-    if (reason.kind === 'refused') {
+    // Only 4 (bad username or password) and 5 (not authorised) mean the token was refused;
+    // 1–3 (protocol, client id, server unavailable) are retried like a dropped connection.
+    if (reason.kind === 'refused' && (reason.returnCode === 4 || reason.returnCode === 5)) {
       if (tokenIsFresh) {
         void signedOut();
         return;

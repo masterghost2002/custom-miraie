@@ -15,6 +15,8 @@ export interface TestBroker {
   setPasswords(passwords: string[]): Promise<void>;
   /** Drops every client connection, like a network failure. */
   kick(): Promise<void>;
+  /** Answers the next `times` CONNECTs with CONNACK `returnCode` (2–5). */
+  refuseNext(returnCode: number, times: number): Promise<void>;
   stop(): Promise<void>;
 }
 
@@ -78,6 +80,11 @@ export async function startBroker(passwords: string[] = []): Promise<TestBroker>
       const count = events.filter((e) => e.event === 'passwords').length;
       send({ cmd: 'passwords', passwords: list });
       await waitFor(() => events.filter((x) => x.event === 'passwords').length > count);
+    },
+    async refuseNext(returnCode, times) {
+      const count = events.filter((e) => e.event === 'refuseNext').length;
+      send({ cmd: 'refuseNext', returnCode, times });
+      await waitFor(() => events.filter((x) => x.event === 'refuseNext').length > count);
     },
     async kick() {
       const count = events.filter((e) => e.event === 'kicked').length;

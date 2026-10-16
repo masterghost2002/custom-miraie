@@ -207,6 +207,24 @@ describe('live backend — AC-8 re-login', () => {
     await expect(backend.getHome()).rejects.toBeInstanceOf(SignedOutError);
   });
 
+  it.each([2, 3])(
+    'AC-8: given the broker answers CONNACK %i twice (not a token refusal), then it keeps retrying and never signs out',
+    async (returnCode) => {
+      const { backend, store, events } = await setup({
+        brokerPasswords: ['token-1', 'token-2', 'token-3'],
+      });
+      await broker.refuseNext(returnCode, 2);
+
+      await backend.getHome();
+
+      await until(() => connected(events));
+      expect(events).not.toContainEqual({ type: 'signed-out' });
+      expect(store.peek()).not.toBeNull();
+      expect(backend.getLoginId()).toBe('9876543210');
+      expect(broker.events.filter((e) => e.event === 'connect')).toHaveLength(3);
+    },
+  );
+
   it('AC-8: given the broker drops the connection, then it signs in again and reconnects', async () => {
     const { backend, events, rest } = await setup({ brokerPasswords: ['token-1', 'token-2'] });
     await backend.getHome();

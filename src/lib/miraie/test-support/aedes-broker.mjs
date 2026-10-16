@@ -4,7 +4,8 @@
 //
 // argv[2]: JSON array of accepted passwords ([] = accept any).
 // stdin commands (one JSON per line): {cmd:"publish", topic, payload, qos?}, {cmd:"passwords",
-// passwords}, {cmd:"kick"}.
+// passwords}, {cmd:"kick"}, {cmd:"refuseNext", returnCode, times} (CONNACK rc 2–5 for the next
+// `times` connects, whatever the password).
 import { Buffer } from 'node:buffer';
 import net from 'node:net';
 import readline from 'node:readline';
@@ -14,6 +15,7 @@ import { Aedes } from 'aedes';
 const emit = (event) => process.stdout.write(`${JSON.stringify(event)}\n`);
 
 let passwords = new Set(JSON.parse(process.argv[2] ?? '[]'));
+let refusals = { returnCode: 0, times: 0 };
 
 const broker = await Aedes.createBroker({
   preConnect(client, packet, callback) {
@@ -29,6 +31,12 @@ const broker = await Aedes.createBroker({
     callback(null, true);
   },
   authenticate(client, username, password, done) {
+    if (refusals.times > 0) {
+      refusals.times--;
+      const error = new Error('Refused by test');
+      error.returnCode = refusals.returnCode;
+      return done(error, null);
+    }
     const given = password ? password.toString() : '';
     if (passwords.size === 0 || passwords.has(given)) return done(null, true);
     const error = new Error('Bad username or password');
@@ -77,6 +85,9 @@ readline.createInterface({ input: process.stdin }).on('line', (line) => {
   } else if (command.cmd === 'passwords') {
     passwords = new Set(command.passwords);
     emit({ event: 'passwords' });
+  } else if (command.cmd === 'refuseNext') {
+    refusals = { returnCode: command.returnCode, times: command.times };
+    emit({ event: 'refuseNext' });
   } else if (command.cmd === 'kick') {
     for (const client of Object.values(broker.clients)) client.conn.destroy();
     emit({ event: 'kicked' });
