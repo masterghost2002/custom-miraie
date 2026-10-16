@@ -15,6 +15,6 @@ The full handbook is **`CLAUDE.md`**. Read it first; this file only repeats what
 - Credentials only in `expo-secure-store`, sent only to `*.miraie.in` over verified TLS.
 - Stop and ask when a design state, token, ticket or wording is missing.
 
-Checks (planned in CHILL-001; must match the list in CLAUDE.md): check:style-policy,
+Checks (run with `pnpm gates`; must match the list in CLAUDE.md): check:style-policy,
 check:design-source, check:feature, check:testid, check:ui-mock-policy, check:env-policy,
 check:secrets, check:handbook-size, check:agent-rules, check:review, check:commit-msg.

@@ -1,8 +1,15 @@
 # Engineering rules
 
 The handbook (`CLAUDE.md`) lists each rule in one line; this page explains them. A rule that matters
-must be checked by a program — the checker is named next to each rule. "Planned" checkers are built in
-CHILL-001; until then the rule is enforced by `/review`.
+must be checked by a program — the checker is named next to each rule. `pnpm gates` runs them all in
+parallel (`pnpm gates:push` adds `check:review`); `pnpm gates:test` runs each gate's own tests. Husky
+runs them on commit and push, CI (`.github/workflows/ci.yml`, job "CI passed") on every PR. The gates
+live in `scripts/check-<rule>.mjs`; see the `write-a-gate` skill to add one.
+
+Claude Code hooks (`scripts/hooks/`) give the same answers while an agent works: PreToolUse blocks
+`.env*`, `ios/`, `android/`, `.review/` and screen files without a Design note; PostToolUse runs
+Prettier; Stop asks once for `/review`. The owner enables them in `.claude/settings.json` (proposal:
+`specs/CHILL-001-agent-harness/settings.proposed.json`) — agents may not edit their own settings.
 
 ## Platform
 
@@ -25,9 +32,9 @@ CHILL-001; until then the rule is enforced by `/review`.
 6. Push → PR to `main` → CI reruns everything → owner merges.
 
 Commit format: `type(scope): subject (CHILL-NNN)`; types feat, fix, refactor, test, docs, chore.
-Checked by: `check:commit-msg` (planned).
+Checked by: `check:commit-msg` (husky commit-msg hook; merge, revert and fixup messages are exempt).
 
-## Styling — `check:style-policy` (planned)
+## Styling — `check:style-policy`
 
 - Colours come from `src/theme/tokens.ts`, reach classes through CSS variables set by
   `<ThemeProvider>` (`tailwind.config.js` maps names to `var(--…)`), and reach JS (SVG strokes,
@@ -38,7 +45,7 @@ Checked by: `check:commit-msg` (planned).
 - Inline `style={{…}}` is allowed only for values computed at runtime (animation, measured layout).
 - Fonts: only the Plus Jakarta Sans families via `font-light|regular|medium|semibold|bold`.
 
-## Design fidelity — `check:design-source` (planned)
+## Design fidelity — `check:design-source`
 
 - Build from `docs/design/screens/<screen>.md`, checking numbers against the raw board.
 - First line of every non-test file in `src/features/**` and `src/ui/**`:
@@ -56,7 +63,7 @@ Checked by: `check:commit-msg` (planned).
   `accessibilityRole="switch"` with `accessibilityState={{ checked }}`; segmented options use
   `accessibilityState={{ selected }}`; the temperature slider is `adjustable`.
 
-## Tests — `check:feature`, `check:testid`, `check:ui-mock-policy` (planned)
+## Tests — `check:feature`, `check:testid`, `check:ui-mock-policy`
 
 - jest-expo + @testing-library/react-native. Run `pnpm test -- <path>` while working; the full suite
   and coverage on the PR.
@@ -73,7 +80,7 @@ Checked by: `check:commit-msg` (planned).
 - `src/lib/miraie` is also tested against real counterparts: the MQTT codec against `mqtt-packet`,
   the session against a local `aedes` broker.
 
-## Security — `check:secrets`, `check:env-policy` (planned)
+## Security — `check:secrets`, `check:env-policy`
 
 - MirAIe password, access token and refresh token are stored only with `expo-secure-store`.
   The password is kept so the app can sign in again when the token expires (no refresh endpoint is
@@ -85,7 +92,7 @@ Checked by: `check:commit-msg` (planned).
   values must never be secrets (they ship in the bundle).
 - `HTTP_CLIENT_ID` in the client is the MirAIe app's public client ID, not a secret.
 
-## Review — `check:review` (planned)
+## Review — `check:review`
 
 `/review` reads the full change (`git diff $(git merge-base origin/main HEAD)` plus uncommitted work)
 for correctness, clarity, structure, security, performance, design fidelity and test honesty, using
@@ -102,10 +109,12 @@ the strongest model (`claude-opus-5-5`, effort `xhigh`). Pass writes `.review/st
 ```
 
 `reviewId` is the first 16 hex characters of the SHA-256 of that diff. Any later change breaks the
-match and the push is blocked until a fresh review. The stamp is local, so it stops agents cutting
+match and the push is blocked until a fresh review. Write the stamp with
+`pnpm review:stamp --verdict pass --critical 0 --important 0 --suggestion <n>`; new untracked files
+count as part of the change. The stamp is local, so it stops agents cutting
 corners; it is not a security lock.
 
-## Handbook upkeep — `check:handbook-size`, `check:agent-rules` (planned)
+## Handbook upkeep — `check:handbook-size`, `check:agent-rules`
 
 - `CLAUDE.md` stays under 10 KB; detail moves to `docs/`.
 - `AGENTS.md` repeats the must-know rules; the list of checks must be identical in both files.

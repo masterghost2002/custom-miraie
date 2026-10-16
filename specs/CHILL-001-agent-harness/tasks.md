@@ -44,7 +44,7 @@
       Files: .github/workflows/ci.yml
       Note: AC-12 is proven only on the first PR to `main`. **Owner action:** in GitHub → Settings →
       Branches, require the "CI passed" status check on `main`.
-- [ ] Task 13: Remove "(planned)" from CLAUDE.md, AGENTS.md, docs/engineering-rules.md; check:agent-rules passes
+- [x] Task 13: Remove "(planned)" from CLAUDE.md, AGENTS.md, docs/engineering-rules.md; check:agent-rules passes
       Check: `pnpm gates`
       Files: CLAUDE.md, AGENTS.md, docs/engineering-rules.md
 - [ ] Task 14: STOP and run /review
