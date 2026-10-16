@@ -78,7 +78,8 @@
     "check:secrets": "node scripts/check-secrets.mjs",
     "check:handbook-size": "node scripts/check-handbook-size.mjs",
     "check:agent-rules": "node scripts/check-agent-rules.mjs",
-    "check:commit-msg": "node scripts/check-commit-msg.mjs"
+    "check:commit-msg": "node scripts/check-commit-msg.mjs",
+    "gates": "node scripts/run-push-gates.mjs"
   },
   "private": true,
   "packageManager": "pnpm@10.33.0",

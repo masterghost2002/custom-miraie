@@ -21,7 +21,7 @@
 - [x] Task 7: check:handbook-size, check:agent-rules, check:commit-msg
       Check: AC-8, AC-9 fixtures
       Files: scripts/check-handbook-size.mjs, scripts/check-agent-rules.mjs, scripts/check-commit-msg.mjs (+ tests)
-- [ ] Task 8: run-push-gates runner (parallel, per-gate timing, summary)
+- [x] Task 8: run-push-gates runner (parallel, per-gate timing, summary)
       Check: AC-11 — `pnpm gates` < 30 s on a clean tree
       Files: scripts/run-push-gates.mjs, package.json
 - [ ] Task 9: review stamp writer + check:review
