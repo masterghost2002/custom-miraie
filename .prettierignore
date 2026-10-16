@@ -1,0 +1,11 @@
+pnpm-lock.yaml
+.expo
+dist
+coverage
+ios
+android
+assets
+
+# design boards are verbatim canvas copies
+design/boards
+design/canvas.json

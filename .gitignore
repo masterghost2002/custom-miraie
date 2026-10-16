@@ -41,3 +41,14 @@ example
 # generated native folders
 /ios
 /android
+
+# tests
+coverage/
+
+# local env (only .env.example is committed)
+.env
+.env.*
+!.env.example
+
+# review stamp (local, see docs/engineering-rules.md#review)
+.review/
