@@ -6,6 +6,7 @@ import type {
   AcCommand,
   AcStatus,
   BackendEvent,
+  ConnectionState,
   CredentialStore,
   Home,
   StoredCredentials,
@@ -25,6 +26,8 @@ export interface MiraieBackend {
   getStatus(deviceId: string): Promise<AcStatus>;
   /** Resolves once the command has left the phone. Offline AC → DeviceOfflineError. */
   send(deviceId: string, command: AcCommand): Promise<void>;
+  /** The live connection right now (events report changes). */
+  getConnectionState(): ConnectionState;
   /** Status pushes, connection changes and `signed-out`. Returns the unsubscribe function. */
   subscribe(listener: (event: BackendEvent) => void): () => void;
 }

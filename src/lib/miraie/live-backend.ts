@@ -310,6 +310,8 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
 
     getLoginId: () => credentials?.loginId ?? null,
 
+    getConnectionState: () => session?.state ?? 'disconnected',
+
     async getHome() {
       const loaded = await withToken((token) => fetchHome(token, { fetch }));
       homeId = loaded.home.homeId;

@@ -217,4 +217,25 @@ describe('demo backend — accounts', () => {
     const backend: MiraieBackend = createDemoBackend();
     expect(backend.kind).toBe('demo');
   });
+
+  it('given simulate.expireSession, then signed-out is emitted and the credentials are gone', async () => {
+    const credentials = createMemoryCredentialStore();
+    const backend = createDemoBackend({ signedIn: false, credentials });
+    await backend.signIn('9876543210', 'demo');
+    const events = record(backend);
+
+    await backend.simulate.expireSession();
+    await backend.simulate.expireSession(); // already signed out: nothing more happens
+
+    expect(events).toEqual([{ type: 'signed-out' }]);
+    expect(credentials.peek()).toBeNull();
+    await expect(backend.getHome()).rejects.toBeInstanceOf(SignedOutError);
+  });
+
+  it('given simulate.connection, then the connection event is emitted', () => {
+    const backend = createDemoBackend();
+    const events = record(backend);
+    backend.simulate.connection('disconnected');
+    expect(events).toEqual([{ type: 'connection', state: 'disconnected' }]);
+  });
 });

@@ -27,7 +27,7 @@
 - [x] Task 9: Demo backend
       Check: AC-10
       Files: src/lib/miraie/demo/demo-backend.ts, `__tests__/demo-backend.test.ts`
-- [ ] Task 10: BackendProvider + query hooks (MQTT pushes into the cache, optimistic commands)
+- [x] Task 10: BackendProvider + query hooks (MQTT pushes into the cache, optimistic commands)
       Check: hook tests rendered with the demo backend
       Files: src/lib/miraie/react/**
 - [ ] Task 11: `pnpm spike:miraie`

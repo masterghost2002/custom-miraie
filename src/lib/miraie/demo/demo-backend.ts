@@ -13,7 +13,7 @@ import {
   WrongCredentialsError,
 } from '../errors';
 import { buildCommandMessage } from '../messages';
-import type { AcDevice, AcStatus, CredentialStore, Home } from '../types';
+import type { AcDevice, AcStatus, ConnectionState, CredentialStore, Home } from '../types';
 
 export interface DemoDevice {
   device: AcDevice;
@@ -39,6 +39,10 @@ export interface DemoBackend extends MiraieBackend {
   simulate: {
     /** A status push, as if someone used the remote. */
     push(deviceId: string, patch: Partial<AcStatus>): void;
+    /** The live connection going down or coming back. */
+    connection(state: ConnectionState): void;
+    /** MirAIe refusing the stored password: credentials are dropped and `signed-out` emitted. */
+    expireSession(): Promise<void>;
   };
 }
 
@@ -105,6 +109,12 @@ export function createDemoBackend(seed: DemoSeed = {}): DemoBackend {
   const events = createEmitter();
   const timers = new Set<ReturnType<typeof setTimeout>>();
   let loginId: string | null = seed.signedIn === false ? null : (seed.loginId ?? '9876543210');
+  let connection: ConnectionState = 'disconnected';
+
+  const setConnection = (state: ConnectionState) => {
+    connection = state;
+    events.emit({ type: 'connection', state });
+  };
 
   const requireAccount = () => {
     if (loginId === null) throw new SignedOutError();
@@ -119,6 +129,14 @@ export function createDemoBackend(seed: DemoSeed = {}): DemoBackend {
   const push = (deviceId: string) => {
     const entry = find(deviceId);
     events.emit({ type: 'status', deviceId, status: { ...entry.status } });
+  };
+
+  const forget = async () => {
+    loginId = null;
+    connection = 'disconnected';
+    for (const timer of timers) clearTimeout(timer);
+    timers.clear();
+    await credentials.clear();
   };
 
   return {
@@ -148,18 +166,15 @@ export function createDemoBackend(seed: DemoSeed = {}): DemoBackend {
       return loginId !== null;
     },
 
-    async signOut() {
-      loginId = null;
-      for (const timer of timers) clearTimeout(timer);
-      timers.clear();
-      await credentials.clear();
-    },
+    signOut: forget,
 
     getLoginId: () => loginId,
 
+    getConnectionState: () => connection,
+
     async getHome(): Promise<Home> {
       requireAccount();
-      events.emit({ type: 'connection', state: 'connected' });
+      if (connection !== 'connected') setConnection('connected');
       return {
         homeId: 'demo-home',
         devices: devices.map((d) => ({ ...d.device, model: { ...d.device.model } })),
@@ -193,6 +208,12 @@ export function createDemoBackend(seed: DemoSeed = {}): DemoBackend {
         const entry = find(deviceId);
         entry.status = { ...entry.status, ...patch };
         push(deviceId);
+      },
+      connection: setConnection,
+      async expireSession() {
+        if (loginId === null) return;
+        await forget();
+        events.emit({ type: 'signed-out' });
       },
     },
   };
