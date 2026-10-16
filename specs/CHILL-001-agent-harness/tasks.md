@@ -39,9 +39,11 @@
       Done: hook scripts + tests in scripts/hooks/. **Owner action:** copy
       `specs/CHILL-001-agent-harness/settings.proposed.json` into `.claude/settings.json` (it keeps the
       existing `enabledPlugins` entry) — until then the hooks exist but Claude Code does not run them.
-- [ ] Task 12: CI workflow, single required "CI passed" job
+- [x] Task 12: CI workflow, single required "CI passed" job
       Check: AC-12 on the first PR
       Files: .github/workflows/ci.yml
+      Note: AC-12 is proven only on the first PR to `main`. **Owner action:** in GitHub → Settings →
+      Branches, require the "CI passed" status check on `main`.
 - [ ] Task 13: Remove "(planned)" from CLAUDE.md, AGENTS.md, docs/engineering-rules.md; check:agent-rules passes
       Check: `pnpm gates`
       Files: CLAUDE.md, AGENTS.md, docs/engineering-rules.md
