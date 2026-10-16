@@ -229,6 +229,24 @@ describe('mqtt-packet output → our decoder', () => {
     );
   });
 
+  it('given a packet announcing more than 1 MiB, when its header arrives, then it throws before buffering the body', () => {
+    // PUBLISH with remaining length 1 048 577 (0x81 0x80 0x40)
+    expect(() => new Decoder().push(Uint8Array.of(0x30, 0x81, 0x80, 0x40))).toThrow(/too large/);
+  });
+
+  it('given a smaller cap, then a packet at the cap decodes and one byte more is refused', () => {
+    const at = oracleBytes({
+      cmd: 'publish',
+      topic: 't',
+      payload: Buffer.alloc(1021), // 2 (topic length) + 1 (topic) + 1021 = 1024
+      qos: 0,
+      dup: false,
+      retain: false,
+    });
+    expect(new Decoder({ maxPacketBytes: 1024 }).push(at)).toHaveLength(1);
+    expect(() => new Decoder({ maxPacketBytes: 1023 }).push(at)).toThrow(MqttProtocolError);
+  });
+
   it('given a packet type we never use, when decoded, then it is reported as unknown and skipped over', () => {
     const unsuback = Uint8Array.of(0xb0, 0x02, 0x00, 0x01);
     const pingresp = oracleBytes({ cmd: 'pingresp' });
@@ -243,6 +261,11 @@ describe('utf8', () => {
   it.each(['', 'plain', 'Bedroom · 24°', '漢字', '🙂 emoji'])('round-trips %p like Buffer', (s) => {
     expect(Array.from(utf8Encode(s))).toEqual(Array.from(Buffer.from(s, 'utf8')));
     expect(utf8Decode(new Uint8Array(Buffer.from(s, 'utf8')))).toBe(s);
+  });
+
+  it('replaces code points above U+10FFFF with U+FFFD instead of throwing', () => {
+    expect(utf8Decode(Uint8Array.of(0xf4, 0x90, 0x80, 0x80))).toBe('\uFFFD'); // 0x110000
+    expect(utf8Decode(Uint8Array.of(0x61, 0xf7, 0xbf, 0xbf, 0xbf))).toBe('a\uFFFD'); // 0x1FFFFF
   });
 
   it('replaces invalid bytes with U+FFFD instead of throwing', () => {

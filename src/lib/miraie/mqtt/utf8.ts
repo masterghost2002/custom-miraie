@@ -50,7 +50,8 @@ export function utf8Decode(bytes: Uint8Array): string {
         }
       }
     }
-    out += String.fromCodePoint(cp);
+    // 4-byte sequences can spell values past Unicode's end, which fromCodePoint rejects.
+    out += String.fromCodePoint(cp > 0x10ffff ? 0xfffd : cp);
     i += size;
   }
   return out;

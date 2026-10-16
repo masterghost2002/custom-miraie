@@ -186,9 +186,17 @@ function decodeBody(first: number, body: Uint8Array): Packet {
   }
 }
 
+/** MirAIe status pushes are a few hundred bytes; anything near this is not from a real AC. */
+export const MAX_PACKET_BYTES = 1024 * 1024;
+
 /** Streaming decoder: feed it socket chunks; it returns every complete packet so far. */
 export class Decoder {
   private buffer = new Uint8Array(0);
+  private readonly maxPacketBytes: number;
+
+  constructor({ maxPacketBytes = MAX_PACKET_BYTES }: { maxPacketBytes?: number } = {}) {
+    this.maxPacketBytes = maxPacketBytes;
+  }
 
   push(chunk: Uint8Array): Packet[] {
     const joined = new Uint8Array(this.buffer.length + chunk.length);
@@ -218,7 +226,11 @@ export class Decoder {
       if (i >= b.length) return null;
       const byte = b[i] as number;
       length += (byte & 0x7f) * multiplier;
-      if ((byte & 0x80) === 0) return { first: b[0] as number, length, headerSize: i + 1 };
+      if ((byte & 0x80) === 0) {
+        // Refuse before buffering: a hostile length would otherwise grow memory without bound.
+        if (length > this.maxPacketBytes) throw new MqttProtocolError('Packet too large');
+        return { first: b[0] as number, length, headerSize: i + 1 };
+      }
       multiplier *= 128;
     }
     throw new MqttProtocolError('Malformed remaining length');

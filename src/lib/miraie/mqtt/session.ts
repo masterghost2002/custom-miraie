@@ -160,16 +160,15 @@ export function createMqttSession(options: SessionOptions): MqttSession {
             password,
           }),
         onData: (bytes) => {
-          let packets: Packet[];
+          // A malformed or oversized packet, or a listener that throws, ends this connection
+          // (the backend reconnects) instead of escaping into the socket library's callback.
           try {
-            packets = decoder.push(bytes);
+            for (const packet of decoder.push(bytes)) {
+              if (finished) return;
+              handle(packet);
+            }
           } catch {
             connection.finish({ kind: 'dropped' });
-            return;
-          }
-          for (const packet of packets) {
-            if (finished) return;
-            handle(packet);
           }
         },
         onError: () => connection.finish({ kind: 'dropped' }),

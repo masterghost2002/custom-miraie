@@ -263,6 +263,40 @@ describe('MQTT session timers and errors (fake socket, fake clock)', () => {
     expect(closes).toEqual([{ kind: 'dropped' }]);
   });
 
+  it('given a packet announcing more than 1 MiB, then the connection is dropped', () => {
+    const socket = fakeSocket();
+    const { closes } = start(socket);
+    socket.state.handlers?.onConnect();
+    socket.state.handlers?.onData(CONNACK_OK);
+    socket.state.handlers?.onData(Uint8Array.of(0x30, 0x81, 0x80, 0x40));
+    expect(closes).toEqual([{ kind: 'dropped' }]);
+    expect(socket.state.destroyed).toBe(true);
+  });
+
+  it('given handling a packet throws, then the connection is dropped instead of crashing the socket callback', () => {
+    const socket = fakeSocket();
+    const closes: CloseReason[] = [];
+    const session = createMqttSession({
+      socketFactory: socket.factory,
+      username: 'home-1',
+      password: 'token-1',
+      topics: [],
+      onMessage: () => {
+        throw new Error('listener bug');
+      },
+      onState: () => {},
+      onClose: (reason) => closes.push(reason),
+    });
+    session.connect();
+    socket.state.handlers?.onConnect();
+    socket.state.handlers?.onData(CONNACK_OK);
+    // PUBLISH qos 0, topic "t", payload "{}"
+    expect(() =>
+      socket.state.handlers?.onData(Uint8Array.of(0x30, 0x05, 0x00, 0x01, 0x74, 0x7b, 0x7d)),
+    ).not.toThrow();
+    expect(closes).toEqual([{ kind: 'dropped' }]);
+  });
+
   it('given a connected session, when closed, then the last bytes written are DISCONNECT', () => {
     const socket = fakeSocket();
     const { session } = start(socket);
