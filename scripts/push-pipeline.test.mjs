@@ -67,3 +67,7 @@ test('AC-12 stand-in: CI has one "CI passed" job running gate tests, gates, type
   assert.equal(scripts['test:coverage'], 'jest --coverage');
   assert.equal(scripts['gates:test'], 'node --test "scripts/**/*.test.mjs"');
 });
+
+test('CI runs with a read-only token', () => {
+  assert.match(read('.github/workflows/ci.yml'), /^permissions:\n {2}contents: read$/m);
+});
