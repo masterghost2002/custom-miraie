@@ -12,7 +12,7 @@
 - [x] Task 4: `getHome` (homes → spaces → devices → details → status), zod-validated
       Check: AC-3
       Files: src/lib/miraie/rest.ts, `__tests__/rest.test.ts`
-- [ ] Task 5: MQTT 3.1 codec
+- [x] Task 5: MQTT 3.1 codec
       Check: AC-6 against mqtt-packet
       Files: src/lib/miraie/mqtt/codec.ts, `__tests__/codec.test.ts`
 - [ ] Task 6: MQTT session (connect, subscribe, publish, keep-alive, reconnect hook) + Node socket
