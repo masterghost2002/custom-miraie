@@ -1,4 +1,6 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { act, fireEvent, render, screen } from '@testing-library/react-native';
+
+import { animatedStyle, animatedViews } from '@/test-support/drawing';
 
 import { SegmentedPill } from '../segmented-pill';
 
@@ -10,7 +12,43 @@ const fan = [
   { value: 'high', label: 'High' },
 ] as const;
 
+const indicatorX = () =>
+  (animatedStyle(animatedViews('transform')[0]).transform as { translateX: number }[])[0]
+    ?.translateX;
+const layout = (width: number) => ({
+  nativeEvent: { layout: { width, height: 52, x: 0, y: 0 } },
+});
+
 describe('SegmentedPill', () => {
+  beforeEach(() => jest.useFakeTimers());
+  afterEach(() => jest.useRealTimers());
+
+  it('AC-3: the indicator slides to the chosen option in 0.45 s', async () => {
+    const view = await render(
+      <SegmentedPill
+        options={fan}
+        value="auto"
+        onChange={jest.fn()}
+        accessibilityLabel="Fan speed"
+      />,
+    );
+    // 318 wide card track: (318 − 8 − 16) / 5 = 58.8 per column, 62.8 per step (board).
+    await fireEvent(screen.getByLabelText('Fan speed'), 'layout', layout(318));
+    expect(indicatorX()).toBe(0);
+    await view.rerender(
+      <SegmentedPill
+        options={fan}
+        value="low"
+        onChange={jest.fn()}
+        accessibilityLabel="Fan speed"
+      />,
+    );
+    await act(async () => jest.advanceTimersByTime(200));
+    expect(indicatorX()).toBeLessThan(125.6);
+    await act(async () => jest.advanceTimersByTime(300));
+    expect(indicatorX()).toBeCloseTo(125.6);
+  });
+
   it('AC-3: given 5 options, when the person taps "Low", then onChange("low") fires', async () => {
     const onChange = jest.fn();
     await render(
