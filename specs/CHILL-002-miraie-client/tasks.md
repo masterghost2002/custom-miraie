@@ -6,7 +6,7 @@
 - [x] Task 2: Control message builders
       Check: AC-5 table test (every builder vs the Python reference output)
       Files: src/lib/miraie/messages.ts, `__tests__/messages.test.ts`
-- [ ] Task 3: REST sign-in with login-ID kind detection and error types
+- [x] Task 3: REST sign-in with login-ID kind detection and error types
       Check: AC-1, AC-2 with a fake fetch
       Files: src/lib/miraie/{auth,rest}.ts, `__tests__/auth.test.ts`
 - [ ] Task 4: `getHome` (homes → spaces → devices → details → status), zod-validated
