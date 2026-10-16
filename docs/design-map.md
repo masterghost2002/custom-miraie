@@ -11,36 +11,35 @@ it is not a token yet: stop and add it (CHILL-003) instead of typing a raw value
 
 ## Colour
 
-| Canvas                            | Light                   | Dark                    | Token                     | Class (examples)                                               |
-| --------------------------------- | ----------------------- | ----------------------- | ------------------------- | -------------------------------------------------------------- |
-| `--bg`                            | `#E7E5E2`               | `#151413`               | `bg`                      | `bg-ground`                                                    |
-| `--ink`                           | `#141210`               | `#F3F1EE`               | `ink`                     | `text-ink`, `bg-ink`                                           |
-| `--muted`                         | `#5E5A56`               | `#A39E98`               | `muted`                   | `text-muted`                                                   |
-| `--tick`                          | `rgba(20,18,16,.22)`    | `rgba(255,255,255,.22)` | `tick`                    | `bg-tick`, `border-tick`                                       |
-| `--track`                         | `rgba(20,18,16,.07)`    | `rgba(255,255,255,.08)` | `track`                   | `bg-track`                                                     |
-| `--glass`                         | `rgba(255,255,255,.58)` | `rgba(48,46,44,.55)`    | `glass`                   | `bg-glass`                                                     |
-| `--glass-line`                    | `rgba(255,255,255,.85)` | `rgba(255,255,255,.08)` | `glassLine`               | `border-glass-line`                                            |
-| `--glass-shadow` colour + opacity | `rgb(60,40,20)` @ .07   | `rgb(0,0,0)` @ .3       | `shadow`, `shadowOpacity` | none — applied by the glass primitive (offset 0/10, radius 15) |
-| `--pill`                          | `#FFFFFF`               | `rgba(255,255,255,.10)` | `pill`                    | `bg-pill`                                                      |
-| `--field-line`                    | `rgba(20,18,16,.08)`    | `rgba(255,255,255,.10)` | `fieldLine`               | `border-field-line`                                            |
-| `--sel-bg`                        | `#141210`               | `#F3F1EE`               | `selBg`                   | `bg-sel-bg`                                                    |
-| `--sel-ink`                       | `#FFFFFF`               | `#151413`               | `selInk`                  | `text-sel-ink`                                                 |
-| `--accent`                        | `#E8701F`               | `#F07A2A`               | `accent`                  | `bg-accent`, `text-accent`, `border-accent`                    |
-| white on accent                   | `#FFFFFF`               | `#FFFFFF`               | `onAccent`                | `text-on-accent`                                               |
-| selected mode fill (`.mb.sel`)    | `#FFFFFF`               | `#2A2826`               | `modeSel`                 | `bg-mode-sel`                                                  |
-| `--unit`                          | `#F7F6F4`               | `#F2F1EF`               | `unit`                    | `bg-unit`                                                      |
-| `--slot`                          | `#1C1A18`               | `#1C1A18`               | `slot`                    | `bg-slot`                                                      |
-| `--particle`                      | `rgba(20,18,16,.45)`    | `rgba(255,255,255,.5)`  | `particle`                | none (animated views/SVG)                                      |
-| `--guide`                         | `rgba(20,18,16,.06)`    | `rgba(255,255,255,.06)` | `guide`                   | none (SVG stroke)                                              |
-| `--wave`                          | `rgba(20,18,16,.09)`    | `rgba(255,255,255,.07)` | `wave`                    | none (breeze SVG stroke)                                       |
-| display digits/icons/lit bars     | `#E8701F`               | `#E8701F`               | `display.glow`            | none                                                           |
-| unlit fan bar                     | `rgba(232,112,31,.2)`   | same                    | `display.dim`             | none                                                           |
-| large-unit vent slot              | `#2B2825`               | same                    | `display.vent`            | none                                                           |
-| LED off                           | `#C9C5C0`               | same                    | `display.ledOff`          | none                                                           |
+| Canvas                         | Light                   | Dark                    | Token            | Class (examples)                                      |
+| ------------------------------ | ----------------------- | ----------------------- | ---------------- | ----------------------------------------------------- |
+| `--bg`                         | `#E7E5E2`               | `#151413`               | `bg`             | `bg-ground`                                           |
+| `--ink`                        | `#141210`               | `#F3F1EE`               | `ink`            | `text-ink`, `bg-ink`                                  |
+| `--muted`                      | `#5E5A56`               | `#A39E98`               | `muted`          | `text-muted`                                          |
+| `--tick`                       | `rgba(20,18,16,.22)`    | `rgba(255,255,255,.22)` | `tick`           | `bg-tick`, `border-tick`                              |
+| `--track`                      | `rgba(20,18,16,.07)`    | `rgba(255,255,255,.08)` | `track`          | `bg-track`                                            |
+| `--glass`                      | `rgba(255,255,255,.58)` | `rgba(48,46,44,.55)`    | `glass`          | `bg-glass`                                            |
+| `--glass-line`                 | `rgba(255,255,255,.85)` | `rgba(255,255,255,.08)` | `glassLine`      | `border-glass-line`                                   |
+| `--glass-shadow` colour        | `rgba(60,40,20,.07)`    | `rgba(0,0,0,.3)`        | `glassShadow`    | none — the glass primitive's `boxShadow: 0 10px 30px` |
+| `--pill`                       | `#FFFFFF`               | `rgba(255,255,255,.10)` | `pill`           | `bg-pill`                                             |
+| `--field-line`                 | `rgba(20,18,16,.08)`    | `rgba(255,255,255,.10)` | `fieldLine`      | `border-field-line`                                   |
+| `--sel-bg`                     | `#141210`               | `#F3F1EE`               | `selBg`          | `bg-sel-bg`                                           |
+| `--sel-ink`                    | `#FFFFFF`               | `#151413`               | `selInk`         | `text-sel-ink`                                        |
+| `--accent`                     | `#E8701F`               | `#F07A2A`               | `accent`         | `bg-accent`, `text-accent`, `border-accent`           |
+| white on accent                | `#FFFFFF`               | `#FFFFFF`               | `onAccent`       | `text-on-accent`                                      |
+| selected mode fill (`.mb.sel`) | `#FFFFFF`               | `#2A2826`               | `modeSel`        | `bg-mode-sel`                                         |
+| `--unit`                       | `#F7F6F4`               | `#F2F1EF`               | `unit`           | `bg-unit`                                             |
+| `--slot`                       | `#1C1A18`               | `#1C1A18`               | `slot`           | `bg-slot`                                             |
+| `--particle`                   | `rgba(20,18,16,.45)`    | `rgba(255,255,255,.5)`  | `particle`       | none (animated views/SVG)                             |
+| `--guide`                      | `rgba(20,18,16,.06)`    | `rgba(255,255,255,.06)` | `guide`          | none (SVG stroke)                                     |
+| `--wave`                       | `rgba(20,18,16,.09)`    | `rgba(255,255,255,.07)` | `wave`           | none (breeze SVG stroke)                              |
+| display digits/icons/lit bars  | `#E8701F`               | `#E8701F`               | `display.glow`   | none                                                  |
+| unlit fan bar                  | `rgba(232,112,31,.2)`   | same                    | `display.dim`    | none                                                  |
+| large-unit vent slot           | `#2B2825`               | same                    | `display.vent`   | none                                                  |
+| LED off                        | `#C9C5C0`               | same                    | `display.ledOff` | none                                                  |
 
 Toggle knob note: the "on" knob is `#FFFFFF` in light and `#151413` in dark, which equals
-`selInk` in both themes — use `selInk` for the on knob. The "off" knob is `#FFFFFF` in both themes
-(needs a `white` token, below).
+`selInk` in both themes — use `selInk` for the on knob. The "off" knob is `fixed.white`.
 
 ## Type
 
@@ -64,17 +63,18 @@ never use `fontWeight` with these).
 | Card reading                                               | 64 / 300        | `text-reading-sm font-light` |
 | Reading                                                    | 96 / 300        | `text-reading font-light`    |
 
-Line heights and letter spacing are baked into each size (see `tailwind.config.js`). Not covered
-yet: the hero's line height 1.12 (config has 45 ≈ 1.125), the Sign-in body line height 1.5
-(config `text-body` is 21 ≈ 1.4), caption line height 1.45 on the secure-storage note, −0.01em on
-the 17 px header/time, 0.01em + tabular numerals on display digits.
+Line heights and letter spacing are baked into each size (see `tailwind.config.js`). The Sign-in
+body (1.5) is `text-intro`, the secure-storage note (1.45) is `text-note`, display digits are
+`text-display-sm|md|lg` (0.01em on the large one) and every reading and display digit uses tabular
+numerals (the `Text` primitive adds them). The hero's 1.12 is 45 px (≈ 1.125); the −0.01em on the
+17 px header/time is in `text-header`.
 
 ## Spacing and size
 
 Tailwind defaults (px): `0.5`=2, `1`=4, `1.5`=6, `2`=8, `2.5`=10, `3`=12, `3.5`=14, `4`=16, `5`=20,
 `6`=24, `7`=28, `8`=32, `9`=36, `10`=40, `11`=44, `12`=48, `14`=56, `16`=64, `20`=80, `24`=96,
 `28`=112, `32`=128, `60`=240. Project extras: `13`=52, `15`=60, `17`=68, `18`=72, `19`=76,
-`21`=84, `30`=120, `42`=168, `59`=236.
+`21`=84, `30`=120, `42`=168, `59`=236, plus `4.5`=18, `5.5`=22, `6.5`=26, `47.5`=190, `70`=280.
 
 | Board value                                   | Class                                                                       |
 | --------------------------------------------- | --------------------------------------------------------------------------- |

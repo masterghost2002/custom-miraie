@@ -1,6 +1,8 @@
 // Design: design/boards/Main.dc.html — room pills (.rp) and the featured card's mode chip
-import { type ReactNode } from 'react';
+import { type ComponentType } from 'react';
 import { View } from 'react-native';
+
+import { useTheme } from '@/theme/theme-provider';
 
 import { Glass } from './glass';
 import { PressScale } from './press-scale';
@@ -16,7 +18,8 @@ export type ChipProps = {
    */
   variant?: 'room' | 'pill' | 'header';
   selected?: boolean;
-  icon?: ReactNode;
+  /** Header chip only: the mode glyph before the label. */
+  icon?: ComponentType<{ size: number; color: string; strokeWidth: number }>;
   accessibilityLabel?: string;
   disabled?: boolean;
 };
@@ -30,6 +33,8 @@ export function Chip({
   accessibilityLabel,
   disabled,
 }: ChipProps) {
+  const { tokens } = useTheme();
+  const Icon = icon;
   const a11y = {
     accessibilityRole: 'button' as const,
     accessibilityLabel: accessibilityLabel ?? label,
@@ -50,7 +55,7 @@ export function Chip({
     return (
       <PressScale {...a11y}>
         <Glass interactive className="h-12 flex-row items-center gap-1.5 rounded-full pl-3.5 pr-4">
-          {icon}
+          {Icon ? <Icon size={16} color={tokens.ink} strokeWidth={2} /> : null}
           <Text variant="chip">{label}</Text>
         </Glass>
       </PressScale>

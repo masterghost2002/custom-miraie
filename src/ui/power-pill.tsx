@@ -42,7 +42,8 @@ export function PowerPill({
   fill,
 }: PowerPillProps) {
   const { tokens } = useTheme();
-  const [width, setWidth] = useState(120);
+  // A full-width pill is measured first, so its knob never shows at the wrong end.
+  const [width, setWidth] = useState<number | null>(fill ? null : 120);
   const progress = useSharedValue(on ? 1 : 0);
   const fade = useSharedValue(on ? 1 : 0);
   useEffect(() => {
@@ -50,7 +51,7 @@ export function PowerPill({
     fade.set(withTiming(on ? 1 : 0, { duration: 300 }));
   }, [on, progress, fade]);
 
-  const travel = Math.max(0, width - KNOB_INSETS);
+  const travel = Math.max(0, (width ?? 0) - KNOB_INSETS);
   const knob = useAnimatedStyle(() => ({
     transform: [{ translateX: progress.get() * travel }],
     backgroundColor: interpolateColor(fade.get(), [0, 1], [tokens.track, tokens.accent]),
@@ -80,7 +81,12 @@ export function PowerPill({
         </Text>
       </Animated.View>
       <Animated.View
-        style={[styles.knob, on ? { boxShadow: `0px 6px 16px ${fixed.powerShadow}` } : null, knob]}
+        style={[
+          styles.knob,
+          on ? { boxShadow: `0px 6px 16px ${fixed.powerShadow}` } : null,
+          width === null ? { opacity: 0 } : null,
+          knob,
+        ]}
       >
         <View className="flex-1 items-center justify-center">
           <Power size={18} strokeWidth={2.2} color={on ? tokens.onAccent : tokens.ink} />

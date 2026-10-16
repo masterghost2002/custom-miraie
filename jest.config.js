@@ -13,7 +13,7 @@ module.exports = {
       '<rootDir>/node_modules/lucide-react-native/dist/cjs/lucide-react-native.js',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|react-native-svg|lucide-react-native|nativewind|react-native-css-interop))',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|react-native-svg|lucide-react-native|nativewind|react-native-css-interop|standard-navigation))',
   ],
   testPathIgnorePatterns: ['/node_modules/', '/scripts/'],
   collectCoverageFrom: [

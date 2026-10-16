@@ -26,8 +26,6 @@ export const themes = {
     guideStrong: 'rgba(20,18,16,0.10)',
     beam: 'rgba(20,18,16,0.07)',
     wave: 'rgba(20,18,16,0.09)',
-    shadow: 'rgb(60,40,20)',
-    shadowOpacity: 0.07,
     /** --glass-shadow colour (0 10px 30px). */
     glassShadow: 'rgba(60,40,20,0.07)',
   },
@@ -53,8 +51,6 @@ export const themes = {
     guideStrong: 'rgba(255,255,255,0.10)',
     beam: 'rgba(255,255,255,0.07)',
     wave: 'rgba(255,255,255,0.07)',
-    shadow: 'rgb(0,0,0)',
-    shadowOpacity: 0.3,
     /** --glass-shadow colour (0 10px 30px). */
     glassShadow: 'rgba(0,0,0,0.3)',
   },
@@ -76,12 +72,9 @@ export const display = {
   ledOff: '#C9C5C0',
 } as const;
 
-/** Colours that are the same in both themes (see docs/design-map.md › Fixed). */
+/** Colours that are the same in both themes (docs/design-map.md › Added in CHILL-003). */
 export const fixed = {
   white: '#FFFFFF',
-  black: '#000000',
-  /** Warm shadow colour of light-theme unit drawings. */
-  warm: 'rgb(60,40,20)',
   /** Shadow under a running power knob / button (0 6px 16px). */
   powerShadow: 'rgba(232,112,31,0.35)',
   /** Outer shadow of the selected mode button (0 8px 20px). */

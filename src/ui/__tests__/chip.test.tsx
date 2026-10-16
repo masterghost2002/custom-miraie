@@ -27,7 +27,7 @@ describe('Chip', () => {
       <Chip
         label="Cool"
         variant="header"
-        icon={<Snowflake size={16} />}
+        icon={Snowflake}
         accessibilityLabel="Mode: cool"
         onPress={jest.fn()}
       />,
