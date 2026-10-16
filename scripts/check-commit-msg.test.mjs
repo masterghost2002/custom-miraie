@@ -43,6 +43,19 @@ test('git-generated merge, revert and fixup messages pass', () => {
   }
 });
 
+test('git’s own merge messages pass, but a hand-written "Merge …" subject does not', () => {
+  for (const msg of [
+    "Merge branch 'feat/x' into main",
+    "Merge remote-tracking branch 'origin/main'",
+    'Merge pull request #3 from owner/feat-x',
+    "Merge tag 'v1.0'",
+    "Merge commit 'abc123'",
+  ]) {
+    assert.deepEqual(checkCommitMessage(msg, known), [], msg);
+  }
+  assert.equal(checkCommitMessage('Merge the climate work', known).length, 1);
+});
+
 test('comment lines from the editor are ignored', () => {
   assert.equal(
     subjectOf('# Please enter\n\nfix(a): b (CHILL-006)\n# end'),

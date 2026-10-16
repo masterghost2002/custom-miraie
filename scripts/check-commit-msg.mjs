@@ -9,7 +9,8 @@ export const RULE = 'commit-msg';
 export const SEVERITY = 'error';
 
 const FORMAT = /^(feat|fix|refactor|test|docs|chore)(\([a-z0-9-]+\))?: .+ \((CHILL-\d{3})\)$/;
-const GIT_GENERATED = /^(Merge |Revert "|fixup! |squash! |amend! )/;
+const GIT_GENERATED =
+  /^(Merge (branch|remote-tracking branch|pull request|tag|commit) |Revert "|fixup! |squash! |amend! )/;
 const EXAMPLE = 'feat(climate): add fan speed pill (CHILL-006)';
 
 /** The subject line: the first non-comment, non-empty line. */
