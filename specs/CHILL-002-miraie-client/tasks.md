@@ -1,6 +1,6 @@
 # CHILL-002 — Tasks
 
-- [ ] Task 1: Types, constants, `parseStatus`
+- [x] Task 1: Types, constants, `parseStatus`
       Check: AC-4 table tests
       Files: src/lib/miraie/{types,constants,status}.ts, `__tests__/status.test.ts`
 - [ ] Task 2: Control message builders
