@@ -31,3 +31,16 @@ jest.mock('expo-glass-effect', () => {
     isGlassEffectAPIAvailable: jest.fn(() => false),
   };
 });
+
+// Reanimated: animated styles become inspectable (toHaveAnimatedStyle) and run on fake timers.
+// useReducedMotion is the device's Reduce Motion setting; tests switch it per case.
+jest.mock('react-native-reanimated', () => {
+  const actual = jest.requireActual('react-native-reanimated');
+  return {
+    __esModule: true,
+    ...actual,
+    default: actual.default,
+    useReducedMotion: jest.fn(() => false),
+  };
+});
+require('react-native-reanimated').setUpTests();

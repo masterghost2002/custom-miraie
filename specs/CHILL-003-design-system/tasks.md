@@ -15,10 +15,10 @@
 - [x] Task 5: `SegmentedPill`, `ModeButton`, auto-mode icon
       Check: AC-3, AC-6
       Files: src/ui/{segmented-pill,mode-button}.tsx, src/ui/icons/auto-mode.tsx
-- [ ] Task 6: `AcUnit` (5 sizes) + `AcDisplay`
+- [x] Task 6: `AcUnit` (5 sizes) + `AcDisplay`
       Check: AC-7
       Files: src/ui/{ac-unit,ac-display}.tsx
-- [ ] Task 7: `AirParticles`, `FanIcon`
+- [x] Task 7: `AirParticles`, `FanIcon`
       Check: AC-8 (still under reduced motion), speed classes per fan
       Files: src/ui/{air-particles,fan-icon}.tsx
 - [x] Task 8: `TabBar`
