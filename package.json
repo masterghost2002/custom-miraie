@@ -60,6 +60,7 @@
     "android": "expo run:android",
     "web": "expo start --web",
     "start:demo": "EXPO_PUBLIC_MIRAIE_DEMO=1 expo start",
+    "spike:miraie": "NODE_OPTIONS=--use-system-ca tsx scripts/spike-miraie.ts",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
     "format": "prettier --write .",

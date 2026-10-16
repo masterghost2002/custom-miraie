@@ -30,7 +30,7 @@
 - [x] Task 10: BackendProvider + query hooks (MQTT pushes into the cache, optimistic commands)
       Check: hook tests rendered with the demo backend
       Files: src/lib/miraie/react/**
-- [ ] Task 11: `pnpm spike:miraie`
+- [x] Task 11: `pnpm spike:miraie`
       Check: AC-11 — owner runs it (O1)
       Files: scripts/spike-miraie.ts, package.json, .env.example
 - [ ] Task 12: STOP and run /review
