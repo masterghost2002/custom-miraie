@@ -1,7 +1,7 @@
 // Shared helpers for every gate (scripts/check-*.mjs) and Claude hook, so they all read files the
 // same way and print the same report format (CHILL-001).
 import { execFileSync } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -131,9 +131,17 @@ export function formatSetupError(rule, error) {
   };
 }
 
-/** True when the module at `metaUrl` is the script node was started with. */
-export function isMain(metaUrl) {
-  return process.argv[1] !== undefined && path.resolve(process.argv[1]) === fileURLToPath(metaUrl);
+/**
+ * True when the module at `metaUrl` is the script node was started with — also through a
+ * symlink (node runs the real file, argv keeps the link), so a gate never silently does nothing.
+ */
+export function isMain(metaUrl, started = process.argv[1]) {
+  if (!started) return false;
+  try {
+    return realpathSync(started) === realpathSync(fileURLToPath(metaUrl));
+  } catch {
+    return false;
+  }
 }
 
 /**

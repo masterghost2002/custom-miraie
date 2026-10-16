@@ -17,8 +17,9 @@ function scriptsDir(gates) {
 }
 
 test('AC-11: gates run in parallel and the report shows each gate with its time', async () => {
-  const sleep = "await new Promise((r) => setTimeout(r, 400)); console.log('✓ check:x');";
-  const dir = scriptsDir({ a: sleep, b: sleep, c: sleep });
+  const sleep = (name) =>
+    `await new Promise((r) => setTimeout(r, 400)); console.log('✓ check:${name}');`;
+  const dir = scriptsDir({ a: sleep('a'), b: sleep('b'), c: sleep('c') });
   const { failed, seconds, report } = await runGates(['a', 'b', 'c'], {
     scriptsDir: dir,
     cwd: dir,
@@ -48,6 +49,25 @@ test('a crashing gate fails', async () => {
   const dir = scriptsDir({ crash: "throw new Error('boom');" });
   const { failed } = await runGates(['crash'], { scriptsDir: dir, cwd: dir });
   assert.equal(failed.length, 1);
+});
+
+test('a gate that exits 0 without printing its result line fails (it did not run)', async () => {
+  const dir = scriptsDir({ silent: '', other: "console.log('✓ check:something-else')" });
+  const { failed, report } = await runGates(['silent', 'other'], { scriptsDir: dir, cwd: dir });
+  assert.deepEqual(
+    failed.map((r) => r.name),
+    ['silent', 'other'],
+  );
+  assert.match(report, /printed no ✓ check:silent line/);
+});
+
+test('a gate that only warns (⚠ line, exit 0) passes and its warnings are shown', async () => {
+  const dir = scriptsDir({
+    soft: "console.log('⚠ check:soft\\n  src/a.ts:1\\n  m — f\\ncheck:soft: 1 warning')",
+  });
+  const { failed, report } = await runGates(['soft'], { scriptsDir: dir, cwd: dir });
+  assert.equal(failed.length, 0);
+  assert.match(report, /src\/a\.ts:1/);
 });
 
 test('broken setup: a missing gate script fails', async () => {

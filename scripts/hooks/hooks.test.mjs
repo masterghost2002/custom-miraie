@@ -4,7 +4,14 @@ import { gitIn, tempRepo } from '../lib/test-git.mjs';
 // on stdin (CHILL-001 AC-3, AC-13, AC-14, AC-15).
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  appendFileSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
@@ -143,6 +150,19 @@ test('AC-14 end to end: the real pre-tool-use script exits 2 for ios/', () => {
   });
   assert.equal(result.code, 2);
   assert.match(result.stderr, /Blocked: ios\/Podfile/);
+});
+
+test('AC-14: the pre-tool-use hook started through a symlink still blocks ios/', () => {
+  const link = path.join(mkdtempSync(path.join(tmpdir(), 'hooklink-')), 'pre.mjs');
+  symlinkSync(path.join(here, 'pre-tool-use.mjs'), link);
+  const result = spawnSync(process.execPath, [link], {
+    input: JSON.stringify({
+      ...write(path.join(REPO_ROOT, 'ios', 'Podfile'), 'x'),
+      cwd: REPO_ROOT,
+    }),
+    encoding: 'utf8',
+  });
+  assert.equal(result.status, 2);
 });
 
 test('AC-3 end to end: the real script blocks a new src/ui file without the note', () => {

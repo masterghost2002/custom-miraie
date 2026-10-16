@@ -2,16 +2,19 @@ import { gitIn, tempRepo } from './test-git.mjs';
 
 // Tests for the shared gate helpers (CHILL-001).
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { mkdtempSync, mkdirSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import {
   GateSetupError,
   applyIgnores,
   formatReport,
   formatSetupError,
+  isMain,
   isTestFile,
   lineOf,
   listFiles,
@@ -111,4 +114,22 @@ test('formatSetupError always fails', () => {
   const { output, exitCode } = formatSetupError('demo', new Error('no git'));
   assert.equal(exitCode, 1);
   assert.match(output, /setup broken: no git/);
+});
+
+test('isMain is true when the script was started through a symlink', () => {
+  const real = fileURLToPath(new URL('./gate.mjs', import.meta.url));
+  const link = path.join(mkdtempSync(path.join(tmpdir(), 'link-')), 'gate-link.mjs');
+  symlinkSync(real, link);
+  assert.equal(isMain(pathToFileURL(real).href, link), true);
+  assert.equal(isMain(pathToFileURL(real).href, path.join(tmpdir(), 'other.mjs')), false);
+  assert.equal(isMain(pathToFileURL(real).href, undefined), false);
+});
+
+test('a gate started through a symlinked path still runs and reports', () => {
+  const real = fileURLToPath(new URL('../check-handbook-size.mjs', import.meta.url));
+  const link = path.join(mkdtempSync(path.join(tmpdir(), 'link-')), 'check.mjs');
+  symlinkSync(real, link);
+  const result = spawnSync(process.execPath, [link], { encoding: 'utf8' });
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /✓ check:handbook-size/);
 });

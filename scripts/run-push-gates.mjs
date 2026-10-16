@@ -20,6 +20,9 @@ export const GATES = [
 ];
 export const PUSH_GATES = [...GATES, 'review'];
 
+const escape = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const resultLine = (name) => new RegExp(`^[✓⚠] check:${escape(name)}(\\s|$)`, 'm');
+
 /** Runs one gate script; resolves with its exit code, output and time. Never rejects. */
 function runOne(name, { cwd, scriptsDir }) {
   const script = path.join(scriptsDir, `check-${name}.mjs`);
@@ -41,14 +44,16 @@ function runOne(name, { cwd, scriptsDir }) {
     child.on('error', (error) =>
       resolve({ name, code: 1, output: `  ${error.message}`, seconds: elapsed() }),
     );
-    child.on('close', (code, signal) =>
-      resolve({
-        name,
-        code: code ?? (signal ? 1 : 0),
-        output: output.trimEnd(),
-        seconds: elapsed(),
-      }),
-    );
+    child.on('close', (code, signal) => {
+      let exit = code ?? (signal ? 1 : 0);
+      let text = output.trimEnd();
+      // A gate that passes always prints its ✓ (or ⚠) line; exit 0 without it means it never ran.
+      if (exit === 0 && !resultLine(name).test(text)) {
+        exit = 1;
+        text = `${text ? `${text}\n` : ''}setup broken: the gate exited 0 but printed no ✓ check:${name} line`;
+      }
+      resolve({ name, code: exit, output: text, seconds: elapsed() });
+    });
   });
 }
 
