@@ -49,6 +49,12 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
   const events = createEmitter();
 
   let credentials: StoredCredentials | null = null;
+  /**
+   * Bumped whenever the account changes (sign in, sign out, signed out by MirAIe). Work that
+   * awaited the network checks it before touching state, so a re-login or home load that was in
+   * flight can never bring old credentials or an old home back.
+   */
+  let epoch = 0;
   let homeId = '';
   let devices: AcDevice[] = [];
   type TopicTarget = { deviceId: string; kind: 'status' | 'connection' };
@@ -89,48 +95,61 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
 
   async function signedOut() {
     if (!credentials) return;
+    epoch++;
     credentials = null;
     teardown();
     await options.credentials.clear();
     events.emit({ type: 'signed-out' });
   }
 
+  /** True while the account that started some work (at `started`) is still the current one. */
+  const sameAccount = (started: number) => epoch === started && credentials !== null;
+
   /** One re-login at a time; MirAIe refusing the stored password signs the user out. */
   function renewToken(): Promise<string> {
     if (!credentials) return Promise.reject(new SignedOutError());
+    if (relogin) return relogin;
     const { loginId, password } = credentials;
-    relogin ??= login(loginId, password, { fetch })
+    const started = epoch;
+    const attempt = login(loginId, password, { fetch })
       .then(async (s) => {
+        if (!sameAccount(started)) throw new SignedOutError();
         await adopt(loginId, password, s);
         return s.accessToken;
       })
       .catch(async (error: unknown) => {
         if (isRejection(error)) {
-          await signedOut();
+          if (sameAccount(started)) await signedOut();
           throw new SignedOutError();
         }
         throw error;
       })
       .finally(() => {
-        relogin = null;
+        if (relogin === attempt) relogin = null;
       });
-    return relogin;
+    relogin = attempt;
+    return attempt;
   }
 
   /** Runs a REST call; on 401 renews the token once and retries; a second 401 signs out. */
   async function withToken<T>(call: (token: string) => Promise<T>): Promise<T> {
     if (!credentials) throw new SignedOutError();
+    const started = epoch;
+    const settle = (result: T) => {
+      if (!sameAccount(started)) throw new SignedOutError();
+      return result;
+    };
     try {
-      return await call(credentials.accessToken);
+      return settle(await call(credentials.accessToken));
     } catch (error) {
       if (!(error instanceof UnauthorizedError)) throw error;
     }
     const token = await renewToken();
     try {
-      return await call(token);
+      return settle(await call(token));
     } catch (error) {
       if (error instanceof UnauthorizedError) {
-        await signedOut();
+        if (sameAccount(started)) await signedOut();
         throw new SignedOutError();
       }
       throw error;
@@ -292,7 +311,10 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
     kind: 'live',
 
     async signIn(loginId, password) {
+      // Starting a sign-in already makes any re-login of the previous account stale.
+      const started = ++epoch;
       const s = await login(loginId, password, { fetch });
+      if (epoch !== started) throw new SignedOutError(); // signed out or superseded meanwhile
       teardown();
       await adopt(loginId, password, s);
     },
@@ -303,6 +325,7 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
     },
 
     async signOut() {
+      epoch++;
       credentials = null;
       teardown();
       await options.credentials.clear();
@@ -313,7 +336,9 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
     getConnectionState: () => session?.state ?? 'disconnected',
 
     async getHome() {
+      const started = epoch;
       const loaded = await withToken((token) => fetchHome(token, { fetch }));
+      if (!sameAccount(started)) throw new SignedOutError();
       homeId = loaded.home.homeId;
       devices = loaded.home.devices;
       raw = { ...loaded.rawStatuses };
@@ -322,9 +347,11 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
     },
 
     async getStatus(deviceId) {
+      const started = epoch;
       const { status, raw: fresh } = await withToken((token) =>
         fetchStatus(token, deviceId, { fetch }),
       );
+      if (!sameAccount(started)) throw new SignedOutError();
       raw[deviceId] = fresh;
       return status;
     },

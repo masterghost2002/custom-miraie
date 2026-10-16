@@ -373,3 +373,74 @@ describe('live backend — AC-9 confirmation', () => {
     expect(rest.log.statusGets).toBe(before);
   });
 });
+
+describe('live backend — account changes while a re-login is in flight', () => {
+  /** Holds the first login request until `release()`, so a test can act in between. */
+  function holdFirstLogin(rest: ReturnType<typeof fakeMiraie>) {
+    let release = () => {};
+    const gate = new Promise<void>((resolve) => (release = resolve));
+    const state = { started: false, logins: 0 };
+    const fetch: typeof globalThis.fetch = async (input, init) => {
+      if (String(input) === LOGIN_URL && state.logins++ === 0) {
+        state.started = true;
+        await gate;
+      }
+      return rest.fetch(input, init);
+    };
+    return { rest: { ...rest, fetch }, release: () => release(), state };
+  }
+
+  it('given a re-login in flight, when the user signs out and the login then succeeds, then nothing is stored or restored', async () => {
+    const held = holdFirstLogin(fakeMiraie({ validTokens: [] }));
+    const { backend, store } = await setup({ rest: held.rest });
+
+    const home = backend.getHome().catch((e: unknown) => e);
+    await until(() => held.state.started);
+    await backend.signOut();
+    held.release();
+
+    expect(await home).toBeInstanceOf(SignedOutError);
+    expect(store.peek()).toBeNull();
+    expect(backend.getLoginId()).toBeNull();
+    expect(broker.events.filter((e) => e.event === 'connect')).toHaveLength(0);
+  });
+
+  it("given a re-login in flight for A, when B signs in and then A's login succeeds, then B stays signed in", async () => {
+    const held = holdFirstLogin(fakeMiraie({ validTokens: [] }));
+    const { backend, store } = await setup({ rest: held.rest });
+
+    const home = backend.getHome().catch((e: unknown) => e);
+    await until(() => held.state.started);
+    await backend.signIn('b@example.com', 'secret');
+    held.release();
+    await home;
+
+    expect(store.peek()?.loginId).toBe('b@example.com');
+    expect(backend.getLoginId()).toBe('b@example.com');
+  });
+
+  it('given getHome in flight, when the user signs out, then the loaded home is not kept and no MQTT session opens', async () => {
+    let release = () => {};
+    const gate = new Promise<void>((resolve) => (release = resolve));
+    const rest = fakeMiraie();
+    let homesRequested = false;
+    const fetch: typeof globalThis.fetch = async (input, init) => {
+      if (String(input) === HOMES_URL) {
+        homesRequested = true;
+        await gate;
+      }
+      return rest.fetch(input, init);
+    };
+    const { backend } = await setup({ rest: { ...rest, fetch } });
+
+    const home = backend.getHome().catch((e: unknown) => e);
+    await until(() => homesRequested);
+    await backend.signOut();
+    release();
+
+    expect(await home).toBeInstanceOf(SignedOutError);
+    await new Promise((r) => setTimeout(r, 200));
+    expect(broker.events.filter((e) => e.event === 'connect')).toHaveLength(0);
+    expect(backend.getConnectionState()).toBe('disconnected');
+  });
+});
