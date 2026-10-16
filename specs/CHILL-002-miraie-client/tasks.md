@@ -24,7 +24,7 @@
 - [x] Task 8: react-native-tcp-socket TLS socket, chosen at runtime (never imported on web/Expo Go)
       Check: typecheck; on-device check in CHILL-011
       Files: src/lib/miraie/mqtt/socket.native.ts
-- [ ] Task 9: Demo backend
+- [x] Task 9: Demo backend
       Check: AC-10
       Files: src/lib/miraie/demo/demo-backend.ts, `__tests__/demo-backend.test.ts`
 - [ ] Task 10: BackendProvider + query hooks (MQTT pushes into the cache, optimistic commands)
