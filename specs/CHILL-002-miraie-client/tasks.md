@@ -3,7 +3,7 @@
 - [x] Task 1: Types, constants, `parseStatus`
       Check: AC-4 table tests
       Files: src/lib/miraie/{types,constants,status}.ts, `__tests__/status.test.ts`
-- [ ] Task 2: Control message builders
+- [x] Task 2: Control message builders
       Check: AC-5 table test (every builder vs the Python reference output)
       Files: src/lib/miraie/messages.ts, `__tests__/messages.test.ts`
 - [ ] Task 3: REST sign-in with login-ID kind detection and error types
