@@ -21,9 +21,9 @@ Review the current branch ($ARGUMENTS).
    7. test honesty (`honest-tests` skill)
 3. Verdict: FAIL if there is any critical or important finding. Fix them (one commit per fix,
    with the ticket ID), then run `/review` again. Suggestions don't block.
-4. On PASS write the stamp (planned in CHILL-001):
-   `pnpm review:stamp --verdict pass --critical 0 --important 0 --suggestion <n>`. Until that script exists, say plainly that the
-   stamp could not be written and the review result is in this reply only.
+4. On PASS write the stamp:
+   `pnpm review:stamp --verdict pass --critical 0 --important 0 --suggestion <n>`, then confirm with
+   `pnpm check:review`. If the stamp can't be written (e.g. no `origin/main`), say so plainly.
    The stamp (`.review/stamp.json`, gitignored) records model `claude-opus-5-5`, effort
    `xhigh` and a `reviewId` fingerprint of the exact diff; any later commit makes it stale.
 5. Reply with the findings (critical → suggestion, each with file:line) and the verdict.

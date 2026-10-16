@@ -1,6 +1,6 @@
 # CHILL-001 — Agent harness: gates, hooks, review stamp, CI
 
-Status: ready (Q1, Q2 have recommended defaults) · Design: none (tooling) · Depends on: —
+Status: ready (all questions answered 2026-10-16) · Design: none (tooling) · Depends on: —
 
 ## Assumptions (correct these now, or the work goes ahead on them)
 
@@ -48,7 +48,7 @@ sees work that already passed.
 
 ## Open questions
 
-| #   | Who decides | Question                                                                                                                                                                      | Answer (with date) |
-| --- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| Q1  | Owner       | Storybook for React Native now, or later? Recommended: later — one developer, and `src/app/_gallery.tsx` (CHILL-003) on the web preview shows every primitive in every state. |                    |
-| Q2  | Owner       | Enforce the review on CI too (needs an Anthropic API key as a repo secret)? Recommended: no; the local stamp is enough for a personal project.                                |                    |
+| #   | Who decides | Question                                                                                                                                                                      | Answer (with date)                                          |
+| --- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Q1  | Owner       | Storybook for React Native now, or later? Recommended: later — one developer, and `src/app/_gallery.tsx` (CHILL-003) on the web preview shows every primitive in every state. | Later; `src/app/_gallery.tsx` covers it (owner, 2026-10-16) |
+| Q2  | Owner       | Enforce the review on CI too (needs an Anthropic API key as a repo secret)? Recommended: no; the local stamp is enough for a personal project.                                | No; the local stamp is enough (owner, 2026-10-16)           |

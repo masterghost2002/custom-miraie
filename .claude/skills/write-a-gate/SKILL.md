@@ -6,15 +6,17 @@ description: Use when adding or changing a gate (scripts/check-<rule>.mjs), its 
 # Write a gate
 
 A gate is a small Node script that checks ONE rule across the repo and exits non-zero when it is
-broken. The planned set (CHILL-001): style-policy, design-source, feature, testid,
-ui-mock-policy, env-policy, secrets, handbook-size, agent-rules, review, commit-msg.
+broken. The set (CHILL-001): style-policy, design-source, feature, testid, ui-mock-policy,
+env-policy, secrets, handbook-size, agent-rules (all in `pnpm gates`), commit-msg (husky
+commit-msg hook) and review (`pnpm gates:push`, husky pre-push). Shared helpers:
+`scripts/lib/gate.mjs`; tests import `scripts/lib/test-git.mjs` first (scrubbed git env).
 
 ## Shape
 
 ```
 scripts/check-<rule>.mjs        the gate: exports a pure check function + a CLI entry
 scripts/check-<rule>.test.mjs   node:test tests for the check function
-scripts/run-push-gates.mjs      runs every gate in parallel (pnpm gates)
+scripts/run-push-gates.mjs      runs the gates in parallel (pnpm gates; --push adds review)
 ```
 
 ```js
@@ -33,7 +35,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 1. **One rule per file.** The exported function is pure (input: file list/text; output:
    violations), so a Claude hook can import the same function and agree with the gate.
 2. **Test it** with `node:test` + `node:assert/strict`: one passing input, one failing input per
-   violation kind, and the broken-setup case. `pnpm gates:test` (planned, `node --test scripts/`) runs them before the scan.
+   violation kind, and the broken-setup case. `pnpm gates:test` (`node --test "scripts/**/*.test.mjs"`) runs them before the scan.
 3. **Output** — exactly this, so the agent can fix it alone:
    ```
    ✖ check:<rule>

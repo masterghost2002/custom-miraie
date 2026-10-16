@@ -11,7 +11,7 @@ A test is the agent's proof that the code works. It must fail when the real feat
 
 1. **Never test a stand-in you made.** No `jest.mock('@/…')`, `jest.mock('./…')`,
    `jest.mock('../…')` — render the real component with the real hooks and `src/lib/miraie` code.
-   (`check:ui-mock-policy`, planned.)
+   (`check:ui-mock-policy`.)
 2. **Fake only what we don't own.**
    - Network → a test backend implementing `MiraieBackend`, or `createDemoBackend()` seeded with
      the state you need, passed through `<BackendProvider>`.
@@ -19,7 +19,7 @@ A test is the agent's proof that the code works. It must fail when the real feat
    - Native modules → already mocked in `jest.setup.ts` (expo-secure-store, AsyncStorage). Add new
      ones there, never per test.
 3. **Find things the way a person does**: `getByRole`, `getByLabelText`, `getByText`.
-   `testID` / `getByTestId` are banned (`check:testid`, planned). If you can't find it by role or
+   `testID` / `getByTestId` are banned (`check:testid`). If you can't find it by role or
    label, the component is missing an `accessibilityRole` or `accessibilityLabel` — fix that.
 4. **Assert what the user sees or what leaves the phone**: visible text, `accessibilityState`,
    and for protocol code the exact JSON payload or packet bytes.

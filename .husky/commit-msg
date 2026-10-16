@@ -1,0 +1,2 @@
+# Commit messages: type(scope): subject (CHILL-NNN) (CHILL-001).
+node scripts/check-commit-msg.mjs "$1"

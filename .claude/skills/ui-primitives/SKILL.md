@@ -10,7 +10,7 @@ description: Use when styling anything in Chill or creating/changing a src/ui pr
 - `src/theme/tokens.ts` holds every raw colour, for both themes (`themes.dark` is the default,
   `themes.light` optional) plus the fixed AC display colours (`display.glow`, `display.dim`,
   `display.vent`, `display.ledOff`). It is the only file allowed raw values
-  (`check:style-policy`, planned).
+  (`check:style-policy`).
 - `<ThemeProvider>` (`src/theme/theme-provider.tsx`) sets them as CSS variables; classes in
   `tailwind.config.js` read the variables:
   - colours (as `bg-*`, `text-*`, `border-*`): `ground` `ink` `muted` `track` `glass`

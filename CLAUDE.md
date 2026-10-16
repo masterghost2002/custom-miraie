@@ -2,7 +2,8 @@
 
 Chill is an **iOS-only** Expo app that replaces the Panasonic MirAIe app for controlling home air
 conditioners. Agents write the code; the owner decides what to build and approves the result.
-Keep this file under 10 KB (`check:handbook-size`, planned); put detail in the linked docs.
+Keep this file under 10 KB (`check:handbook-size`); put detail in the linked docs.
+`AGENTS.md` repeats the must-know rules; its check list must equal this file's (`check:agent-rules`).
 
 ## Start here
 
@@ -20,6 +21,7 @@ pnpm start                   # Metro; iPhone via Expo Go until CHILL-011, then t
 pnpm start:demo              # same, against the in-memory demo MirAIe (no account)
 pnpm web                     # web preview (demo backend only) at http://localhost:8081
 pnpm typecheck && pnpm lint && pnpm test
+pnpm gates                   # source + repo rules in parallel (commit-msg: on commit; review: on push)
 ```
 
 On this Mac, Node needs `NODE_OPTIONS=--use-system-ca` (Zscaler) for `expo install` and fetches.
@@ -29,9 +31,9 @@ Install packages with `pnpm expo install <pkg>`, never a bare `pnpm add`, so ver
 
 - Trunk is `main`. Branch `feat/CHILL-NNN-<slug>`; PRs target `main`.
 - Commit message: `type(scope): subject (CHILL-NNN)` — e.g. `feat(climate): add fan speed pill (CHILL-006)`.
-  Checked by: `check:commit-msg` (planned, CHILL-001).
+  Checked by: `check:commit-msg` (husky commit-msg hook).
 
-## Rules (each one is checked by a program — or will be, see CHILL-001)
+## Rules (each one is checked by a program — `pnpm gates`, git hooks, CI)
 
 ### Expo changes fast
 
@@ -47,13 +49,13 @@ No code without a spec whose open questions are all answered. Flow: `/spec` → 
 
 - Raw colours (`#…`, `rgb(…)`) live only in `src/theme/tokens.ts`. Never use arbitrary Tailwind
   values like `p-[13px]`; add a named value to `tailwind.config.js` instead.
-- Checked by: `check:style-policy` (planned). Guide: `.claude/skills/ui-primitives/SKILL.md`.
+- Checked by: `check:style-policy`. Guide: `.claude/skills/ui-primitives/SKILL.md`.
 
 ### Every screen says where its design came from
 
 - First line of every file in `src/features/**` and `src/ui/**` (not tests):
   `// Design: design/boards/<Board>.dc.html — <part>` or `// Design: none — <reason> (CHILL-NNN)`.
-- Checked by: `check:design-source` (planned). Guide: `.claude/skills/build-screen-from-design/SKILL.md`.
+- Checked by: `check:design-source`. Guide: `.claude/skills/build-screen-from-design/SKILL.md`.
 
 ### Glass is native liquid glass
 
@@ -62,11 +64,11 @@ fill everywhere else. Never hand-roll blur or a translucent card.
 
 ### Tests are honest
 
-- Query by role, label or visible text. `testID` queries are banned (`check:testid`, planned).
-- Never `jest.mock` a module from this repo (`check:ui-mock-policy`, planned). Fake only what we
+- Query by role, label or visible text. `testID` queries are banned (`check:testid`).
+- Never `jest.mock` a module from this repo (`check:ui-mock-policy`). Fake only what we
   don't own: the network goes through `MiraieBackend` (use `createDemoBackend()`), native modules
   are mocked once in `jest.setup.ts`.
-- Every new screen and component has a test (`check:feature`, planned). Coverage: lines 85%,
+- Every new screen and component has a test (`check:feature`). Coverage: lines 85%,
   branches 75% (`jest.config.js`); any exclusion carries a reason there.
 - Guide: `.claude/skills/honest-tests/SKILL.md`.
 
@@ -74,8 +76,8 @@ fill everywhere else. Never hand-roll blur or a translucent card.
 
 - Password and tokens only in `expo-secure-store`; never logged, never in `EXPO_PUBLIC_*`, never sent
   anywhere except `auth.miraie.in`, `app.miraie.in`, `mqtt.miraie.in` (TLS verified).
-- `.env*` files are never committed (`check:secrets`, planned); every `EXPO_PUBLIC_*` the app reads
-  is listed in `.env.example` (`check:env-policy`, planned).
+- `.env*` files are never committed (`check:secrets`); every `EXPO_PUBLIC_*` the app reads
+  is listed in `.env.example` (`check:env-policy`).
 
 ### Use the established libraries
 
@@ -86,8 +88,8 @@ fits, with a one-line reason — e.g. `src/lib/miraie/mqtt/codec.ts` (see CHILL-
 
 ### Reviewed before push
 
-`/review` must pass and write the stamp; `check:review` (planned) blocks a push whose code changed
-after the review.
+`/review` must pass and write the stamp; `check:review` blocks a push whose code changed
+after the review (husky pre-push: `pnpm gates:test && pnpm gates:push`; CI reruns the gates).
 
 ## When you must stop and ask
 
@@ -103,7 +105,7 @@ For anything else, work it out from the code and the docs.
 ## Done means
 
 - [ ] The spec's open questions are all answered, and every AC has a test named after it
-- [ ] Tests are honest; `pnpm test`, `pnpm typecheck`, `pnpm lint` (and `pnpm gates` once built) pass
+- [ ] Tests are honest; `pnpm test`, `pnpm typecheck`, `pnpm lint` and `pnpm gates` pass
 - [ ] Every new screen/component has its Design note and a test, and every state the board shows
 - [ ] Every colour, size and spacing value came from a token
 - [ ] The screen was compared with its board at 390×844 (web preview) and on the iPhone
