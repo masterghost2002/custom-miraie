@@ -1,4 +1,4 @@
-<!-- learn-sources: src/lib/miraie/rest.ts src/lib/miraie/messages.ts src/lib/miraie/status.ts src/lib/miraie/mqtt/session.ts -->
+<!-- learn-sources: src/lib/miraie/auth.ts src/lib/miraie/rest.ts src/lib/miraie/messages.ts src/lib/miraie/status.ts src/lib/miraie/mqtt/session.ts src/lib/miraie/live-backend.ts -->
 
 # How Chill talks to a MirAIe AC
 
@@ -6,7 +6,9 @@ Panasonic MirAIe has no public API. Everything here comes from the open-source
 [Panasonic-MirAIe-MCP-Server](https://github.com/painful-bug/Panasonic-MirAIe-MCP-Server)
 (`api.py`, `broker.py`, `device.py`, `constants.py`, `enums.py`), which in turn mirrors the
 official app, plus a probe of the broker from this repo's laptop on 2026-10-16.
-The source paths above are planned (CHILL-002); when one of them changes, re-check this page.
+The code that implements it is listed in the `learn-sources` comment at the top (CHILL-002);
+when one of those files changes, re-check this page. `pnpm spike:miraie` exercises it against
+your own account.
 
 There are two channels:
 
