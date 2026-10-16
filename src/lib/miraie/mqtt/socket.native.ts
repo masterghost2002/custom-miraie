@@ -3,8 +3,11 @@
 // library is required lazily: in Expo Go or on web `createNativeTlsSocketFactory()` returns null
 // and the app stays on the demo backend (CHILL-002 Task 8, CHILL-011 AC-4).
 //
-// Certificates are verified by iOS against the system trust store with the host as peer name
-// (the library's default when no `ca` is given). Never pass rejectUnauthorized: false.
+// Certificates are verified by iOS against the system trust store with the host as peer name —
+// the library's default when no `ca` is given. Never pass `rejectUnauthorized` or `ca`:
+// react-native-tcp-socket 6.4.3 never validates a custom `ca` (its `_checkValidity` is never set
+// to true, so manual trust evaluation accepts any certificate). The version is pinned in
+// package.json; re-check TcpSocketClient.m before upgrading it.
 
 import { NativeModules } from 'react-native';
 
