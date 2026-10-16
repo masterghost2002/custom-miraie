@@ -30,12 +30,15 @@
 - [x] Task 10: husky pre-commit, commit-msg, pre-push
       Check: AC-7, AC-9, AC-11 by hand on a scratch branch
       Files: .husky/*
-- [ ] Task 11: Claude Code hooks (PreToolUse block list + design note on new files, PostToolUse prettier, Stop → /review once)
+- [x] Task 11: Claude Code hooks (PreToolUse block list + design note on new files, PostToolUse prettier, Stop → /review once)
       Check: AC-13…AC-15 — `node --test scripts/hooks/*.test.mjs`
       Files: scripts/hooks/*, .claude/settings.json — the OWNER applies the settings change (an agent
       may not edit its own permissions). Proposed allow-list: `pnpm typecheck`, `pnpm lint`,
       `pnpm test*`, `pnpm format:check`, `pnpm gates*`, `pnpm check:*`, `git status|diff|log|show|merge-base`;
       deny: Read `.env`/`.env.local`, Edit `ios/**`/`android/**`.
+      Done: hook scripts + tests in scripts/hooks/. **Owner action:** copy
+      `specs/CHILL-001-agent-harness/settings.proposed.json` into `.claude/settings.json` (it keeps the
+      existing `enabledPlugins` entry) — until then the hooks exist but Claude Code does not run them.
 - [ ] Task 12: CI workflow, single required "CI passed" job
       Check: AC-12 on the first PR
       Files: .github/workflows/ci.yml
