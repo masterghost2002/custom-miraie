@@ -6,7 +6,7 @@
 - [x] Task 2: `Glass` (GlassView + fallback), `Screen`, `Breeze`
       Check: AC-2, AC-8 (breeze)
       Files: src/ui/{glass,screen,breeze}.tsx
-- [ ] Task 3: `IconButton`, `PrimaryButton`, `Chip`, `PowerButton`
+- [x] Task 3: `IconButton`, `PrimaryButton`, `Chip`, `PowerButton`
       Check: AC-10; pressed/disabled states
       Files: src/ui/{icon-button,primary-button,chip,power-button}.tsx
 - [ ] Task 4: `Toggle`, `PowerPill`
