@@ -3,7 +3,7 @@
 - [x] Task 1: Gate helpers — walk `src/`, read files, git staged/changed lists, report format, exit codes
       Check: `node --test scripts/lib/gate.test.mjs`
       Files: scripts/lib/gate.mjs, scripts/lib/gate.test.mjs
-- [ ] Task 2: check:style-policy (hex/rgb/hsl outside src/theme; arbitrary `[..px]` classes)
+- [x] Task 2: check:style-policy (hex/rgb/hsl outside src/theme; arbitrary `[..px]` classes)
       Check: AC-1 fixtures pass/fail as expected
       Files: scripts/check-style-policy.mjs (+ .test.mjs), scripts/**fixtures**/style-policy/**
 - [ ] Task 3: check:design-source (first-line `// Design:` note in src/features/** and src/ui/**)
