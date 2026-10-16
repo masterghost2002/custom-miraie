@@ -3,7 +3,7 @@
 - [x] Task 1: Add missing tokens; `Text` with every variant
       Check: AC-1 for Text; style-policy passes
       Files: src/theme/tokens.ts, src/ui/text.tsx, docs/design-map.md
-- [ ] Task 2: `Glass` (GlassView + fallback), `Screen`, `Breeze`
+- [x] Task 2: `Glass` (GlassView + fallback), `Screen`, `Breeze`
       Check: AC-2, AC-8 (breeze)
       Files: src/ui/{glass,screen,breeze}.tsx
 - [ ] Task 3: `IconButton`, `PrimaryButton`, `Chip`, `PowerButton`
@@ -21,7 +21,7 @@
 - [ ] Task 7: `AirParticles`, `FanIcon`
       Check: AC-8 (still under reduced motion), speed classes per fan
       Files: src/ui/{air-particles,fan-icon}.tsx
-- [ ] Task 8: `TabBar`
+- [x] Task 8: `TabBar`
       Check: AC-9
       Files: src/ui/tab-bar.tsx
 - [ ] Task 9: `_gallery` route

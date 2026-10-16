@@ -2,6 +2,13 @@
 module.exports = {
   preset: 'jest-expo',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  // Reanimated 4 / worklets ship web-only code paths for Jest; their resolver picks them.
+  resolver: 'react-native-reanimated/jest/resolver',
+  moduleNameMapper: {
+    // lucide's package exports point Jest at an ESM .mjs build; use its CommonJS build.
+    '^lucide-react-native$':
+      '<rootDir>/node_modules/lucide-react-native/dist/cjs/lucide-react-native.js',
+  },
   transformIgnorePatterns: [
     'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|react-native-svg|lucide-react-native|nativewind|react-native-css-interop))',
   ],

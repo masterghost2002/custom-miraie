@@ -28,6 +28,8 @@ export const themes = {
     wave: 'rgba(20,18,16,0.09)',
     shadow: 'rgb(60,40,20)',
     shadowOpacity: 0.07,
+    /** --glass-shadow colour (0 10px 30px). */
+    glassShadow: 'rgba(60,40,20,0.07)',
   },
   dark: {
     bg: '#151413',
@@ -53,6 +55,8 @@ export const themes = {
     wave: 'rgba(255,255,255,0.07)',
     shadow: 'rgb(0,0,0)',
     shadowOpacity: 0.3,
+    /** --glass-shadow colour (0 10px 30px). */
+    glassShadow: 'rgba(0,0,0,0.3)',
   },
 } as const;
 
