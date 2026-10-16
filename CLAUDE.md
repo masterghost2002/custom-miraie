@@ -3,6 +3,7 @@
 Chill is an **iOS-only** Expo app that replaces the Panasonic MirAIe app for controlling home air
 conditioners. Agents write the code; the owner decides what to build and approves the result.
 Keep this file under 10 KB (`check:handbook-size`, planned); put detail in the linked docs.
+`AGENTS.md` repeats the must-know rules; its check list must equal this file's (`check:agent-rules`, planned).
 
 ## Start here
 

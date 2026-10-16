@@ -75,7 +75,10 @@
     "check:testid": "node scripts/check-testid.mjs",
     "check:ui-mock-policy": "node scripts/check-ui-mock-policy.mjs",
     "check:env-policy": "node scripts/check-env-policy.mjs",
-    "check:secrets": "node scripts/check-secrets.mjs"
+    "check:secrets": "node scripts/check-secrets.mjs",
+    "check:handbook-size": "node scripts/check-handbook-size.mjs",
+    "check:agent-rules": "node scripts/check-agent-rules.mjs",
+    "check:commit-msg": "node scripts/check-commit-msg.mjs"
   },
   "private": true,
   "packageManager": "pnpm@10.33.0",

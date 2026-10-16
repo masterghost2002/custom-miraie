@@ -18,7 +18,7 @@
 - [x] Task 6: check:env-policy and check:secrets
       Check: AC-6, AC-7 fixtures
       Files: scripts/check-env-policy.mjs, scripts/check-secrets.mjs (+ tests)
-- [ ] Task 7: check:handbook-size, check:agent-rules, check:commit-msg
+- [x] Task 7: check:handbook-size, check:agent-rules, check:commit-msg
       Check: AC-8, AC-9 fixtures
       Files: scripts/check-handbook-size.mjs, scripts/check-agent-rules.mjs, scripts/check-commit-msg.mjs (+ tests)
 - [ ] Task 8: run-push-gates runner (parallel, per-gate timing, summary)
