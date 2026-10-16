@@ -28,7 +28,7 @@ export function drawnPaths(): string[] {
 /** The path data of a Lucide icon, e.g. lucidePaths('snowflake'). */
 export function lucidePaths(name: string): string[] {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const icon = require(`lucide-react-native/dist/cjs/icons/${name}.js`) as {
+  const icon = require(`lucide-react-native/icons/${name}`) as {
     __iconData: { node: [string, { d?: string }][] };
   };
   return icon.__iconData.node.map(([, attrs]) => attrs.d).filter((d): d is string => !!d);

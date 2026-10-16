@@ -101,15 +101,8 @@ export function AcDisplay({ size, on, mode, temp, fan = 'auto', preset = 'none' 
   const style = useAnimatedStyle(() => ({ opacity: shown.get() * pulse.get() }));
 
   const PresetIcon = preset === 'eco' ? Leaf : preset === 'boost' ? Zap : null;
-  const summary = on
-    ? [value, mode, preset !== 'none' ? preset : null, s.extras ? `fan level ${level}` : null]
-        .filter(Boolean)
-        .join(', ')
-    : 'blank';
-
   return (
     <Animated.View
-      accessibilityLabel={summary}
       style={[{ flexDirection: 'row', alignItems: 'center', gap: s.gap, height: s.height }, style]}
     >
       {s.extras ? (

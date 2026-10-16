@@ -6,6 +6,9 @@ module.exports = {
   resolver: 'react-native-reanimated/jest/resolver',
   moduleNameMapper: {
     // lucide's package exports point Jest at an ESM .mjs build; use its CommonJS build.
+    // Tests read an icon's path data to check which glyph a drawing shows.
+    '^lucide-react-native/icons/(.*)$':
+      '<rootDir>/node_modules/lucide-react-native/dist/cjs/icons/$1.js',
     '^lucide-react-native$':
       '<rootDir>/node_modules/lucide-react-native/dist/cjs/lucide-react-native.js',
   },
