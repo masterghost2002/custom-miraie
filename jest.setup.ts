@@ -14,3 +14,33 @@ jest.mock('expo-secure-store', () => {
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
+
+jest.mock(
+  'react-native-safe-area-context',
+  () => require('react-native-safe-area-context/jest/mock').default,
+);
+
+// Liquid glass is a native iOS 26 view. Tests choose whether it is available; the view itself
+// renders as a plain host element so the tree shows which surface was picked.
+jest.mock('expo-glass-effect', () => {
+  const React = jest.requireActual<typeof import('react')>('react');
+  return {
+    GlassView: (props: object) => React.createElement('ExpoGlassView', props),
+    GlassContainer: (props: object) => React.createElement('ExpoGlassContainer', props),
+    isLiquidGlassAvailable: jest.fn(() => false),
+    isGlassEffectAPIAvailable: jest.fn(() => false),
+  };
+});
+
+// Reanimated: animated styles become inspectable (toHaveAnimatedStyle) and run on fake timers.
+// useReducedMotion is the device's Reduce Motion setting; tests switch it per case.
+jest.mock('react-native-reanimated', () => {
+  const actual = jest.requireActual('react-native-reanimated');
+  return {
+    __esModule: true,
+    ...actual,
+    default: actual.default,
+    useReducedMotion: jest.fn(() => false),
+  };
+});
+require('react-native-reanimated').setUpTests();

@@ -23,9 +23,11 @@ export const themes = {
     slot: '#1C1A18',
     particle: 'rgba(20,18,16,0.45)',
     guide: 'rgba(20,18,16,0.06)',
+    guideStrong: 'rgba(20,18,16,0.10)',
+    beam: 'rgba(20,18,16,0.07)',
     wave: 'rgba(20,18,16,0.09)',
-    shadow: 'rgb(60,40,20)',
-    shadowOpacity: 0.07,
+    /** --glass-shadow colour (0 10px 30px). */
+    glassShadow: 'rgba(60,40,20,0.07)',
   },
   dark: {
     bg: '#151413',
@@ -46,9 +48,11 @@ export const themes = {
     slot: '#1C1A18',
     particle: 'rgba(255,255,255,0.5)',
     guide: 'rgba(255,255,255,0.06)',
+    guideStrong: 'rgba(255,255,255,0.10)',
+    beam: 'rgba(255,255,255,0.07)',
     wave: 'rgba(255,255,255,0.07)',
-    shadow: 'rgb(0,0,0)',
-    shadowOpacity: 0.3,
+    /** --glass-shadow colour (0 10px 30px). */
+    glassShadow: 'rgba(0,0,0,0.3)',
   },
 } as const;
 
@@ -58,8 +62,39 @@ export type ThemeTokens = (typeof themes)[ThemeName];
 export const display = {
   glow: '#E8701F',
   dim: 'rgba(232,112,31,0.2)',
+  /** Digit text glow (CSS text-shadow 0 0 8px). */
+  glowShadow: 'rgba(232,112,31,0.3)',
   vent: '#2B2825',
+  /** Vent blade inside the large (Climate) unit. */
+  blade: '#8C857E',
+  /** Swing flap on the Airflow side view. */
+  flap: '#D8D4CE',
   ledOff: '#C9C5C0',
+} as const;
+
+/** Colours that are the same in both themes (docs/design-map.md › Added in CHILL-003). */
+export const fixed = {
+  white: '#FFFFFF',
+  /** Shadow under a running power knob / button (0 6px 16px). */
+  powerShadow: 'rgba(232,112,31,0.35)',
+  /** Outer shadow of the selected mode button (0 8px 20px). */
+  modeShadow: 'rgba(232,112,31,0.22)',
+  /** Toggle knob shadow (0 1px 3px). */
+  knobShadow: 'rgba(0,0,0,0.25)',
+  /** Slider marker shadow (0 3px 8px). */
+  markerShadow: 'rgba(0,0,0,0.15)',
+  /** Seam line and inset shading on the unit drawings. */
+  seam: 'rgba(0,0,0,0.06)',
+  insetSoft: 'rgba(0,0,0,0.05)',
+  /** Unit drop shadows (language §7). */
+  unitShadowStrong: 'rgba(0,0,0,0.28)',
+  unitShadowMid: 'rgba(0,0,0,0.22)',
+  unitShadowSoft: 'rgba(0,0,0,0.12)',
+  warmShadow16: 'rgba(60,40,20,0.16)',
+  warmShadow14: 'rgba(60,40,20,0.14)',
+  warmShadow12: 'rgba(60,40,20,0.12)',
+  warmShadow08: 'rgba(60,40,20,0.08)',
+  flapShadow: 'rgba(0,0,0,0.3)',
 } as const;
 
 /** CSS variables consumed by tailwind.config.js colour names. */
