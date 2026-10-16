@@ -20,7 +20,7 @@ test('a handbook under the limit passes', () => {
   assert.deepEqual(checkHandbookSize(LIMIT_BYTES - 1), []);
 });
 
-test('broken setup: no CLAUDE.md fails', () => {
+test('AC-16: broken setup: no CLAUDE.md fails', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'handbook-'));
   assert.throws(() => collect({ cwd: dir }), GateSetupError);
 });

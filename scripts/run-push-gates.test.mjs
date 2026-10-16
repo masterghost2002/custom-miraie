@@ -70,7 +70,7 @@ test('a gate that only warns (⚠ line, exit 0) passes and its warnings are show
   assert.match(report, /src\/a\.ts:1/);
 });
 
-test('broken setup: a missing gate script fails', async () => {
+test('AC-16: broken setup: a missing gate script fails', async () => {
   const dir = scriptsDir({});
   const { failed, report } = await runGates(['missing'], { scriptsDir: dir, cwd: dir });
   assert.equal(failed.length, 1);

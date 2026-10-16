@@ -74,12 +74,12 @@ test('nothing to push (no change since origin/main) passes', () => {
   assert.deepEqual(collect({ cwd: dir }), []);
 });
 
-test('broken setup: no origin/main fails loudly', () => {
+test('AC-16: broken setup: no origin/main fails loudly', () => {
   const dir = repo({ withOrigin: false });
   assert.throws(() => collect({ cwd: dir }), GateSetupError);
 });
 
-test('broken setup: a corrupt stamp file fails', () => {
+test('AC-16: broken setup: a corrupt stamp file fails', () => {
   const dir = repo();
   writeStamp(pass, { cwd: dir });
   writeFileSync(path.join(dir, '.review', 'stamp.json'), '{nope');

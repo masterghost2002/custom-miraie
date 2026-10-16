@@ -43,12 +43,12 @@ test('stagedFiles lists only staged files', () => {
   assert.deepEqual(stagedFiles({ cwd: dir }), ['a.ts']);
 });
 
-test('broken setup: git outside a repository throws GateSetupError', () => {
+test('AC-16: broken setup: git outside a repository throws GateSetupError', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'nogit-'));
   assert.throws(() => listFiles({ cwd: dir }), GateSetupError);
 });
 
-test('broken setup: an unreadable file throws GateSetupError', () => {
+test('AC-16: broken setup: an unreadable file throws GateSetupError', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'read-'));
   assert.throws(() => readFiles(['missing.ts'], { cwd: dir }), GateSetupError);
 });

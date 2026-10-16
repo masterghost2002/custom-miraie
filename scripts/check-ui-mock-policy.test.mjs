@@ -50,7 +50,7 @@ test('mocking third-party modules in a test is not this rule’s business', () =
   );
 });
 
-test('broken setup: outside a git repository the gate fails', () => {
+test('AC-16: broken setup: outside a git repository the gate fails', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'mock-'));
   assert.throws(() => collect({ cwd: dir }), GateSetupError);
 });

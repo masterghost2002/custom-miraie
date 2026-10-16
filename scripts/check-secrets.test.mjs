@@ -68,7 +68,7 @@ test('obvious test fakes and binaries pass', () => {
   );
 });
 
-test('broken setup: outside a git repository the gate fails', () => {
+test('AC-16: broken setup: outside a git repository the gate fails', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'nogit-'));
   assert.throws(() => collect({ cwd: dir, staged: true }), GateSetupError);
 });

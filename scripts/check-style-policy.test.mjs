@@ -86,7 +86,7 @@ test('the ignore comment needs a reason', () => {
   ]);
 });
 
-test('broken setup: outside a git repository the gate fails', () => {
+test('AC-16: broken setup: outside a git repository the gate fails', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'style-'));
   assert.throws(() => collect({ cwd: dir }), GateSetupError);
 });

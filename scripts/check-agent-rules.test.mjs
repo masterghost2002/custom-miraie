@@ -36,7 +36,7 @@ test('checksIn ignores punctuation around names', () => {
   ]);
 });
 
-test('broken setup: a missing AGENTS.md, or a CLAUDE.md naming no checks, fails', () => {
+test('AC-16: broken setup: a missing AGENTS.md, or a CLAUDE.md naming no checks, fails', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'agents-'));
   writeFileSync(path.join(dir, 'CLAUDE.md'), 'check:testid');
   assert.throws(() => collect({ cwd: dir }), GateSetupError);

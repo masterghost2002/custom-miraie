@@ -58,7 +58,7 @@ test('collect reads the message file and the specs folder', () => {
   assert.deepEqual([...ticketsIn({ cwd: dir })], ['CHILL-006']);
 });
 
-test('broken setup: no message file, or no specs folder, fails', () => {
+test('AC-16: broken setup: no message file, or no specs folder, fails', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'msg-'));
   assert.throws(() => collect({ cwd: dir }), GateSetupError);
   writeFileSync(path.join(dir, 'MSG'), 'feat(a): b (CHILL-001)');

@@ -48,7 +48,7 @@ test('role, label and text queries pass', () => {
   assert.deepEqual(checkTestIds([file('src/ui/__tests__/x.test.tsx', text)]), []);
 });
 
-test('broken setup: outside a git repository the gate fails', () => {
+test('AC-16: broken setup: outside a git repository the gate fails', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'testid-'));
   assert.throws(() => collect({ cwd: dir }), GateSetupError);
 });

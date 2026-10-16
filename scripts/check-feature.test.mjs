@@ -63,7 +63,7 @@ test('an exemption skips a file only with a reason', () => {
   assert.match(v.message, /has no reason/);
 });
 
-test('broken setup: outside a git repository the gate fails', () => {
+test('AC-16: broken setup: outside a git repository the gate fails', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'feature-'));
   assert.throws(() => collect({ cwd: dir }), GateSetupError);
 });

@@ -62,7 +62,7 @@ test('tests and files outside src/features and src/ui are not checked', () => {
   assert.deepEqual(checkDesignSource(files, { boards }), []);
 });
 
-test('broken setup: no design/boards folder fails', () => {
+test('AC-16: broken setup: no design/boards folder fails', () => {
   const dir = mkdtempSync(path.join(tmpdir(), 'design-'));
   assert.throws(() => readBoards({ cwd: dir }), GateSetupError);
 });

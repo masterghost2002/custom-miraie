@@ -38,7 +38,7 @@ test('declaredNames reads NAME= lines and skips comments', () => {
   ]);
 });
 
-test('broken setup: no .env.example fails', () => {
+test('AC-16: broken setup: no .env.example fails', () => {
   const dir = tempRepo('env-');
   assert.throws(() => collect({ cwd: dir }), GateSetupError);
 });
