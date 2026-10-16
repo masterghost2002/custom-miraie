@@ -1,6 +1,7 @@
+import { gitIn, tempRepo } from './test-git.mjs';
+
 // Tests for the shared gate helpers (CHILL-001).
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -18,18 +19,12 @@ import {
   stagedFiles,
 } from './gate.mjs';
 
-function tempRepo() {
-  const dir = mkdtempSync(path.join(tmpdir(), 'gate-'));
-  execFileSync('git', ['init', '-q'], { cwd: dir });
-  return dir;
-}
-
 test('listFiles returns tracked and new files but not ignored ones', () => {
   const dir = tempRepo();
   writeFileSync(path.join(dir, '.gitignore'), 'ignored.txt\n');
   writeFileSync(path.join(dir, 'tracked.ts'), 'a');
   writeFileSync(path.join(dir, 'ignored.txt'), 'b');
-  execFileSync('git', ['add', 'tracked.ts'], { cwd: dir });
+  gitIn(dir, 'add', 'tracked.ts');
   mkdirSync(path.join(dir, 'src'));
   writeFileSync(path.join(dir, 'src', 'new.tsx'), 'c');
 
@@ -41,7 +36,7 @@ test('stagedFiles lists only staged files', () => {
   const dir = tempRepo();
   writeFileSync(path.join(dir, 'a.ts'), 'a');
   writeFileSync(path.join(dir, 'b.ts'), 'b');
-  execFileSync('git', ['add', 'a.ts'], { cwd: dir });
+  gitIn(dir, 'add', 'a.ts');
   assert.deepEqual(stagedFiles({ cwd: dir }), ['a.ts']);
 });
 

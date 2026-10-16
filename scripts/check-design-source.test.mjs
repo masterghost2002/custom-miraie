@@ -1,3 +1,5 @@
+import './lib/test-git.mjs';
+
 // Tests for check:design-source (CHILL-001 AC-3).
 import assert from 'node:assert/strict';
 import { mkdtempSync } from 'node:fs';

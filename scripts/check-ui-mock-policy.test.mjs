@@ -1,3 +1,5 @@
+import './lib/test-git.mjs';
+
 // Tests for check:ui-mock-policy (CHILL-001 AC-5).
 import assert from 'node:assert/strict';
 import { mkdtempSync } from 'node:fs';

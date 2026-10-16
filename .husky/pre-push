@@ -1,3 +1,4 @@
 # Every gate, plus the review stamp, before code leaves this Mac (CHILL-001).
-pnpm gates:test
+# Git exports GIT_DIR/GIT_INDEX_FILE to hooks; the gate tests build temp repos and must not follow them.
+env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE -u GIT_COMMON_DIR -u GIT_PREFIX pnpm gates:test
 pnpm gates:push

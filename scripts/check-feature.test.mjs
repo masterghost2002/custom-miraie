@@ -1,3 +1,5 @@
+import './lib/test-git.mjs';
+
 // Tests for check:feature (CHILL-001 AC-2).
 import assert from 'node:assert/strict';
 import { mkdtempSync } from 'node:fs';

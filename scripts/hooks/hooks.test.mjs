@@ -1,8 +1,10 @@
+import { gitIn, tempRepo } from '../lib/test-git.mjs';
+
 // Tests for the Claude Code hooks: pure decisions plus the real scripts fed sample hook JSON
 // on stdin (CHILL-001 AC-3, AC-13, AC-14, AC-15).
 import assert from 'node:assert/strict';
-import { execFileSync, spawnSync } from 'node:child_process';
-import { appendFileSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { appendFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
@@ -208,18 +210,15 @@ test('no unreviewed src/ change: the agent may stop', () => {
 });
 
 test('hasUnreviewedSrc: src/ changes without a stamp count, docs-only changes do not', () => {
-  const dir = mkdtempSync(path.join(tmpdir(), 'stop-'));
-  const run = (...args) => execFileSync('git', args, { cwd: dir, stdio: 'pipe' });
-  run('init', '-q', '-b', 'main');
-  run('config', 'user.email', 't@example.com');
-  run('config', 'user.name', 'T');
+  const dir = tempRepo('stop-');
+  const run = (...args) => gitIn(dir, ...args);
   writeFileSync(path.join(dir, 'README.md'), 'x\n');
   run('add', '.');
   run('commit', '-q', '-m', 'init');
   run('update-ref', 'refs/remotes/origin/main', 'HEAD');
   appendFileSync(path.join(dir, 'README.md'), 'docs only\n');
   assert.equal(hasUnreviewedSrc({ cwd: dir }), false);
-  execFileSync('mkdir', ['-p', path.join(dir, 'src')]);
+  mkdirSync(path.join(dir, 'src'));
   writeFileSync(path.join(dir, 'src', 'a.ts'), 'code');
   assert.equal(hasUnreviewedSrc({ cwd: dir }), true);
 });

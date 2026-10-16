@@ -1,3 +1,5 @@
+import './lib/test-git.mjs';
+
 // Tests for check:commit-msg (CHILL-001 AC-9).
 import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';

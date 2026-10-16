@@ -1,3 +1,5 @@
+import './lib/test-git.mjs';
+
 // Tests for check:agent-rules (CHILL-001 AC-8).
 import assert from 'node:assert/strict';
 import { mkdtempSync, writeFileSync } from 'node:fs';

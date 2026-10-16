@@ -1,9 +1,7 @@
+import { tempRepo } from './lib/test-git.mjs';
+
 // Tests for check:env-policy (CHILL-001 AC-6).
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
-import { mkdtempSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import path from 'node:path';
 import { test } from 'node:test';
 
 import { checkEnvPolicy, collect, declaredNames } from './check-env-policy.mjs';
@@ -41,8 +39,7 @@ test('declaredNames reads NAME= lines and skips comments', () => {
 });
 
 test('broken setup: no .env.example fails', () => {
-  const dir = mkdtempSync(path.join(tmpdir(), 'env-'));
-  execFileSync('git', ['init', '-q'], { cwd: dir });
+  const dir = tempRepo('env-');
   assert.throws(() => collect({ cwd: dir }), GateSetupError);
 });
 

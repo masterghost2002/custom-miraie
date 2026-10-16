@@ -1,6 +1,7 @@
+import { gitIn, tempRepo } from './lib/test-git.mjs';
+
 // Tests for check:secrets (CHILL-001 AC-7).
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -16,15 +17,14 @@ const fakeJwt = [
 ].join('.');
 
 function repoWith(files) {
-  const dir = mkdtempSync(path.join(tmpdir(), 'secrets-'));
-  execFileSync('git', ['init', '-q'], { cwd: dir });
+  const dir = tempRepo('secrets-');
   for (const [name, text] of Object.entries(files)) writeFileSync(path.join(dir, name), text);
   return dir;
 }
 
 test('AC-7: a staged .env.local blocks the commit', () => {
   const dir = repoWith({ '.env.local': 'MIRAIE_PASSWORD=x\n', 'a.ts': 'ok' });
-  execFileSync('git', ['add', '-f', '.env.local', 'a.ts'], { cwd: dir });
+  gitIn(dir, 'add', '-f', '.env.local', 'a.ts');
   const violations = collect({ cwd: dir, staged: true });
   assert.equal(violations.length, 1);
   assert.equal(violations[0].path, '.env.local');
@@ -33,7 +33,7 @@ test('AC-7: a staged .env.local blocks the commit', () => {
 
 test('only staged content counts in --staged mode', () => {
   const dir = repoWith({ 'a.ts': 'clean' });
-  execFileSync('git', ['add', 'a.ts'], { cwd: dir });
+  gitIn(dir, 'add', 'a.ts');
   writeFileSync(path.join(dir, 'a.ts'), `const accessToken = '${fakeJwt}';`);
   assert.deepEqual(collect({ cwd: dir, staged: true }), []);
 });

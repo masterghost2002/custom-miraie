@@ -1,8 +1,8 @@
+import { gitIn, tempRepo } from './lib/test-git.mjs';
+
 // Tests for the review stamp and check:review (CHILL-001 AC-10).
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
-import { appendFileSync, mkdtempSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { appendFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
 
@@ -11,14 +11,11 @@ import { GateSetupError } from './lib/gate.mjs';
 import { currentReviewId, reviewIdOf } from './lib/review.mjs';
 import { parseStampArgs, writeStamp } from './review-stamp.mjs';
 
-const run = (dir, ...args) => execFileSync('git', args, { cwd: dir, stdio: 'pipe' });
+const run = gitIn;
 
 /** A repo whose origin/main is its first commit, with one change on a branch. */
 function repo({ withOrigin = true } = {}) {
-  const dir = mkdtempSync(path.join(tmpdir(), 'review-'));
-  run(dir, 'init', '-q', '-b', 'main');
-  run(dir, 'config', 'user.email', 't@example.com');
-  run(dir, 'config', 'user.name', 'T');
+  const dir = tempRepo('review-');
   writeFileSync(path.join(dir, '.gitignore'), '.review/\n');
   writeFileSync(path.join(dir, 'a.ts'), 'one\n');
   run(dir, 'add', '.');

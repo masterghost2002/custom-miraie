@@ -1,3 +1,5 @@
+import './lib/test-git.mjs';
+
 // Tests for the gate runner (CHILL-001 AC-11).
 import assert from 'node:assert/strict';
 import { existsSync, mkdtempSync, writeFileSync } from 'node:fs';
