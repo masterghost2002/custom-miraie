@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chill — Sign in</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:inherit}
+.th-light{--bg:#E7E5E2;--ink:#141210;--muted:#5E5A56;--track:rgba(20,18,16,.07);--glass:rgba(255,255,255,.58);--glass-line:rgba(255,255,255,.85);--glass-shadow:0 10px 30px rgba(60,40,20,.07);--pill:#FFFFFF;--field-line:rgba(20,18,16,.08);--sel-bg:#141210;--sel-ink:#FFFFFF;--accent:#E8701F;--unit:#F7F6F4;--slot:#1C1A18;--particle:rgba(20,18,16,.45);color-scheme:light}
+.th-dark{--bg:#151413;--ink:#F3F1EE;--muted:#A39E98;--track:rgba(255,255,255,.08);--glass:rgba(48,46,44,.55);--glass-line:rgba(255,255,255,.08);--glass-shadow:0 10px 30px rgba(0,0,0,.3);--pill:rgba(255,255,255,.08);--field-line:rgba(255,255,255,.10);--sel-bg:#F3F1EE;--sel-ink:#151413;--accent:#F07A2A;--unit:#F2F1EF;--slot:#1C1A18;--particle:rgba(255,255,255,.5);color-scheme:dark}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow)}
+.th-light{--wave:rgba(20,18,16,.09)}
+.th-dark{--wave:rgba(255,255,255,.07)}
+.breeze{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.breeze svg{position:absolute;left:0;top:0}
+.breeze path{fill:none;stroke:var(--wave);stroke-width:1}
+.bz1{animation:breeze 70s linear infinite}
+.bz2{animation:breeze 110s linear infinite}
+@keyframes breeze{to{transform:translateX(-390px)}}
+@media (prefers-reduced-motion:reduce){.bz1,.bz2{animation:none}}
+.pt{position:absolute;left:0;top:0;width:5px;height:5px;border-radius:50%;background:var(--particle);offset-rotate:0deg;opacity:0;animation:along 3.2s linear infinite}
+@keyframes along{0%{offset-distance:0%;opacity:0}10%{opacity:1}75%{opacity:1}100%{offset-distance:100%;opacity:0}}
+input::placeholder{color:var(--muted)}
+input:focus{outline:2px solid var(--ink);outline-offset:2px}
+.primary{background:var(--sel-bg);color:var(--sel-ink);transition:transform .15s}
+.primary:active{transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){.pt{animation:none}}
+</style>
+</helmet>
+<div class="th-{{theme}}" style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: 'Plus Jakarta Sans', system-ui, sans-serif">
+<div class="breeze" aria-hidden="true">
+  <svg class="bz1" width="780" height="844" viewBox="0 0 780 844"><path d="M0 52 Q48.75 43 97.5 52 T195 52 T292.5 52 T390 52 T487.5 52 T585 52 T682.5 52 T780 52"></path><path d="M0 200 Q48.75 188 97.5 200 T195 200 T292.5 200 T390 200 T487.5 200 T585 200 T682.5 200 T780 200"></path><path d="M0 348 Q48.75 358 97.5 348 T195 348 T292.5 348 T390 348 T487.5 348 T585 348 T682.5 348 T780 348"></path><path d="M0 496 Q48.75 485 97.5 496 T195 496 T292.5 496 T390 496 T487.5 496 T585 496 T682.5 496 T780 496"></path><path d="M0 644 Q48.75 638 97.5 644 T195 644 T292.5 644 T390 644 T487.5 644 T585 644 T682.5 644 T780 644"></path><path d="M0 792 Q48.75 801 97.5 792 T195 792 T292.5 792 T390 792 T487.5 792 T585 792 T682.5 792 T780 792"></path></svg>
+  <svg class="bz2" width="780" height="844" viewBox="0 0 780 844"><path d="M0 126 Q32.5 132 65 126 T130 126 T195 126 T260 126 T325 126 T390 126 T455 126 T520 126 T585 126 T650 126 T715 126 T780 126"></path><path d="M0 274 Q32.5 267 65 274 T130 274 T195 274 T260 274 T325 274 T390 274 T455 274 T520 274 T585 274 T650 274 T715 274 T780 274"></path><path d="M0 422 Q32.5 417 65 422 T130 422 T195 422 T260 422 T325 422 T390 422 T455 422 T520 422 T585 422 T650 422 T715 422 T780 422"></path><path d="M0 570 Q32.5 578 65 570 T130 570 T195 570 T260 570 T325 570 T390 570 T455 570 T520 570 T585 570 T650 570 T715 570 T780 570"></path><path d="M0 718 Q32.5 706 65 718 T130 718 T195 718 T260 718 T325 718 T390 718 T455 718 T520 718 T585 718 T650 718 T715 718 T780 718"></path></svg>
+</div>
+
+  <div aria-hidden="true" style="position: absolute; left: 0; top: 392px; width: 390px; height: 452px; pointer-events: none">
+    <span class="pt" style="offset-path: path('M130 0 C130 110 108 270 86 452'); animation-delay: -0.4s"></span>
+    <span class="pt" style="offset-path: path('M130 0 C130 110 108 270 86 452'); animation-delay: -2.0s"></span>
+    <span class="pt" style="offset-path: path('M195 0 C195 110 195 270 195 452'); animation-delay: -1.1s"></span>
+    <span class="pt" style="offset-path: path('M195 0 C195 110 195 270 195 452'); animation-delay: -2.7s"></span>
+    <span class="pt" style="offset-path: path('M260 0 C260 110 282 270 304 452'); animation-delay: -0.7s"></span>
+    <span class="pt" style="offset-path: path('M260 0 C260 110 282 270 304 452'); animation-delay: -2.3s"></span>
+  </div>
+
+  <div style="position: relative; height: 100%; box-sizing: border-box; padding: 44px 24px 24px; display: flex; flex-direction: column">
+    <h1 style="margin: 0; font-size: 40px; font-weight: 400; letter-spacing: -0.04em; line-height: 1.12">Your AC,<br><span aria-hidden="true" style="display: inline-flex; width: 40px; height: 40px; border-radius: 20px; background: var(--accent); color: #FFFFFF; align-items: center; justify-content: center; vertical-align: -6px; margin-right: 8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"></path><path d="M12 2v20"></path><path d="m20 16-4-4 4-4"></path><path d="m4 8 4 4-4 4"></path><path d="m16 4-4 4-4-4"></path><path d="m8 20 4-4 4 4"></path></svg></span>made <span style="color: var(--muted)">simple.</span></h1>
+    <p style="margin: 14px 0 0; font-size: 15px; line-height: 1.5; color: var(--muted)">Sign in with your Panasonic MirAIe account to control every air conditioner at home.</p>
+
+    <div aria-hidden="true" style="flex: 1 1 auto; display: flex; align-items: center; justify-content: center">
+      <div style="position: relative; width: 250px; height: 76px; border-radius: 20px 20px 28px 28px; background: var(--unit); box-shadow: inset 0 3px 0 #FFFFFF, inset 0 -14px 20px rgba(0,0,0,0.06), 0 26px 44px rgba(60,40,20,0.16), 0 6px 12px rgba(60,40,20,0.08)">
+        <div style="position: absolute; left: 16px; right: 16px; top: 50px; height: 1px; background: rgba(0,0,0,0.06)"></div>
+        <div style="position: absolute; right: 26px; top: 20px; display: flex; align-items: center; gap: 6px; color: #E8701F"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"></path><path d="M12 2v20"></path><path d="m20 16-4-4 4-4"></path><path d="m4 8 4 4-4 4"></path><path d="m16 4-4 4-4-4"></path><path d="m8 20 4-4 4 4"></path></svg><span style="font-size: 15px; font-weight: 500; line-height: 1; text-shadow: 0 0 8px rgba(232,112,31,0.3)">24°</span></div>
+        <div style="position: absolute; left: 30px; right: 30px; bottom: 11px; height: 7px; border-radius: 4px; background: #2B2825"></div>
+      </div>
+    </div>
+
+    <form class="glass" style="margin: 0; border-radius: 30px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="login-id" style="font-size: 13px; font-weight: 500; color: var(--muted); padding-left: 6px">Mobile number or email</label>
+        <input id="login-id" type="text" autocomplete="username" placeholder="Registered with MirAIe" style="height: 52px; box-sizing: border-box; border-radius: 26px; background: var(--pill); border: 1px solid var(--field-line); padding: 0 20px; color: var(--ink); font-family: inherit; font-size: 16px">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="password" style="font-size: 13px; font-weight: 500; color: var(--muted); padding-left: 6px">Password</label>
+        <input id="password" type="password" autocomplete="current-password" style="height: 52px; box-sizing: border-box; border-radius: 26px; background: var(--pill); border: 1px solid var(--field-line); padding: 0 20px; color: var(--ink); font-family: inherit; font-size: 16px">
+      </div>
+      <a href="Main.dc.html" class="primary" style="margin-top: 4px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600">Sign in</a>
+      <div style="display: flex; align-items: flex-start; gap: 8px; padding: 0 6px; color: var(--muted); font-size: 12px; line-height: 1.45">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 1px"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <span>Your password stays in this phone's secure storage and is sent only to MirAIe.</span>
+      </div>
+    </form>
+
+    <div style="margin-top: 16px; text-align: center; font-size: 11px; color: var(--muted)">Unofficial app · not affiliated with Panasonic</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { theme: this.props.theme ?? 'dark' };
+  }
+}
+</script>
+</body>
+</html>

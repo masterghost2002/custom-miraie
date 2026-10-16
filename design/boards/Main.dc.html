@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chill — Home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer}
+button:disabled{cursor:default}
+.th-light{--bg:#E7E5E2;--ink:#141210;--muted:#5E5A56;--track:rgba(20,18,16,.07);--glass:rgba(255,255,255,.58);--glass-line:rgba(255,255,255,.85);--glass-shadow:0 10px 30px rgba(60,40,20,.07);--pill:#FFFFFF;--sel-bg:#141210;--sel-ink:#FFFFFF;--accent:#E8701F;--unit:#F7F6F4;--slot:#1C1A18;--particle:rgba(20,18,16,.45);color-scheme:light}
+.th-dark{--bg:#151413;--ink:#F3F1EE;--muted:#A39E98;--track:rgba(255,255,255,.08);--glass:rgba(48,46,44,.55);--glass-line:rgba(255,255,255,.08);--glass-shadow:0 10px 30px rgba(0,0,0,.3);--pill:rgba(255,255,255,.10);--sel-bg:#F3F1EE;--sel-ink:#151413;--accent:#F07A2A;--unit:#F2F1EF;--slot:#1C1A18;--particle:rgba(255,255,255,.5);color-scheme:dark}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow)}
+.th-light{--wave:rgba(20,18,16,.09)}
+.th-dark{--wave:rgba(255,255,255,.07)}
+.breeze{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.breeze svg{position:absolute;left:0;top:0}
+.breeze path{fill:none;stroke:var(--wave);stroke-width:1}
+.bz1{animation:breeze 70s linear infinite}
+.bz2{animation:breeze 110s linear infinite}
+@keyframes breeze{to{transform:translateX(-390px)}}
+@media (prefers-reduced-motion:reduce){.bz1,.bz2{animation:none}}
+.press{transition:transform .15s,opacity .2s}
+.press:active{transform:scale(.94)}
+.rp{background:var(--glass);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);border:1px solid var(--glass-line);color:var(--ink);transition:background .3s,color .3s,transform .15s}
+.rp:active{transform:scale(.95)}
+.rp.sel{background:var(--sel-bg);color:var(--sel-ink);border-color:transparent}
+.flow{transition:opacity .6s}
+.is-off .flow{opacity:0}
+.pt{position:absolute;left:0;top:0;width:4px;height:4px;border-radius:50%;background:var(--particle);offset-rotate:0deg;opacity:0;animation:along 2.4s linear infinite}
+@keyframes along{0%{offset-distance:0%;opacity:0}12%{opacity:1}75%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.slot{height:5px;transition:height .5s cubic-bezier(.2,.8,.2,1)}
+.is-off .slot{height:2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin 2s linear infinite}
+.is-off .spin{animation:none}
+.pp .knob{left:4px;background:var(--track);color:var(--ink);transition:left .45s cubic-bezier(.3,1.3,.5,1),background .3s,color .3s}
+.pp.on .knob{left:calc(100% - 48px);background:var(--accent);color:#FFFFFF;box-shadow:0 6px 16px rgba(232,112,31,.35)}
+.pp .lbl-on{opacity:0;transition:opacity .3s}
+.pp.on .lbl-on{opacity:1}
+.pp .lbl-off{transition:opacity .3s}
+.pp.on .lbl-off{opacity:0}
+.pp:disabled{opacity:.4}
+.pw{background:var(--pill);color:var(--ink);transition:background .3s,color .3s,box-shadow .3s,transform .15s}
+.pw:active{transform:scale(.92)}
+.pw.on{background:var(--accent);color:#FFFFFF;box-shadow:0 6px 16px rgba(232,112,31,.35)}
+.pw:disabled{opacity:.4}
+.card{transition:opacity .3s}
+.card.offline{opacity:.55}
+.disp .dv,.disp svg,.disp .dbars{transition:opacity .4s}
+.is-off .disp .dv,.is-off .disp svg,.is-off .disp .dbars{opacity:0}
+.disp .dv{text-shadow:0 0 8px rgba(232,112,31,.3);font-variant-numeric:tabular-nums}
+.mi,.pi{display:none}
+.mi.show,.pi.show{display:block}
+.disp.pa{animation:dpa .6s ease-out}
+.disp.pb{animation:dpb .6s ease-out}
+@keyframes dpa{0%{opacity:.15}100%{opacity:1}}
+@keyframes dpb{0%{opacity:.15}100%{opacity:1}}
+.bar{background:rgba(232,112,31,.2);transition:background .3s,box-shadow .3s}
+.bar.lit{background:#E8701F}
+.dbars.auto .bar{animation:barwave 1.4s ease-in-out infinite}
+.dbars.auto .bar:nth-child(2){animation-delay:.15s}
+.dbars.auto .bar:nth-child(3){animation-delay:.3s}
+.dbars.auto .bar:nth-child(4){animation-delay:.45s}
+@keyframes barwave{0%,100%{background:rgba(232,112,31,.2)}50%{background:#E8701F}}
+.nav{color:var(--muted)}
+.nav.cur{background:var(--sel-bg);color:var(--sel-ink)}
+@media (prefers-reduced-motion:reduce){.pt,.spin{animation:none}}
+</style>
+</helmet>
+<div class="th-{{theme}}" style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: 'Plus Jakarta Sans', system-ui, sans-serif">
+<div class="breeze" aria-hidden="true">
+  <svg class="bz1" width="780" height="844" viewBox="0 0 780 844"><path d="M0 52 Q48.75 43 97.5 52 T195 52 T292.5 52 T390 52 T487.5 52 T585 52 T682.5 52 T780 52"></path><path d="M0 200 Q48.75 188 97.5 200 T195 200 T292.5 200 T390 200 T487.5 200 T585 200 T682.5 200 T780 200"></path><path d="M0 348 Q48.75 358 97.5 348 T195 348 T292.5 348 T390 348 T487.5 348 T585 348 T682.5 348 T780 348"></path><path d="M0 496 Q48.75 485 97.5 496 T195 496 T292.5 496 T390 496 T487.5 496 T585 496 T682.5 496 T780 496"></path><path d="M0 644 Q48.75 638 97.5 644 T195 644 T292.5 644 T390 644 T487.5 644 T585 644 T682.5 644 T780 644"></path><path d="M0 792 Q48.75 801 97.5 792 T195 792 T292.5 792 T390 792 T487.5 792 T585 792 T682.5 792 T780 792"></path></svg>
+  <svg class="bz2" width="780" height="844" viewBox="0 0 780 844"><path d="M0 126 Q32.5 132 65 126 T130 126 T195 126 T260 126 T325 126 T390 126 T455 126 T520 126 T585 126 T650 126 T715 126 T780 126"></path><path d="M0 274 Q32.5 267 65 274 T130 274 T195 274 T260 274 T325 274 T390 274 T455 274 T520 274 T585 274 T650 274 T715 274 T780 274"></path><path d="M0 422 Q32.5 417 65 422 T130 422 T195 422 T260 422 T325 422 T390 422 T455 422 T520 422 T585 422 T650 422 T715 422 T780 422"></path><path d="M0 570 Q32.5 578 65 570 T130 570 T195 570 T260 570 T325 570 T390 570 T455 570 T520 570 T585 570 T650 570 T715 570 T780 570"></path><path d="M0 718 Q32.5 706 65 718 T130 718 T195 718 T260 718 T325 718 T390 718 T455 718 T520 718 T585 718 T650 718 T715 718 T780 718"></path></svg>
+</div>
+  <div style="position: relative; height: 100%; box-sizing: border-box; padding: 20px 20px 28px; display: flex; flex-direction: column">
+
+    <header style="display: flex; align-items: flex-start; justify-content: space-between">
+      <div style="display: flex; flex-direction: column; gap: 4px">
+        <span style="font-size: 14px; color: var(--muted)">Thu, 16 October</span>
+        <h1 style="margin: 0; font-size: 30px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15">Good evening</h1>
+      </div>
+      <a href="SignIn.dc.html" class="glass press" aria-label="Account" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4.5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg></a>
+    </header>
+
+    <div role="group" aria-label="Rooms" style="display: flex; gap: 8px; margin-top: 20px">
+      <sc-for list="{{rooms}}" as="r" hint-placeholder-count="3">
+        <button class="rp {{r.cls}}" onClick="{{r.pick}}" aria-pressed="{{r.sel}}" style="flex: none; height: 44px; padding: 0 20px; border-radius: 22px; font-size: 15px; font-weight: 500">{{r.name}}</button>
+      </sc-for>
+    </div>
+
+    <section class="glass {{f.offCls}}" aria-label="{{f.name}} air conditioner" style="position: relative; margin-top: 16px; height: 236px; box-sizing: border-box; border-radius: 30px; overflow: hidden">
+      <div style="position: absolute; left: 20px; top: 20px; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 17px; font-weight: 600">{{f.name}}</span>
+        <span style="font-size: 13px; color: var(--muted)">{{f.sub}}</span>
+      </div>
+      <a href="Climate.dc.html" class="press" aria-label="Open climate controls" style="position: absolute; right: 16px; top: 16px; width: 40px; height: 40px; border-radius: 20px; background: var(--pill); display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg></a>
+
+      <div style="position: absolute; left: 20px; top: 74px; display: flex; flex-direction: column">
+        <div style="display: flex; align-items: flex-start; height: 64px">
+          <span style="font-size: 64px; font-weight: 300; letter-spacing: -0.05em; line-height: 1">{{f.temp}}</span>
+          <span style="font-size: 28px; font-weight: 300; line-height: 1; margin-top: 6px">°</span>
+        </div>
+        <span style="font-size: 13px; color: var(--muted); margin-top: 6px">Inside {{f.inside}}°</span>
+      </div>
+
+      <div class="flow" aria-hidden="true" style="position: absolute; right: 20px; top: 118px; width: 150px; height: 70px">
+        <span class="pt" style="offset-path: path('M30 0 C30 25 22 50 14 70'); animation-delay: -0.3s"></span>
+        <span class="pt" style="offset-path: path('M30 0 C30 25 22 50 14 70'); animation-delay: -1.5s"></span>
+        <span class="pt" style="offset-path: path('M75 0 C75 25 75 50 75 70'); animation-delay: -0.9s"></span>
+        <span class="pt" style="offset-path: path('M75 0 C75 25 75 50 75 70'); animation-delay: -2.1s"></span>
+        <span class="pt" style="offset-path: path('M120 0 C120 25 128 50 136 70'); animation-delay: -0.6s"></span>
+        <span class="pt" style="offset-path: path('M120 0 C120 25 128 50 136 70'); animation-delay: -1.8s"></span>
+      </div>
+      <div aria-hidden="true" style="position: absolute; right: 20px; top: 72px; width: 150px; height: 48px; border-radius: 15px 15px 20px 20px; background: var(--unit); box-shadow: inset 0 2px 0 #FFFFFF, inset 0 -10px 14px rgba(0,0,0,0.05), 0 14px 26px rgba(0,0,0,0.22)">
+        <div style="position: absolute; left: 10px; right: 10px; top: 31px; height: 1px; background: rgba(0,0,0,0.06)"></div>
+        <div class="disp {{f.pulse}}" style="position: absolute; right: 14px; top: 11px; height: 12px; display: flex; align-items: center; gap: 4px; color: #E8701F"><span style="display: flex; width: 9px; height: 9px"><svg class="mi {{f.mi.cool}}" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"></path><path d="M12 2v20"></path><path d="m20 16-4-4 4-4"></path><path d="m4 8 4 4-4 4"></path><path d="m16 4-4 4-4-4"></path><path d="m8 20 4-4 4 4"></path></svg><svg class="mi {{f.mi.dry}}" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg></span><span class="dv" style="font-size: 11px; font-weight: 500; line-height: 1">{{f.temp}}°</span></div>
+        <div class="slot" style="position: absolute; left: 18px; right: 18px; bottom: 6px; border-radius: 3px; background: #2B2825"></div>
+      </div>
+
+      <div style="position: absolute; left: 16px; bottom: 16px; display: flex; gap: 8px; align-items: center">
+        <button class="pp {{f.ppCls}}" onClick="{{f.toggle}}" disabled="{{f.disabled}}" role="switch" aria-checked="{{f.on}}" aria-label="{{f.name}} power" style="position: relative; width: 120px; height: 52px; border-radius: 26px; background: var(--pill)">
+          <span class="lbl-on" style="position: absolute; left: 18px; top: 16px; font-size: 15px; font-weight: 600">On</span>
+          <span class="lbl-off" style="position: absolute; right: 18px; top: 16px; font-size: 15px; font-weight: 600; color: var(--muted)">Off</span>
+          <span class="knob" style="position: absolute; top: 4px; width: 44px; height: 44px; border-radius: 22px; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v10"></path><path d="M18.4 6.6a9 9 0 1 1-12.77.04"></path></svg></span>
+        </button>
+        <a href="Climate.dc.html" class="press" style="height: 52px; padding: 0 18px; border-radius: 26px; background: var(--pill); display: flex; align-items: center; font-size: 14px; font-weight: 600">{{f.mode}}</a>
+        <a href="Climate.dc.html" class="press" aria-label="Fan speed auto" style="width: 52px; height: 52px; border-radius: 26px; background: var(--pill); display: flex; align-items: center; justify-content: center"><svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.83 16.38a6.08 6.08 0 0 1-8.62-7l5.41 1.45a6.08 6.08 0 0 1 7-8.62l-1.45 5.41a6.08 6.08 0 0 1 8.62 7l-5.41-1.45a6.08 6.08 0 0 1-7 8.62l1.45-5.41Z"></path><path d="M12 12v.01"></path></svg></a>
+      </div>
+    </section>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px">
+      <sc-for list="{{others}}" as="o" hint-placeholder-count="2">
+        <div class="glass card {{o.cardCls}}" style="position: relative; height: 168px; box-sizing: border-box; border-radius: 28px; padding: 16px; display: flex; flex-direction: column">
+          <div aria-hidden="true" style="position: relative; width: 104px; height: 32px; border-radius: 10px 10px 13px 13px; background: var(--unit); box-shadow: inset 0 2px 0 #FFFFFF, inset 0 -8px 10px rgba(0,0,0,0.06), 0 10px 18px rgba(60,40,20,0.12)">
+            <div style="position: absolute; left: 10px; right: 10px; bottom: 5px; height: 4px; border-radius: 2px; background: var(--slot)"></div>
+          </div>
+          <button onClick="{{o.pick}}" style="margin-top: 16px; text-align: left; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 15px; font-weight: 600">{{o.name}}</span>
+            <span style="font-size: 13px; color: var(--muted)">{{o.sub}}</span>
+          </button>
+          <button class="pw {{o.pwCls}}" onClick="{{o.toggle}}" disabled="{{o.disabled}}" aria-pressed="{{o.on}}" aria-label="{{o.aria}}" style="margin-top: auto; width: 44px; height: 44px; border-radius: 22px; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v10"></path><path d="M18.4 6.6a9 9 0 1 1-12.77.04"></path></svg></button>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px">
+      <a href="Airflow.dc.html" class="glass press" style="height: 76px; box-sizing: border-box; border-radius: 26px; padding: 0 14px; display: flex; align-items: center; gap: 10px">
+        <span style="width: 44px; height: 44px; border-radius: 22px; background: var(--pill); display: flex; align-items: center; justify-content: center; flex: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"></path><path d="M9.6 4.6A2 2 0 1 1 11 8H2"></path><path d="M12.6 19.4A2 2 0 1 0 14 16H2"></path></svg></span>
+        <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 15px; font-weight: 600">Airflow</span><span style="font-size: 12px; color: var(--muted)">Swing · Centre</span></span>
+      </a>
+      <a href="Schedules.dc.html" class="glass press" style="height: 76px; box-sizing: border-box; border-radius: 26px; padding: 0 14px; display: flex; align-items: center; gap: 10px">
+        <span style="width: 44px; height: 44px; border-radius: 22px; background: var(--pill); display: flex; align-items: center; justify-content: center; flex: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>
+        <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-size: 15px; font-weight: 600">Schedules</span><span style="font-size: 12px; color: var(--muted)">Next at 22:30</span></span>
+      </a>
+    </div>
+
+    <nav class="glass" aria-label="Main" style="margin-top: auto; align-self: center; display: flex; gap: 6px; padding: 6px; border-radius: 34px">
+      <a href="Main.dc.html" class="nav cur press" aria-label="Home" aria-current="page" style="width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path></svg></a>
+      <a href="Rooms.dc.html" class="nav press" aria-label="All devices" style="width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"></rect><rect x="14" y="3" width="7" height="7" rx="2"></rect><rect x="3" y="14" width="7" height="7" rx="2"></rect><rect x="14" y="14" width="7" height="7" rx="2"></rect></svg></a>
+      <a href="Schedules.dc.html" class="nav press" aria-label="Schedules" style="width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></a>
+      <button class="nav press" aria-label="Settings" style="width: 56px; height: 56px; border-radius: 28px; display: flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
+    </nav>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const featured = s.featured ?? 'bed';
+    const power = s.power ?? { bed: true, living: false, study: false };
+    const data = [
+      { id: 'bed', name: 'Bedroom', mode: 'Cool', temp: 24, inside: 27, online: true },
+      { id: 'living', name: 'Living room', mode: 'Dry', temp: 25, inside: 29, online: true },
+      { id: 'study', name: 'Study', mode: 'Cool', temp: 24, inside: 31, online: false }
+    ];
+    const isOn = (r) => r.online && !!power[r.id];
+    const stateOf = (r) => !r.online ? 'Offline' : (isOn(r) ? (r.mode === 'Cool' ? 'Cooling' : 'Drying') : 'Standby');
+    const toggle = (r) => () => this.setState({ power: Object.assign({}, power, { [r.id]: !power[r.id] }), flip: !s.flip });
+    const pick = (r) => () => this.setState({ featured: r.id, flip: !s.flip });
+
+    const fr = data.find((r) => r.id === featured) || data[0];
+    const fOn = isOn(fr);
+    const f = {
+      name: fr.name,
+      sub: 'Air conditioner · ' + stateOf(fr),
+      temp: fr.temp,
+      inside: fr.inside,
+      mode: fr.mode,
+      mi: { cool: fr.mode === 'Cool' ? 'show' : '', dry: fr.mode === 'Dry' ? 'show' : '' },
+      pulse: s.flip ? 'pa' : 'pb',
+      on: fOn,
+      offCls: fOn ? '' : 'is-off',
+      ppCls: fOn ? 'on' : '',
+      disabled: !fr.online,
+      toggle: toggle(fr)
+    };
+
+    return {
+      theme: this.props.theme ?? 'dark',
+      rooms: data.map((r) => ({ name: r.name, cls: r.id === featured ? 'sel' : '', sel: r.id === featured, pick: pick(r) })),
+      f: f,
+      others: data.filter((r) => r.id !== featured).map((r) => ({
+        name: r.name,
+        sub: r.online ? stateOf(r) + ' · ' + r.temp + '°' : 'Offline',
+        on: isOn(r),
+        pwCls: isOn(r) ? 'on' : '',
+        cardCls: r.online ? '' : 'offline',
+        disabled: !r.online,
+        aria: r.name + ' power',
+        toggle: toggle(r),
+        pick: pick(r)
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Airflow.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 40,
+      "title": "Airflow",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "Climate.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 40,
+      "title": "Climate",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 40,
+      "title": "Home",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Rooms.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 40,
+      "title": "All devices",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "Schedules.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 40,
+      "title": "Schedules",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    },
+    "SignIn.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 40,
+      "title": "Sign in",
+      "w": 390,
+      "x": 2350,
+      "y": 0
+    },
+    "Style.dc.html": {
+      "h": 900,
+      "title": "Design language",
+      "w": 1280,
+      "x": 0,
+      "y": 964
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-16T06:24:04Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "screens": {
+      "kind": "title1",
+      "maxW": 2740,
+      "text": "Chill — screens",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Climate.dc.html",
+    "Airflow.dc.html",
+    "Rooms.dc.html",
+    "Schedules.dc.html",
+    "SignIn.dc.html",
+    "Style.dc.html"
+  ],
+  "pages": [],
+  "title": "Chill — AC app design"
+}

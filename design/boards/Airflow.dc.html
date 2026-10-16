@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chill — Airflow</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer}
+.th-light{--bg:#E7E5E2;--ink:#141210;--muted:#5E5A56;--tick:rgba(20,18,16,.22);--track:rgba(20,18,16,.07);--beam:rgba(20,18,16,.07);--glass:rgba(255,255,255,.58);--glass-line:rgba(255,255,255,.85);--glass-shadow:0 10px 30px rgba(60,40,20,.07);--pill:#FFFFFF;--sel-bg:#141210;--sel-ink:#FFFFFF;--accent:#E8701F;--unit:#F7F6F4;--slot:#1C1A18;--particle:rgba(20,18,16,.5);--guide:rgba(20,18,16,.10);color-scheme:light}
+.th-dark{--bg:#151413;--ink:#F3F1EE;--muted:#A39E98;--tick:rgba(255,255,255,.22);--track:rgba(255,255,255,.08);--beam:rgba(255,255,255,.07);--glass:rgba(48,46,44,.55);--glass-line:rgba(255,255,255,.08);--glass-shadow:0 10px 30px rgba(0,0,0,.3);--pill:rgba(255,255,255,.10);--sel-bg:#F3F1EE;--sel-ink:#151413;--accent:#F07A2A;--unit:#F2F1EF;--slot:#1C1A18;--particle:rgba(255,255,255,.55);--guide:rgba(255,255,255,.10);color-scheme:dark}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow)}
+.th-light{--wave:rgba(20,18,16,.09)}
+.th-dark{--wave:rgba(255,255,255,.07)}
+.breeze{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.breeze svg{position:absolute;left:0;top:0}
+.breeze path{fill:none;stroke:var(--wave);stroke-width:1}
+.bz1{animation:breeze 70s linear infinite}
+.bz2{animation:breeze 110s linear infinite}
+@keyframes breeze{to{transform:translateX(-390px)}}
+@media (prefers-reduced-motion:reduce){.bz1,.bz2{animation:none}}
+.press{transition:transform .15s}
+.press:active{transform:scale(.94)}
+.beam{transform-origin:0 50%;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.beam.sweep{animation:sweepV 3.4s ease-in-out infinite alternate}
+@keyframes sweepV{from{transform:rotate(6deg)}to{transform:rotate(40deg)}}
+.cone{background:var(--beam);-webkit-clip-path:polygon(0 47%,100% 10%,100% 90%,0 53%);clip-path:polygon(0 47%,100% 10%,100% 90%,0 53%)}
+.stream{transform-origin:0 50%;background:var(--guide)}
+.pt{position:absolute;left:0;top:50%;width:5px;height:5px;margin-top:-2.5px;border-radius:50%;background:var(--particle);opacity:0;animation:fly 2.4s linear infinite}
+@keyframes fly{0%{transform:translateX(0);opacity:0}12%{opacity:1}80%{opacity:1}100%{transform:translateX(270px);opacity:0}}
+.fanwedge{transform-origin:50% 0;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.fanwedge.sweep{animation:sweepH 3.8s ease-in-out infinite alternate}
+@keyframes sweepH{from{transform:rotate(50deg)}to{transform:rotate(-50deg)}}
+.wedge{background:var(--beam);-webkit-clip-path:polygon(50% 0,35% 100%,65% 100%);clip-path:polygon(50% 0,35% 100%,65% 100%)}
+.col{transform-origin:50% 0}
+.colline{background:var(--guide)}
+.dp{position:absolute;left:50%;top:0;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--particle);opacity:0;animation:drop 2.2s linear infinite}
+@keyframes drop{0%{transform:translateY(0);opacity:0}12%{opacity:1}80%{opacity:1}100%{transform:translateY(125px);opacity:0}}
+.flap{transform-origin:0 50%;transition:transform .8s cubic-bezier(.2,.8,.2,1);box-shadow:0 1px 2px rgba(0,0,0,.3)}
+.flap.sweep{animation:sweepV 3.4s ease-in-out infinite alternate}
+.dot{background:var(--tick);transition:background .3s,box-shadow .3s,transform .3s}
+.dot.on{background:#FFFFFF;box-shadow:0 0 0 3px var(--accent);transform:scale(1.25)}
+.dot.auto{background:var(--accent);animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{50%{opacity:.3}}
+.ind{background:var(--sel-bg);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.opt{position:relative;color:var(--muted);transition:color .3s}
+.opt.sel{color:var(--sel-ink)}
+@media (prefers-reduced-motion:reduce){.pt,.dp,.beam.sweep,.fanwedge.sweep,.dot.auto{animation:none}}
+</style>
+</helmet>
+<div class="th-{{theme}}" style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: 'Plus Jakarta Sans', system-ui, sans-serif">
+<div class="breeze" aria-hidden="true">
+  <svg class="bz1" width="780" height="844" viewBox="0 0 780 844"><path d="M0 52 Q48.75 43 97.5 52 T195 52 T292.5 52 T390 52 T487.5 52 T585 52 T682.5 52 T780 52"></path><path d="M0 200 Q48.75 188 97.5 200 T195 200 T292.5 200 T390 200 T487.5 200 T585 200 T682.5 200 T780 200"></path><path d="M0 348 Q48.75 358 97.5 348 T195 348 T292.5 348 T390 348 T487.5 348 T585 348 T682.5 348 T780 348"></path><path d="M0 496 Q48.75 485 97.5 496 T195 496 T292.5 496 T390 496 T487.5 496 T585 496 T682.5 496 T780 496"></path><path d="M0 644 Q48.75 638 97.5 644 T195 644 T292.5 644 T390 644 T487.5 644 T585 644 T682.5 644 T780 644"></path><path d="M0 792 Q48.75 801 97.5 792 T195 792 T292.5 792 T390 792 T487.5 792 T585 792 T682.5 792 T780 792"></path></svg>
+  <svg class="bz2" width="780" height="844" viewBox="0 0 780 844"><path d="M0 126 Q32.5 132 65 126 T130 126 T195 126 T260 126 T325 126 T390 126 T455 126 T520 126 T585 126 T650 126 T715 126 T780 126"></path><path d="M0 274 Q32.5 267 65 274 T130 274 T195 274 T260 274 T325 274 T390 274 T455 274 T520 274 T585 274 T650 274 T715 274 T780 274"></path><path d="M0 422 Q32.5 417 65 422 T130 422 T195 422 T260 422 T325 422 T390 422 T455 422 T520 422 T585 422 T650 422 T715 422 T780 422"></path><path d="M0 570 Q32.5 578 65 570 T130 570 T195 570 T260 570 T325 570 T390 570 T455 570 T520 570 T585 570 T650 570 T715 570 T780 570"></path><path d="M0 718 Q32.5 706 65 718 T130 718 T195 718 T260 718 T325 718 T390 718 T455 718 T520 718 T585 718 T650 718 T715 718 T780 718"></path></svg>
+</div>
+  <div style="position: relative; height: 100%; box-sizing: border-box; padding: 16px 20px 28px; display: flex; flex-direction: column">
+
+    <header style="display: flex; align-items: center; justify-content: space-between; height: 48px">
+      <a href="Main.dc.html" class="glass press" aria-label="Back to Home" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg></a>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 2px">
+        <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Airflow</span>
+        <span style="font-size: 13px; color: var(--muted)">Bedroom</span>
+      </div>
+      <a href="Climate.dc.html" class="glass press" aria-label="Mode: cool" style="height: 48px; padding: 0 16px 0 14px; border-radius: 24px; display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h20"></path><path d="M12 2v20"></path><path d="m20 16-4-4 4-4"></path><path d="m4 8 4 4-4 4"></path><path d="m16 4-4 4-4-4"></path><path d="m8 20 4-4 4 4"></path></svg>Cool</a>
+    </header>
+
+    <section class="glass" aria-label="Up and down" style="position: relative; margin-top: 16px; border-radius: 30px; overflow: hidden; display: flex; flex-direction: column">
+      <div style="display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 16px 16px 0">
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 16px; font-weight: 600">Up and down</span>
+          <span aria-live="polite" style="font-size: 13px; color: var(--muted)">{{vLabel}}</span>
+        </div>
+      </div>
+      <div aria-hidden="true" style="position: relative; height: 240px; overflow: hidden">
+        <div style="position: absolute; left: 16px; right: 16px; top: 220px; height: 1px; background: var(--tick)"></div>
+        <div style="position: absolute; left: 318px; top: 156px; width: 12px; height: 64px; border-radius: 6px; background: var(--pill); border: 1px solid var(--glass-line)"></div>
+        <div style="position: absolute; left: 196px; top: 190px; width: 124px; height: 30px; border-radius: 10px; background: var(--pill); border: 1px solid var(--glass-line)"></div>
+        <div style="position: absolute; left: 284px; top: 178px; width: 28px; height: 13px; border-radius: 7px; background: var(--track)"></div>
+
+        <div class="beam {{vSweep}}" style="position: absolute; left: 50px; top: 23px; width: 300px; height: 150px; transform: rotate({{vDeg}}deg)">
+          <div class="cone" style="position: absolute; inset: 0"></div>
+          <div class="stream" style="position: absolute; left: 0; top: 74px; width: 280px; height: 1px; transform: rotate(-6deg)"><span class="pt" style="animation-delay: -0.2s"></span><span class="pt" style="animation-delay: -1.4s"></span></div>
+          <div class="stream" style="position: absolute; left: 0; top: 74px; width: 280px; height: 1px"><span class="pt" style="animation-delay: -0.8s"></span><span class="pt" style="animation-delay: -2.0s"></span></div>
+          <div class="stream" style="position: absolute; left: 0; top: 74px; width: 280px; height: 1px; transform: rotate(6deg)"><span class="pt" style="animation-delay: -0.5s"></span><span class="pt" style="animation-delay: -1.7s"></span></div>
+        </div>
+
+        <div style="position: absolute; left: 0; top: 50px; width: 58px; height: 52px; border-radius: 0 18px 22px 0; background: var(--unit); box-shadow: inset 0 2px 0 #FFFFFF, inset 0 -10px 14px rgba(0,0,0,0.06), 0 12px 24px rgba(60,40,20,0.14)">
+          <div style="position: absolute; right: 6px; bottom: 6px; width: 24px; height: 6px; border-radius: 3px; background: var(--slot)"></div>
+        </div>
+        <div class="flap {{vSweep}}" style="position: absolute; left: 30px; top: 95px; width: 26px; height: 3px; border-radius: 2px; background: #D8D4CE; transform: rotate({{vDeg}}deg)"></div>
+        <span class="dot {{vd.p1}}" style="position: absolute; left: 135.5px; top: 103.4px; width: 8px; height: 8px; border-radius: 4px"></span>
+        <span class="dot {{vd.p2}}" style="position: absolute; left: 133.3px; top: 115.8px; width: 8px; height: 8px; border-radius: 4px"></span>
+        <span class="dot {{vd.p3}}" style="position: absolute; left: 129.4px; top: 127.7px; width: 8px; height: 8px; border-radius: 4px"></span>
+        <span class="dot {{vd.p4}}" style="position: absolute; left: 123.9px; top: 139px; width: 8px; height: 8px; border-radius: 4px"></span>
+        <span class="dot {{vd.p5}}" style="position: absolute; left: 114.9px; top: 151.9px; width: 8px; height: 8px; border-radius: 4px"></span>
+      </div>
+      <div role="group" aria-label="Up-down position" style="position: relative; margin: 0 12px 12px; padding: 4px; border-radius: 26px; background: var(--track)">
+        <div class="ind" aria-hidden="true" style="position: absolute; left: 4px; top: 4px; width: 49.7px; height: 44px; border-radius: 22px; transform: translateX({{vX}}px)"></div>
+        <div style="position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px">
+          <button class="opt {{vc.auto}}" onClick="{{vPick.auto}}" aria-pressed="{{vp.auto}}" aria-label="Swing up and down" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">Auto</button>
+          <button class="opt {{vc.p1}}" onClick="{{vPick.p1}}" aria-pressed="{{vp.p1}}" aria-label="Position 1, highest" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">1</button>
+          <button class="opt {{vc.p2}}" onClick="{{vPick.p2}}" aria-pressed="{{vp.p2}}" aria-label="Position 2" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">2</button>
+          <button class="opt {{vc.p3}}" onClick="{{vPick.p3}}" aria-pressed="{{vp.p3}}" aria-label="Position 3" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">3</button>
+          <button class="opt {{vc.p4}}" onClick="{{vPick.p4}}" aria-pressed="{{vp.p4}}" aria-label="Position 4" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">4</button>
+          <button class="opt {{vc.p5}}" onClick="{{vPick.p5}}" aria-pressed="{{vp.p5}}" aria-label="Position 5, lowest" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">5</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass" aria-label="Left and right" style="position: relative; margin-top: 12px; border-radius: 30px; overflow: hidden; display: flex; flex-direction: column">
+      <div style="display: flex; align-items: center; justify-content: space-between; height: 40px; padding: 16px 16px 0">
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 16px; font-weight: 600">Left and right</span>
+          <span aria-live="polite" style="font-size: 13px; color: var(--muted)">{{hLabel}}</span>
+        </div>
+      </div>
+      <div aria-hidden="true" style="position: relative; height: 190px; overflow: hidden">
+        <div style="position: absolute; left: 16px; right: 16px; top: 30px; bottom: 10px; border: 1px dashed var(--tick); border-radius: 18px"></div>
+        <div style="position: absolute; left: 210px; top: 118px; width: 70px; height: 54px; border-radius: 10px; background: var(--pill); border: 1px solid var(--glass-line)"></div>
+        <div style="position: absolute; left: 218px; top: 124px; width: 54px; height: 10px; border-radius: 5px; background: var(--track)"></div>
+
+        <div class="fanwedge {{hSweep}}" style="position: absolute; left: 25px; top: 38px; width: 300px; height: 140px; transform: rotate({{hDeg}}deg)">
+          <div class="wedge" style="position: absolute; inset: 0"></div>
+          <div class="col" style="position: absolute; left: 0; top: 0; width: 300px; height: 140px; transform: rotate(-6deg)"><span class="colline" style="position: absolute; left: 150px; top: 0; width: 1px; height: 130px"></span><span class="dp" style="animation-delay: -0.3s"></span><span class="dp" style="animation-delay: -1.4s"></span></div>
+          <div class="col" style="position: absolute; left: 0; top: 0; width: 300px; height: 140px"><span class="colline" style="position: absolute; left: 150px; top: 0; width: 1px; height: 130px"></span><span class="dp" style="animation-delay: -0.8s"></span><span class="dp" style="animation-delay: -1.9s"></span></div>
+          <div class="col" style="position: absolute; left: 0; top: 0; width: 300px; height: 140px; transform: rotate(6deg)"><span class="colline" style="position: absolute; left: 150px; top: 0; width: 1px; height: 130px"></span><span class="dp" style="animation-delay: -0.55s"></span><span class="dp" style="animation-delay: -1.65s"></span></div>
+        </div>
+
+        <div style="position: absolute; left: 115px; top: 24px; width: 120px; height: 14px; border-radius: 7px; background: var(--unit); box-shadow: inset 0 2px 0 #FFFFFF, 0 8px 18px rgba(60,40,20,0.14)"></div>
+        <span class="dot {{hd.p1}}" style="position: absolute; left: 86.7px; top: 104.7px; width: 8px; height: 8px; border-radius: 4px"></span>
+        <span class="dot {{hd.p2}}" style="position: absolute; left: 124.5px; top: 133.7px; width: 8px; height: 8px; border-radius: 4px"></span>
+        <span class="dot {{hd.p3}}" style="position: absolute; left: 171px; top: 144px; width: 8px; height: 8px; border-radius: 4px"></span>
+        <span class="dot {{hd.p4}}" style="position: absolute; left: 217.5px; top: 133.7px; width: 8px; height: 8px; border-radius: 4px"></span>
+        <span class="dot {{hd.p5}}" style="position: absolute; left: 255.3px; top: 104.7px; width: 8px; height: 8px; border-radius: 4px"></span>
+      </div>
+      <div role="group" aria-label="Left-right position" style="position: relative; margin: 0 12px 12px; padding: 4px; border-radius: 26px; background: var(--track)">
+        <div class="ind" aria-hidden="true" style="position: absolute; left: 4px; top: 4px; width: 49.7px; height: 44px; border-radius: 22px; transform: translateX({{hX}}px)"></div>
+        <div style="position: relative; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px">
+          <button class="opt {{hc.auto}}" onClick="{{hPick.auto}}" aria-pressed="{{hp.auto}}" aria-label="Swing left and right" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">Auto</button>
+          <button class="opt {{hc.p1}}" onClick="{{hPick.p1}}" aria-pressed="{{hp.p1}}" aria-label="Position 1, far left" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">1</button>
+          <button class="opt {{hc.p2}}" onClick="{{hPick.p2}}" aria-pressed="{{hp.p2}}" aria-label="Position 2, left" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">2</button>
+          <button class="opt {{hc.p3}}" onClick="{{hPick.p3}}" aria-pressed="{{hp.p3}}" aria-label="Position 3, centre" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">3</button>
+          <button class="opt {{hc.p4}}" onClick="{{hPick.p4}}" aria-pressed="{{hp.p4}}" aria-label="Position 4, right" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">4</button>
+          <button class="opt {{hc.p5}}" onClick="{{hPick.p5}}" aria-pressed="{{hp.p5}}" aria-label="Position 5, far right" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">5</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const v = s.v ?? 'p3';
+    const h = s.h ?? 'auto';
+    const keys = ['auto', 'p1', 'p2', 'p3', 'p4', 'p5'];
+    const vAngles = { p1: 6, p2: 14, p3: 22, p4: 30, p5: 40 };
+    const hAngles = { p1: 50, p2: 25, p3: 0, p4: -25, p5: -50 };
+    const build = (cur, field) => {
+      const cls = {}, pressed = {}, pick = {}, dots = {};
+      keys.forEach((k) => {
+        cls[k] = k === cur ? 'sel' : '';
+        pressed[k] = k === cur;
+        pick[k] = () => this.setState({ [field]: k });
+        if (k !== 'auto') dots[k] = cur === 'auto' ? 'auto' : (k === cur ? 'on' : '');
+      });
+      return { cls: cls, pressed: pressed, pick: pick, dots: dots, x: (keys.indexOf(cur) * 53.7).toFixed(1) };
+    };
+    const V = build(v, 'v');
+    const H = build(h, 'h');
+    const hNames = { p1: 'Far left', p2: 'Left', p3: 'Centre', p4: 'Right', p5: 'Far right' };
+    return {
+      theme: this.props.theme ?? 'dark',
+      vc: V.cls, vp: V.pressed, vPick: V.pick, vd: V.dots, vX: V.x,
+      hc: H.cls, hp: H.pressed, hPick: H.pick, hd: H.dots, hX: H.x,
+      vSweep: v === 'auto' ? 'sweep' : '',
+      hSweep: h === 'auto' ? 'sweep' : '',
+      vDeg: v === 'auto' ? 22 : vAngles[v],
+      hDeg: h === 'auto' ? 0 : hAngles[h],
+      vLabel: v === 'auto' ? 'Swinging' : 'Position ' + v.slice(1),
+      hLabel: h === 'auto' ? 'Swinging' : hNames[h]
+    };
+  }
+}
+</script>
+</body>
+</html>

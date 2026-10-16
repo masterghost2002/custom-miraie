@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chill — Climate</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:inherit}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer}
+button:disabled{cursor:default}
+.th-light{--bg:#E7E5E2;--ink:#141210;--muted:#5E5A56;--tick:rgba(20,18,16,.22);--track:rgba(20,18,16,.07);--glass:rgba(255,255,255,.58);--glass-line:rgba(255,255,255,.85);--glass-shadow:0 10px 30px rgba(60,40,20,.07);--pill:#FFFFFF;--sel-bg:#141210;--sel-ink:#FFFFFF;--accent:#E8701F;--unit:#F7F6F4;--slot:#1C1A18;--particle:rgba(20,18,16,.45);--guide:rgba(20,18,16,.06);color-scheme:light}
+.th-dark{--bg:#151413;--ink:#F3F1EE;--muted:#A39E98;--tick:rgba(255,255,255,.22);--track:rgba(255,255,255,.08);--glass:rgba(48,46,44,.55);--glass-line:rgba(255,255,255,.08);--glass-shadow:0 10px 30px rgba(0,0,0,.3);--pill:rgba(255,255,255,.10);--sel-bg:#F3F1EE;--sel-ink:#151413;--accent:#F07A2A;--unit:#F2F1EF;--slot:#1C1A18;--particle:rgba(255,255,255,.5);--guide:rgba(255,255,255,.06);color-scheme:dark}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow)}
+.th-light{--wave:rgba(20,18,16,.09)}
+.th-dark{--wave:rgba(255,255,255,.07)}
+.breeze{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.breeze svg{position:absolute;left:0;top:0}
+.breeze path{fill:none;stroke:var(--wave);stroke-width:1}
+.bz1{animation:breeze 70s linear infinite}
+.bz2{animation:breeze 110s linear infinite}
+@keyframes breeze{to{transform:translateX(-390px)}}
+@media (prefers-reduced-motion:reduce){.bz1,.bz2{animation:none}}
+.press{transition:transform .15s,opacity .2s}
+.press:active{transform:scale(.92)}
+.press:disabled{opacity:.35}
+.flow{transition:opacity .7s}
+.is-off .flow{opacity:0}
+.guides path{fill:none;stroke:var(--guide);stroke-width:1}
+.pt{position:absolute;left:0;top:0;width:5px;height:5px;border-radius:50%;background:var(--particle);offset-rotate:0deg;opacity:0;animation:along 3.6s linear infinite}
+@keyframes along{0%{offset-distance:0%;opacity:0}8%{opacity:1}80%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.spd-quiet .pt{animation-duration:6s}
+.spd-low .pt{animation-duration:4.6s}
+.spd-medium .pt{animation-duration:2.8s}
+.spd-high .pt{animation-duration:1.7s}
+.slot{height:9px;transition:height .5s cubic-bezier(.2,.8,.2,1)}
+.is-off .slot{height:3px}
+.blade{transition:opacity .4s}
+.is-off .blade{opacity:0}
+.led{background:var(--accent);box-shadow:0 0 8px var(--accent);transition:background .4s,box-shadow .4s}
+.is-off .led{background:#C9C5C0;box-shadow:none}
+.digits{transition:opacity .4s}
+.is-off .digits{opacity:0}
+.fill{transition:height .45s cubic-bezier(.2,.8,.2,1)}
+.marker{transition:top .45s cubic-bezier(.2,.8,.2,1)}
+.vrange{writing-mode:vertical-lr;direction:rtl}
+.mb{color:var(--muted);transition:background .3s,color .3s,box-shadow .3s}
+.mb.sel{background:#FFFFFF;color:var(--accent);border-color:transparent;box-shadow:0 0 0 2px var(--accent),0 8px 20px rgba(232,112,31,.22)}
+.ind{background:var(--sel-bg);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.opt{position:relative;color:var(--muted);transition:color .3s}
+.opt.sel{color:var(--sel-ink)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin 2s linear infinite}
+.spin.spd-quiet{animation-duration:3.6s}
+.spin.spd-low{animation-duration:2.6s}
+.spin.spd-medium{animation-duration:1.3s}
+.spin.spd-high{animation-duration:.6s}
+.is-off .spin{animation:none}
+.pp .knob{left:4px;background:var(--track);color:var(--ink);transition:left .45s cubic-bezier(.3,1.3,.5,1),background .3s,color .3s}
+.pp.on .knob{left:calc(100% - 48px);background:var(--accent);color:#FFFFFF;box-shadow:0 6px 16px rgba(232,112,31,.35)}
+.pp .lbl-on{opacity:0;transition:opacity .3s}
+.pp.on .lbl-on{opacity:1}
+.pp .lbl-off{opacity:1;transition:opacity .3s}
+.pp.on .lbl-off{opacity:0}
+.tg{background:var(--track);transition:background .3s}
+.tg .k{left:3px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .35s cubic-bezier(.3,1.3,.5,1),background .3s}
+.tg.on{background:var(--sel-bg)}
+.tg.on .k{left:23px}
+.th-dark .tg.on .k{background:#151413}
+.th-dark .mb.sel{background:#2A2826}
+.disp .dv,.disp svg,.disp .dbars{transition:opacity .4s}
+.is-off .disp .dv,.is-off .disp svg,.is-off .disp .dbars{opacity:0}
+.disp .dv{text-shadow:0 0 8px rgba(232,112,31,.3);font-variant-numeric:tabular-nums}
+.mi,.pi{display:none}
+.mi.show,.pi.show{display:block}
+.disp.pa{animation:dpa .6s ease-out}
+.disp.pb{animation:dpb .6s ease-out}
+@keyframes dpa{0%{opacity:.15}100%{opacity:1}}
+@keyframes dpb{0%{opacity:.15}100%{opacity:1}}
+.bar{background:rgba(232,112,31,.2);transition:background .3s,box-shadow .3s}
+.bar.lit{background:#E8701F}
+.dbars.auto .bar{animation:barwave 1.4s ease-in-out infinite}
+.dbars.auto .bar:nth-child(2){animation-delay:.15s}
+.dbars.auto .bar:nth-child(3){animation-delay:.3s}
+.dbars.auto .bar:nth-child(4){animation-delay:.45s}
+@keyframes barwave{0%,100%{background:rgba(232,112,31,.2)}50%{background:#E8701F}}
+@media (prefers-reduced-motion:reduce){.pt,.spin{animation:none}}
+</style>
+</helmet>
+<div class="th-{{theme}} {{offCls}}" style="position: relative; width: 390px; height: 844px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: 'Plus Jakarta Sans', system-ui, sans-serif">
+<div class="breeze" aria-hidden="true">
+  <svg class="bz1" width="780" height="844" viewBox="0 0 780 844"><path d="M0 52 Q48.75 43 97.5 52 T195 52 T292.5 52 T390 52 T487.5 52 T585 52 T682.5 52 T780 52"></path><path d="M0 200 Q48.75 188 97.5 200 T195 200 T292.5 200 T390 200 T487.5 200 T585 200 T682.5 200 T780 200"></path><path d="M0 348 Q48.75 358 97.5 348 T195 348 T292.5 348 T390 348 T487.5 348 T585 348 T682.5 348 T780 348"></path><path d="M0 496 Q48.75 485 97.5 496 T195 496 T292.5 496 T390 496 T487.5 496 T585 496 T682.5 496 T780 496"></path><path d="M0 644 Q48.75 638 97.5 644 T195 644 T292.5 644 T390 644 T487.5 644 T585 644 T682.5 644 T780 644"></path><path d="M0 792 Q48.75 801 97.5 792 T195 792 T292.5 792 T390 792 T487.5 792 T585 792 T682.5 792 T780 792"></path></svg>
+  <svg class="bz2" width="780" height="844" viewBox="0 0 780 844"><path d="M0 126 Q32.5 132 65 126 T130 126 T195 126 T260 126 T325 126 T390 126 T455 126 T520 126 T585 126 T650 126 T715 126 T780 126"></path><path d="M0 274 Q32.5 267 65 274 T130 274 T195 274 T260 274 T325 274 T390 274 T455 274 T520 274 T585 274 T650 274 T715 274 T780 274"></path><path d="M0 422 Q32.5 417 65 422 T130 422 T195 422 T260 422 T325 422 T390 422 T455 422 T520 422 T585 422 T650 422 T715 422 T780 422"></path><path d="M0 570 Q32.5 578 65 570 T130 570 T195 570 T260 570 T325 570 T390 570 T455 570 T520 570 T585 570 T650 570 T715 570 T780 570"></path><path d="M0 718 Q32.5 706 65 718 T130 718 T195 718 T260 718 T325 718 T390 718 T455 718 T520 718 T585 718 T650 718 T715 718 T780 718"></path></svg>
+</div>
+
+  <div class="flow spd-{{fan}}" aria-hidden="true" style="position: absolute; left: 0; top: 180px; width: 390px; height: 664px; pointer-events: none">
+    <svg class="guides" width="390" height="664" viewBox="0 0 390 664" style="position: absolute; left: 0; top: 0">
+      <path d="M110 0 C110 160 84.5 420 59 664"></path>
+      <path d="M150 0 C150 160 136.5 420 123 664"></path>
+      <path d="M195 0 C195 160 195 420 195 664"></path>
+      <path d="M240 0 C240 160 253.5 420 267 664"></path>
+      <path d="M280 0 C280 160 305.5 420 331 664"></path>
+    </svg>
+    <span class="pt" style="offset-path: path('M110 0 C110 160 84.5 420 59 664'); animation-delay: -0.3s"></span>
+    <span class="pt" style="offset-path: path('M110 0 C110 160 84.5 420 59 664'); animation-delay: -2.1s"></span>
+    <span class="pt" style="offset-path: path('M150 0 C150 160 136.5 420 123 664'); animation-delay: -1.2s"></span>
+    <span class="pt" style="offset-path: path('M150 0 C150 160 136.5 420 123 664'); animation-delay: -3.0s"></span>
+    <span class="pt" style="offset-path: path('M195 0 C195 160 195 420 195 664'); animation-delay: -0.7s"></span>
+    <span class="pt" style="offset-path: path('M195 0 C195 160 195 420 195 664'); animation-delay: -2.5s"></span>
+    <span class="pt" style="offset-path: path('M240 0 C240 160 253.5 420 267 664'); animation-delay: -1.6s"></span>
+    <span class="pt" style="offset-path: path('M240 0 C240 160 253.5 420 267 664'); animation-delay: -3.4s"></span>
+    <span class="pt" style="offset-path: path('M280 0 C280 160 305.5 420 331 664'); animation-delay: -0.1s"></span>
+    <span class="pt" style="offset-path: path('M280 0 C280 160 305.5 420 331 664'); animation-delay: -1.9s"></span>
+  </div>
+
+  <header style="position: absolute; left: 20px; right: 20px; top: 16px; height: 48px; display: flex; align-items: center; justify-content: space-between">
+    <a href="Main.dc.html" class="glass press" aria-label="Back to Bedroom" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg></a>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 2px">
+      <span style="font-size: 17px; font-weight: 600; letter-spacing: -0.01em">Air conditioner</span>
+      <span style="font-size: 13px; color: var(--muted)">Bedroom</span>
+    </div>
+    <button class="glass press" aria-label="More options" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="19" cy="12" r="1.8"></circle></svg></button>
+  </header>
+
+  <div aria-hidden="true" style="position: absolute; left: 40px; top: 92px; width: 310px; height: 92px; border-radius: 26px 26px 36px 36px; background: var(--unit); box-shadow: inset 0 3px 0 #FFFFFF, inset 0 -16px 22px rgba(0,0,0,0.05), 0 30px 50px rgba(0,0,0,0.28), 0 6px 14px rgba(0,0,0,0.12)">
+    <div style="position: absolute; left: 20px; right: 20px; top: 60px; height: 1px; background: rgba(0,0,0,0.06)"></div>
+    <div class="disp {{pulse}}" style="position: absolute; right: 30px; top: 24px; height: 18px; display: flex; align-items: center; gap: 7px; color: #E8701F">
+      <span style="display: flex; width: 10px; height: 10px"><svg class="pi {{pi.eco}}" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg><svg class="pi {{pi.chill}}" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg></span>
+      <span style="display: flex; width: 12px; height: 12px"><svg class="mi {{mi.cool}}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"></path><path d="M12 2v20"></path><path d="m20 16-4-4 4-4"></path><path d="m4 8 4 4-4 4"></path><path d="m16 4-4 4-4-4"></path><path d="m8 20 4-4 4 4"></path></svg><svg class="mi {{mi.dry}}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg><svg class="mi {{mi.fan}}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.83 16.38a6.08 6.08 0 0 1-8.62-7l5.41 1.45a6.08 6.08 0 0 1 7-8.62l-1.45 5.41a6.08 6.08 0 0 1 8.62 7l-5.41-1.45a6.08 6.08 0 0 1-7 8.62l1.45-5.41Z"></path></svg><svg class="mi {{mi.heat}}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg><svg class="mi {{mi.auto}}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 16 12 7.5 15.5 16"></path><path d="M9.8 13h4.4"></path></svg></span>
+      <span class="dv" style="font-size: 17px; font-weight: 500; letter-spacing: 0.01em; line-height: 1">{{dispTemp}}</span>
+      <span class="dbars {{barsCls}}" style="display: flex; align-items: flex-end; gap: 1.5px; height: 11px"><span class="bar {{bars.b1}}" style="width: 2px; height: 3px; border-radius: 1px"></span><span class="bar {{bars.b2}}" style="width: 2px; height: 5px; border-radius: 1px"></span><span class="bar {{bars.b3}}" style="width: 2px; height: 8px; border-radius: 1px"></span><span class="bar {{bars.b4}}" style="width: 2px; height: 11px; border-radius: 1px"></span></span>
+    </div>
+    <div class="slot" style="position: absolute; left: 34px; right: 34px; bottom: 13px; border-radius: 5px; background: #2B2825; overflow: hidden">
+      <div class="blade" style="position: absolute; left: 8px; right: 8px; top: 50%; height: 2px; margin-top: -1px; border-radius: 1px; background: #8C857E"></div>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 22px; top: 222px; width: 44px; height: 280px">
+    <div aria-hidden="true" style="position: absolute; left: 0; top: 0; width: 16px; height: 280px; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start">
+      <sc-for list="{{ticks}}" as="t" hint-placeholder-count="29">
+        <span style="display: block; width: {{t.w}}px; height: 1px; background: var(--tick)"></span>
+      </sc-for>
+    </div>
+    <div aria-hidden="true" style="position: absolute; left: 26px; top: 0; width: 6px; height: 280px; border-radius: 3px; background: var(--track)"></div>
+    <div class="fill" aria-hidden="true" style="position: absolute; left: 26px; bottom: 0; width: 6px; height: {{fillPx}}px; border-radius: 3px; background: var(--accent)"></div>
+    <div class="marker" aria-hidden="true" style="position: absolute; left: 21px; top: {{markerTop}}px; width: 16px; height: 16px; box-sizing: border-box; border-radius: 8px; background: #FFFFFF; border: 3px solid var(--accent); box-shadow: 0 3px 8px rgba(0,0,0,0.15)"></div>
+    <input class="vrange" type="range" min="16" max="30" step="1" value="{{temp}}" onChange="{{onTemp}}" disabled="{{tempLocked}}" aria-label="Temperature" style="position: absolute; left: 0; top: 0; width: 44px; height: 280px; margin: 0; opacity: 0; cursor: ns-resize">
+  </div>
+
+  <div style="position: absolute; left: 84px; top: 262px; display: flex; flex-direction: column">
+    <span style="font-size: 15px; font-weight: 500; color: var(--muted)">{{tempLabel}}</span>
+    <div aria-live="polite" style="display: flex; align-items: flex-start; height: 100px; margin-top: 2px">
+      <span style="font-size: 96px; font-weight: 300; letter-spacing: -0.05em; line-height: 1">{{tempText}}</span>
+      <span style="font-size: 40px; font-weight: 300; line-height: 1; margin-top: 10px">{{degree}}</span>
+    </div>
+    <span style="display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 14px; color: var(--muted)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"></path></svg>Inside 27°</span>
+    <div style="display: flex; gap: 10px; margin-top: 18px">
+      <button class="glass press" onClick="{{dec}}" disabled="{{tempLocked}}" aria-label="Lower temperature" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+      <button class="glass press" onClick="{{inc}}" disabled="{{tempLocked}}" aria-label="Raise temperature" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></button>
+    </div>
+  </div>
+
+  <div role="group" aria-label="Mode" style="position: absolute; right: 22px; top: 222px; display: flex; flex-direction: column; gap: 10px">
+    <button class="glass mb press {{mc.cool}}" onClick="{{pick.cool}}" aria-pressed="{{mp.cool}}" aria-label="Cool" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h20"></path><path d="M12 2v20"></path><path d="m20 16-4-4 4-4"></path><path d="m4 8 4 4-4 4"></path><path d="m16 4-4 4-4-4"></path><path d="m8 20 4-4 4 4"></path></svg></button>
+    <button class="glass mb press {{mc.dry}}" onClick="{{pick.dry}}" aria-pressed="{{mp.dry}}" aria-label="Dry" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"></path></svg></button>
+    <button class="glass mb press {{mc.fan}}" onClick="{{pick.fan}}" aria-pressed="{{mp.fan}}" aria-label="Fan only" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.83 16.38a6.08 6.08 0 0 1-8.62-7l5.41 1.45a6.08 6.08 0 0 1 7-8.62l-1.45 5.41a6.08 6.08 0 0 1 8.62 7l-5.41-1.45a6.08 6.08 0 0 1-7 8.62l1.45-5.41Z"></path><path d="M12 12v.01"></path></svg></button>
+    <button class="glass mb press {{mc.heat}}" onClick="{{pick.heat}}" aria-pressed="{{mp.heat}}" aria-label="Heat" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg></button>
+    <button class="glass mb press {{mc.auto}}" onClick="{{pick.auto}}" aria-pressed="{{mp.auto}}" aria-label="Auto" style="width: 48px; height: 48px; border-radius: 24px; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M8.5 16 12 7.5 15.5 16"></path><path d="M9.8 13h4.4"></path></svg></button>
+  </div>
+
+  <div style="position: absolute; left: 20px; right: 20px; bottom: 28px; display: flex; flex-direction: column; gap: 12px">
+    <section class="glass" aria-label="Fan speed" style="border-radius: 28px; padding: 16px">
+      <div style="display: flex; align-items: center; justify-content: space-between; height: 40px">
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 16px; font-weight: 600">Fan speed</span>
+          <span style="font-size: 13px; color: var(--muted)">{{fanName}}</span>
+        </div>
+        <span aria-hidden="true" style="width: 40px; height: 40px; border-radius: 20px; background: var(--pill); display: flex; align-items: center; justify-content: center"><svg class="spin spd-{{fan}}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10.83 16.38a6.08 6.08 0 0 1-8.62-7l5.41 1.45a6.08 6.08 0 0 1 7-8.62l-1.45 5.41a6.08 6.08 0 0 1 8.62 7l-5.41-1.45a6.08 6.08 0 0 1-7 8.62l1.45-5.41Z"></path><path d="M12 12v.01"></path></svg></span>
+      </div>
+      <div role="group" aria-label="Fan speed" style="position: relative; margin-top: 12px; padding: 4px; border-radius: 26px; background: var(--track)">
+        <div class="ind" aria-hidden="true" style="position: absolute; left: 4px; top: 4px; width: 58.8px; height: 44px; border-radius: 22px; transform: translateX({{fanX}}px)"></div>
+        <div style="position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px">
+          <button class="opt {{fc.auto}}" onClick="{{fanPick.auto}}" aria-pressed="{{fp.auto}}" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">Auto</button>
+          <button class="opt {{fc.quiet}}" onClick="{{fanPick.quiet}}" aria-pressed="{{fp.quiet}}" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">Quiet</button>
+          <button class="opt {{fc.low}}" onClick="{{fanPick.low}}" aria-pressed="{{fp.low}}" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">Low</button>
+          <button class="opt {{fc.medium}}" onClick="{{fanPick.medium}}" aria-pressed="{{fp.medium}}" aria-label="Medium" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">Med</button>
+          <button class="opt {{fc.high}}" onClick="{{fanPick.high}}" aria-pressed="{{fp.high}}" style="height: 44px; border-radius: 22px; font-size: 13px; font-weight: 600">High</button>
+        </div>
+      </div>
+    </section>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+      <section class="glass" aria-label="Power" style="border-radius: 28px; padding: 16px; height: 128px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between">
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 16px; font-weight: 600">Power</span>
+          <span style="font-size: 13px; color: var(--muted)">{{powerSub}}</span>
+        </div>
+        <button class="pp {{powerCls}}" onClick="{{togglePower}}" role="switch" aria-checked="{{on}}" aria-label="Power" style="position: relative; height: 52px; border-radius: 26px; background: var(--pill)">
+          <span class="lbl-on" style="position: absolute; left: 18px; top: 16px; font-size: 15px; font-weight: 600">On</span>
+          <span class="lbl-off" style="position: absolute; right: 18px; top: 16px; font-size: 15px; font-weight: 600; color: var(--muted)">Off</span>
+          <span class="knob" style="position: absolute; top: 4px; width: 44px; height: 44px; border-radius: 22px; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v10"></path><path d="M18.4 6.6a9 9 0 1 1-12.77.04"></path></svg></span>
+        </button>
+      </section>
+
+      <section class="glass" aria-label="Energy" style="border-radius: 28px; padding: 16px; height: 128px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between">
+        <div style="display: flex; align-items: center; justify-content: space-between; height: 40px">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 15px; font-weight: 600">Eco</span>
+            <span style="font-size: 12px; color: var(--muted)">Holds 26°</span>
+          </div>
+          <button class="tg {{ecoCls}}" role="switch" aria-checked="{{eco}}" aria-label="Eco" onClick="{{toggleEco}}" style="position: relative; width: 48px; height: 28px; border-radius: 14px; flex: none"><span class="k" style="position: absolute; top: 3px; width: 22px; height: 22px; border-radius: 11px"></span></button>
+        </div>
+        <div style="height: 1px; background: var(--track)"></div>
+        <div style="display: flex; align-items: center; justify-content: space-between; height: 40px">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 15px; font-weight: 600">Powerchill</span>
+            <span style="font-size: 12px; color: var(--muted)">Fast cooling</span>
+          </div>
+          <button class="tg {{chillCls}}" role="switch" aria-checked="{{chill}}" aria-label="Powerchill" onClick="{{toggleChill}}" style="position: relative; width: 48px; height: 28px; border-radius: 14px; flex: none"><span class="k" style="position: absolute; top: 3px; width: 22px; height: 22px; border-radius: 11px"></span></button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const on = s.on ?? true;
+    const mode = s.mode ?? 'cool';
+    const fan = s.fan ?? 'auto';
+    const temp = s.temp ?? 24;
+    const plan = s.plan ?? 'normal';
+    const locked = mode === 'fan';
+    const set = (patch) => this.setState(Object.assign({}, patch, { flip: !s.flip }));
+
+    const modes = ['cool', 'dry', 'fan', 'heat', 'auto'];
+    const fans = ['auto', 'quiet', 'low', 'medium', 'high'];
+    const mc = {}, mp = {}, pick = {};
+    modes.forEach((m) => { mc[m] = m === mode ? 'sel' : ''; mp[m] = m === mode; pick[m] = () => set({ mode: m }); });
+    const fc = {}, fp = {}, fanPick = {};
+    fans.forEach((f) => { fc[f] = f === fan ? 'sel' : ''; fp[f] = f === fan; fanPick[f] = () => set({ fan: f }); });
+
+    const H = 280;
+    const fillPx = locked ? 0 : Math.round((temp - 16) / 14 * H);
+    const ticks = [];
+    for (let i = 0; i < 29; i++) ticks.push({ w: i % 2 === 0 ? 16 : 9 });
+
+    const label = { cool: 'Cooling to', heat: 'Heating to', dry: 'Drying at', fan: 'Fan only', auto: 'Auto at' };
+    const modeName = { cool: 'Cool', heat: 'Heat', dry: 'Dry', fan: 'Fan', auto: 'Auto' };
+    const fanName = { auto: 'Auto', quiet: 'Quiet', low: 'Low', medium: 'Medium', high: 'High' };
+
+    return {
+      theme: this.props.theme ?? 'dark',
+      on: on,
+      fan: fan,
+      temp: temp,
+      offCls: on ? '' : 'is-off',
+      ticks: ticks,
+      fillPx: fillPx,
+      markerTop: H - fillPx - 8,
+      tempLabel: on ? label[mode] : 'Set to',
+      tempText: locked ? '—' : String(temp),
+      degree: locked ? '' : '°',
+      tempLocked: locked,
+      unitDigits: locked ? 'FAN' : temp + '°',
+      pulse: s.flip ? 'pa' : 'pb',
+      dispTemp: locked ? 'FAN' : temp + '°',
+      mi: { cool: mode === 'cool' ? 'show' : '', dry: mode === 'dry' ? 'show' : '', fan: mode === 'fan' ? 'show' : '', heat: mode === 'heat' ? 'show' : '', auto: mode === 'auto' ? 'show' : '' },
+      pi: { eco: plan === 'eco' ? 'show' : '', chill: plan === 'chill' ? 'show' : '' },
+      bars: (() => { const lv = { auto: 0, quiet: 1, low: 2, medium: 3, high: 4 }[fan]; return { b1: lv >= 1 ? 'lit' : '', b2: lv >= 2 ? 'lit' : '', b3: lv >= 3 ? 'lit' : '', b4: lv >= 4 ? 'lit' : '' }; })(),
+      barsCls: fan === 'auto' ? 'auto' : '',
+      onTemp: (e) => set({ temp: Number(e.target.value) }),
+      dec: () => set({ temp: Math.max(16, temp - 1) }),
+      inc: () => set({ temp: Math.min(30, temp + 1) }),
+      mc: mc, mp: mp, pick: pick,
+      fc: fc, fp: fp, fanPick: fanPick,
+      fanX: (fans.indexOf(fan) * 62.8).toFixed(1),
+      fanName: fanName[fan],
+      powerCls: on ? 'on' : '',
+      powerSub: on ? 'Running · ' + modeName[mode] : 'Standby',
+      togglePower: () => set({ on: !on }),
+      eco: plan === 'eco',
+      chill: plan === 'chill',
+      ecoCls: plan === 'eco' ? 'on' : '',
+      chillCls: plan === 'chill' ? 'on' : '',
+      toggleEco: () => set(plan === 'eco' ? { plan: 'normal' } : { plan: 'eco', temp: 26 }),
+      toggleChill: () => set({ plan: plan === 'chill' ? 'normal' : 'chill' })
+    };
+  }
+}
+</script>
+</body>
+</html>
