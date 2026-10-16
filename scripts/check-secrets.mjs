@@ -22,10 +22,11 @@ const PRIVATE_KEY = /-----BEGIN (?:[A-Z]+ )*PRIVATE KEY-----/g;
 const JWT_ASSIGNED =
   /\b[\w-]*(?:token|password|passwd|secret|authorization)[\w-]*["']?\s*[:=]\s*["'`](?:Bearer\s+)?eyJ[\w-]{8,}\.[\w-]{8,}\.[\w-]{8,}/gi;
 
-/** `.env`, `.env.local`, `config/.env.production` … but not `.env.example`. */
+/** `.env`, `.env.local`, `config/.env.production`, direnv's `.envrc` … but not `.env.example`. */
 export function isEnvFile(file) {
   const base = file.split('/').pop();
-  return (base === '.env' || base.startsWith('.env.')) && base !== '.env.example';
+  if (base === '.env.example') return false;
+  return base === '.env' || base === '.envrc' || base.startsWith('.env.');
 }
 
 /** Pure check: `files` = [{ path, text }] (text may be null for binaries). */

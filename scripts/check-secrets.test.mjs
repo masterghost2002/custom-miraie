@@ -42,6 +42,7 @@ test('.env.example is allowed; .env and .env.production are not', () => {
   assert.equal(isEnvFile('.env.example'), false);
   assert.equal(isEnvFile('.env'), true);
   assert.equal(isEnvFile('config/.env.production'), true);
+  assert.equal(isEnvFile('.envrc'), true); // direnv
 });
 
 test('a private key block or a JWT assigned to a token key fails', () => {

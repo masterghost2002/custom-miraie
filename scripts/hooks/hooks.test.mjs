@@ -145,7 +145,7 @@ test('other tools, and ordinary files outside any repo, are let through', () => 
 });
 
 test('an env file is blocked anywhere, even outside every repo (.env, .env.local, .envrc)', () => {
-  for (const file of ['/tmp/.env', '/elsewhere/project/.env.local']) {
+  for (const file of ['/tmp/.env', '/elsewhere/project/.env.local', '/repo/.envrc']) {
     assert.equal(
       decidePreToolUse(write(file, 'x'), { rootOf, readFile: noFile, boards }).exitCode,
       2,
