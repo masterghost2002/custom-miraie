@@ -443,4 +443,26 @@ describe('live backend — account changes while a re-login is in flight', () =>
     expect(broker.events.filter((e) => e.event === 'connect')).toHaveLength(0);
     expect(backend.getConnectionState()).toBe('disconnected');
   });
+
+  it("given A's getHome in flight, when B signs in, then A's home is dropped and no MQTT session opens with B's token", async () => {
+    let release = () => {};
+    const gate = new Promise<void>((resolve) => (release = resolve));
+    const rest = fakeMiraie();
+    let homesRequested = 0;
+    const fetch: typeof globalThis.fetch = async (input, init) => {
+      if (String(input) === HOMES_URL && homesRequested++ === 0) await gate;
+      return rest.fetch(input, init);
+    };
+    const { backend } = await setup({ rest: { ...rest, fetch }, brokerPasswords: ['token-2'] });
+
+    const homeA = backend.getHome().catch((e: unknown) => e);
+    await until(() => homesRequested === 1);
+    await backend.signIn('b@example.com', 'secret');
+    release();
+
+    expect(await homeA).toBeInstanceOf(SignedOutError);
+    await new Promise((r) => setTimeout(r, 200));
+    expect(broker.events.filter((e) => e.event === 'connect')).toHaveLength(0);
+    expect(backend.getLoginId()).toBe('b@example.com');
+  });
 });
