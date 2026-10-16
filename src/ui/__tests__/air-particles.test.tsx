@@ -1,7 +1,15 @@
 import { act, render, screen } from '@testing-library/react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 
-import { AirParticles, arcLengthTable, curvePath, type ParticleCurve } from '../air-particles';
+import { animatedStyle } from '@/test-support/drawing';
+
+import {
+  AirParticles,
+  arcLengthTable,
+  curvePath,
+  PARTICLE_MS,
+  type ParticleCurve,
+} from '../air-particles';
 
 const curves: ParticleCurve[] = [
   { path: [75, 0, 75, 25, 75, 50, 75, 70], delays: [-0.9, -2.1] },
@@ -53,6 +61,22 @@ describe('AirParticles', () => {
         !n.props.jestAnimatedStyle.value.transform,
     )[0];
     expect(layer).toHaveAnimatedStyle({ opacity: 0 });
+  });
+
+  it('moves air faster on a high fan than on quiet (speed by fan, Climate board)', async () => {
+    const travelled = async (durationMs: number) => {
+      const view = await render(<AirParticles {...props} durationMs={durationMs} visible />);
+      const y0 =
+        (animatedStyle(dots()[0]).transform as { translateY?: number }[])[1]?.translateY ?? 0;
+      await act(async () => jest.advanceTimersByTime(400));
+      const y1 =
+        (animatedStyle(dots()[0]).transform as { translateY?: number }[])[1]?.translateY ?? 0;
+      await view.unmount();
+      return Math.abs(y1 - y0);
+    };
+    expect(PARTICLE_MS.high).toBe(1700);
+    expect(PARTICLE_MS.quiet).toBe(6000);
+    expect(await travelled(PARTICLE_MS.high)).toBeGreaterThan(await travelled(PARTICLE_MS.quiet));
   });
 
   it('AC-8: shows no moving particles under Reduce Motion', async () => {

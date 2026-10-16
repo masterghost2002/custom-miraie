@@ -26,6 +26,17 @@ export type ParticleCurve = {
 
 type Lut = { xs: number[]; ys: number[]; lens: number[]; total: number };
 
+export type ParticleSpeed = 'auto' | 'quiet' | 'low' | 'medium' | 'high';
+
+/** Climate: one trip along a curve by fan speed (.pt / .spd-* on the board), in ms. */
+export const PARTICLE_MS: Record<ParticleSpeed, number> = {
+  auto: 3600,
+  quiet: 6000,
+  low: 4600,
+  medium: 2800,
+  high: 1700,
+};
+
 const SAMPLES = 40;
 
 function point(c: Curve, t: number): [number, number] {
@@ -144,22 +155,33 @@ export function AirParticles({
   const [box, setBox] = useState({ width: boardWidth, height: boardHeight });
   const progress = useSharedValue(0);
   const shown = useSharedValue(visible ? 1 : 0);
-  const luts = useMemo(() => curves.map((c) => arcLengthTable(c.path)), [curves]);
-  const moving = visible && !reduced;
+  // Pair each curve with its arc-length table once (pass curves from a module constant).
+  const tables = useMemo(
+    () => curves.map((c) => ({ curve: c, lut: arcLengthTable(c.path) })),
+    [curves],
+  );
 
   useEffect(() => {
     shown.set(withTiming(visible ? 1 : 0, { duration: fadeMs }));
   }, [visible, fadeMs, shown]);
 
+  // (Re)start the flow whenever it should run or its speed changes.
   useEffect(() => {
-    cancelAnimation(progress);
-    if (!moving) return;
+    if (reduced || !visible) return;
     progress.set(0);
     progress.set(
       withRepeat(withTiming(1, { duration: durationMs, easing: Easing.linear }), -1, false),
     );
-    return () => cancelAnimation(progress);
-  }, [moving, durationMs, progress]);
+  }, [reduced, visible, durationMs, progress]);
+
+  // The air keeps moving while it fades out, then stops.
+  useEffect(() => {
+    if (visible) return;
+    const t = setTimeout(() => cancelAnimation(progress), fadeMs);
+    return () => clearTimeout(t);
+  }, [visible, fadeMs, progress]);
+
+  useEffect(() => () => cancelAnimation(progress), [progress]);
 
   const layer = useAnimatedStyle(() => ({ opacity: shown.get() }));
   const sx = box.width / boardWidth;
@@ -200,11 +222,11 @@ export function AirParticles({
         <Animated.View
           style={[{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }, layer]}
         >
-          {curves.flatMap((c, ci) =>
+          {tables.flatMap(({ curve: c, lut }, ci) =>
             c.delays.map((delay) => (
               <Dot
                 key={`${ci}:${delay}`}
-                lut={luts[ci] as Lut}
+                lut={lut}
                 progress={progress}
                 offset={((((-delay * 1000) / durationMs) % 1) + 1) % 1}
                 size={dotSize}
