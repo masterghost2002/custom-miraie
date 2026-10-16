@@ -27,7 +27,7 @@
 - [x] Task 9: review stamp writer + check:review
       Check: AC-10 — stamp written, extra commit makes the check fail
       Files: scripts/review-stamp.mjs, scripts/check-review.mjs (+ tests)
-- [ ] Task 10: husky pre-commit, commit-msg, pre-push
+- [x] Task 10: husky pre-commit, commit-msg, pre-push
       Check: AC-7, AC-9, AC-11 by hand on a scratch branch
       Files: .husky/*
 - [ ] Task 11: Claude Code hooks (PreToolUse block list + design note on new files, PostToolUse prettier, Stop → /review once)
