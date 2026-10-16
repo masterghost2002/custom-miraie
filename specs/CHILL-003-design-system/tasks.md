@@ -1,6 +1,6 @@
 # CHILL-003 — Tasks
 
-- [ ] Task 1: Add missing tokens; `Text` with every variant
+- [x] Task 1: Add missing tokens; `Text` with every variant
       Check: AC-1 for Text; style-policy passes
       Files: src/theme/tokens.ts, src/ui/text.tsx, docs/design-map.md
 - [ ] Task 2: `Glass` (GlassView + fallback), `Screen`, `Breeze`

@@ -51,8 +51,18 @@ module.exports = {
         'degree-sm': ['28px', { lineHeight: '28px' }],
         'reading-sm': ['64px', { lineHeight: '64px', letterSpacing: '-3.2px' }],
         reading: ['96px', { lineHeight: '96px', letterSpacing: '-4.8px' }],
+        // AC dead-front display digits (line height 1)
+        'display-sm': ['11px', { lineHeight: '11px' }],
+        'display-md': ['15px', { lineHeight: '15px' }],
+        'display-lg': ['17px', { lineHeight: '17px', letterSpacing: '0.17px' }],
+        // Sign-in body (line height 1.5) and secure-storage note (1.45)
+        intro: ['15px', { lineHeight: '22.5px' }],
+        note: ['12px', { lineHeight: '17.4px' }],
       },
       spacing: {
+        4.5: '18px',
+        5.5: '22px',
+        6.5: '26px',
         13: '52px',
         15: '60px',
         17: '68px',
@@ -61,10 +71,13 @@ module.exports = {
         21: '84px',
         30: '120px',
         42: '168px',
+        47.5: '190px',
         59: '236px',
+        70: '280px',
       },
       borderRadius: {
         chip: '18px',
+        'tile-sm': '22px',
         tile: '26px',
         card: '28px',
         panel: '30px',
@@ -72,5 +85,18 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Web preview only: the frosted fallback's blur (language §5). Native ignores it.
+    ({ addUtilities }) =>
+      addUtilities({
+        '.backdrop-glass': {
+          'backdrop-filter': 'blur(22px) saturate(140%)',
+          '-webkit-backdrop-filter': 'blur(22px) saturate(140%)',
+        },
+        '.backdrop-pill': {
+          'backdrop-filter': 'blur(22px)',
+          '-webkit-backdrop-filter': 'blur(22px)',
+        },
+      }),
+  ],
 };

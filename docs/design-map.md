@@ -104,33 +104,30 @@ Tailwind defaults (px): `0.5`=2, `1`=4, `1.5`=6, `2`=8, `2.5`=10, `3`=12, `3.5`=
 | 34 (tab bar)                                                       | `rounded-dock`  |
 | Height ÷ 2 (all circles and pills: 11, 13, 14, 20, 22, 24, 26, 28) | `rounded-full`  |
 
-## Missing from tokens (add in CHILL-003)
+## Added in CHILL-003
 
-Board values with no token or class yet. Do not type these raw in a component.
+The values the boards used without a token now have one (owner answers, CHILL-003 Q2, 2026-10-16).
+Particles stay `.45` light / `.5` dark everywhere; dark `--pill` is `.10` everywhere; the AC display
+stays `#E8701F` in both themes; every press scales to `.94` (`.97` for the wide primary button).
 
-| Value                                                                          | Where                                                                             | Proposed token                                                       |
-| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `--beam`: `rgba(20,18,16,.07)` / `rgba(255,255,255,.07)`                       | Airflow cone and wedge                                                            | `beam`                                                               |
-| `--guide` Airflow variant `.10` (light and dark)                               | Airflow stream lines (Climate uses `.06`)                                         | `guideStrong` or one value for both                                  |
-| `--particle` Rooms/Airflow variant `.5` light / `.55` dark                     | Drips, airflow particles (others use `.45` / `.5`)                                | decide one value                                                     |
-| `--pill` dark `.08` on Sign in (`.10` elsewhere)                               | Sign-in fields                                                                    | decide one value                                                     |
-| `--swatch-line`: `rgba(20,18,16,.10)` / `rgba(255,255,255,.12)`                | Style board swatches only                                                         | not needed in the app                                                |
-| `#FFFFFF` (fixed)                                                              | Toggle knob off, slider marker, unit top highlight (inset), selected position dot | `white`                                                              |
-| `#8C857E`                                                                      | Climate vent blade                                                                | `display.blade`                                                      |
-| `#D8D4CE`                                                                      | Airflow swing flap                                                                | `display.flap`                                                       |
-| `rgba(232,112,31,.35)`                                                         | Power-on shadow                                                                   | `accentShadow` (shadow colour `#E8701F` @ .35, offset 0/6, radius 8) |
-| `rgba(232,112,31,.22)`                                                         | Selected mode shadow                                                              | shadow `#E8701F` @ .22, offset 0/8, radius 10                        |
-| `rgba(232,112,31,.3)`                                                          | Display digit text glow (0 0 8)                                                   | `display.glowShadow`                                                 |
-| `rgba(0,0,0,.25)` / `.15`                                                      | Toggle knob shadow (0 1 3) / slider marker shadow (0 3 8)                         | `knobShadow`, `markerShadow`                                         |
-| `rgba(0,0,0,.05–.06)`                                                          | Unit inset shading and seam line                                                  | `display.seam`                                                       |
-| Unit drop shadows: `rgba(0,0,0,.22/.28/.12)`, `rgba(60,40,20,.16/.14/.12/.08)` | AC unit sizes (language §7)                                                       | a size table inside the AC unit primitive, colours from tokens       |
-| Radius 22 on a non-circle                                                      | All-devices icon tile 68 × 68                                                     | `rounded-tile-sm` (22)                                               |
-| Radii 20/28, 26/36, 15/20, 10/13, 6/8, 0 18 22 0, 7                            | AC unit body corners                                                              | size table inside the AC unit primitive                              |
-| Spacing 18                                                                     | Mode chip padding, power-label inset                                              | `4.5`                                                                |
-| Spacing 22                                                                     | Climate slider / mode column inset from the screen edge                           | `5.5`                                                                |
-| Size 26                                                                        | Day circles                                                                       | `6.5`                                                                |
-| Size 150, 250, 310, 104 × 32, 44 × 15                                          | AC unit drawings                                                                  | size table inside the AC unit primitive                              |
-| Size 280                                                                       | Climate slider and control-area height                                            | `70`                                                                 |
-| Size 190                                                                       | Airflow left/right illustration height                                            | `47.5`                                                               |
-| Size 58.8 / 49.7 indicator, 62.8 / 53.7 step                                   | Segmented indicator                                                               | computed from measured width — never a constant                      |
-| Letter spacing −0.01em (17 px), 0.01em (display)                               | Header title, schedule time, display digits                                       | `tracking-*` entries                                                 |
+| Board value                                                         | Where                                       | Token / class                                                     |
+| ------------------------------------------------------------------- | ------------------------------------------- | ----------------------------------------------------------------- |
+| `--beam` `rgba(20,18,16,.07)` / `rgba(255,255,255,.07)`             | Airflow cone and wedge                      | `beam`                                                            |
+| `--guide` Airflow `.10`                                             | Airflow stream lines                        | `guideStrong` (Climate keeps `guide`)                             |
+| `#FFFFFF` fixed                                                     | Toggle knob off, slider marker, unit inset  | `fixed.white`                                                     |
+| `#8C857E`                                                           | Climate vent blade                          | `display.blade`                                                   |
+| `#D8D4CE`                                                           | Airflow swing flap                          | `display.flap`                                                    |
+| `rgba(232,112,31,.35)`                                              | Power-on shadow (0 6 16)                    | `fixed.powerShadow`                                               |
+| `rgba(232,112,31,.22)`                                              | Selected mode shadow (0 8 20)               | `fixed.modeShadow`                                                |
+| `rgba(232,112,31,.3)`                                               | Display digit glow (0 0 8)                  | `display.glowShadow`                                              |
+| `rgba(0,0,0,.25)` / `.15`                                           | Toggle knob / slider marker shadow          | `fixed.knobShadow`, `fixed.markerShadow`                          |
+| `rgba(0,0,0,.05–.06)`                                               | Unit inset shading, seam line               | `fixed.insetSoft`, `fixed.seam`                                   |
+| Unit drop shadows `rgba(0,0,0,.28/.22/.12)`, warm `.16/.14/.12/.08` | AC unit sizes (language §7)                 | `fixed.unitShadow*`, `fixed.warmShadow*` (size table in `AcUnit`) |
+| Radius 22 on a non-circle                                           | All-devices icon tile 68 × 68               | `rounded-tile-sm`                                                 |
+| Spacing 18 / 22 / 26                                                | Mode chip padding / slider inset / day dots | `4.5` / `5.5` / `6.5`                                             |
+| Size 280 / 190                                                      | Climate slider / Airflow top-view height    | `70` / `47.5`                                                     |
+| Display digits 11 / 15 / 17 (line height 1)                         | Home / Sign in / Climate units              | `text-display-sm` / `text-display-md` / `text-display-lg`         |
+| Sign-in body 15 / 1.5, secure note 12 / 1.45                        | Sign in                                     | `text-intro`, `text-note`                                         |
+| `backdrop-filter: blur(22px) saturate(140%)`                        | Glass fallback on the web preview           | `web:backdrop-glass` (`web:backdrop-pill` without saturate)       |
+| Unit body radii and sizes (150, 250, 310, 104 × 32, 44 × 15)        | AC unit drawings                            | size table inside `src/ui/ac-unit.tsx`                            |
+| Segmented indicator width / step                                    | Segmented pill                              | computed from the measured width — never a constant               |
