@@ -64,6 +64,45 @@ test('clean code, URL fragments, named steps and array indexing pass', () => {
   assert.deepEqual(checkStylePolicy([file('src/features/x/screen.tsx', text)]), []);
 });
 
+test('colours in comments and regex literals are not raw colours', () => {
+  const text = [
+    '// the accent is #E8701F (see tokens)',
+    '/* rgba(0,0,0,.2) shadow from the board */',
+    '/** JSDoc: #151413 ground */',
+    'const isHex = /#[0-9a-f]{6}/i.test(value) || /rgba?\\(/.test(value);',
+    '{/* JSX comment: bg-[#fff] */}',
+  ].join('\n');
+  assert.deepEqual(checkStylePolicy([file('src/ui/a.tsx', text)]), []);
+});
+
+test('a colour after a URL inside a string on the same line is still found', () => {
+  const [v] = checkStylePolicy([
+    file('src/ui/a.tsx', "\nconst link = 'https://x.dev/a'; const c = '#fff';"),
+  ]);
+  assert.equal(v.line, 2);
+  assert.match(v.message, /#fff/);
+});
+
+test('arbitrary values are looked for only inside strings and template literals', () => {
+  const ok = 'const n = a-[1].length;\nconst m = x - [2];';
+  assert.deepEqual(checkStylePolicy([file('src/ui/a.ts', ok)]), []);
+  const bad = [
+    'const t = `w-[52px] ${extra}`;',
+    "cn('p-[13px]');",
+    '<A b={c} /><B className="h-[10px]" />',
+    '<Text>a</Text><Text className="mt-[3px]">b</Text>',
+  ].join('\n');
+  assert.deepEqual(
+    checkStylePolicy([file('src/ui/b.tsx', bad)]).map((v) => v.line),
+    [1, 2, 3, 4],
+  );
+});
+
+test('line numbers stay right after comments are skipped', () => {
+  const text = "/*\n multi\n line\n*/\nconst c = '#abc';";
+  assert.equal(checkStylePolicy([file('src/ui/a.ts', text)])[0].line, 5);
+});
+
 test('files outside src are not checked', () => {
   assert.deepEqual(checkStylePolicy([file('app.json', '{"backgroundColor": "#151413"}')]), []);
 });

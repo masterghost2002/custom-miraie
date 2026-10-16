@@ -10,6 +10,7 @@ import {
   readFiles,
   runGate,
 } from './lib/gate.mjs';
+import { scanSource } from './lib/source-scan.mjs';
 
 export const RULE = 'style-policy';
 export const SEVERITY = 'error';
@@ -31,32 +32,29 @@ export function checkStylePolicy(files) {
   const violations = [];
   for (const file of files) {
     if (!appliesTo(file.path)) continue;
+    const css = file.path.endsWith('.css');
+    // Comments and regex literals are blanked; class names are looked for only inside strings
+    // (in CSS, everywhere outside comments).
+    const { code, strings } = scanSource(file.text, { css });
     const found = [];
+    const add = (index, message, fix) =>
+      found.push({ path: file.path, line: lineOf(file.text, index), message, fix });
+    const tokenFix = `use a token from ${TOKENS_FILE} (a colour class, or useTheme().tokens)`;
     if (file.path !== TOKENS_FILE) {
-      for (const match of file.text.matchAll(HEX)) {
-        found.push({
-          path: file.path,
-          line: lineOf(file.text, match.index),
-          message: `raw colour ${match[0]}`,
-          fix: `use a token from ${TOKENS_FILE} (a colour class, or useTheme().tokens)`,
-        });
-      }
-      for (const match of file.text.matchAll(COLOUR_FN)) {
-        found.push({
-          path: file.path,
-          line: lineOf(file.text, match.index),
-          message: `raw colour ${match[0]}…)`,
-          fix: `use a token from ${TOKENS_FILE} (a colour class, or useTheme().tokens)`,
-        });
+      for (const match of code.matchAll(HEX)) add(match.index, `raw colour ${match[0]}`, tokenFix);
+      for (const match of code.matchAll(COLOUR_FN)) {
+        add(match.index, `raw colour ${match[0]}…)`, tokenFix);
       }
     }
-    for (const match of file.text.matchAll(ARBITRARY)) {
-      found.push({
-        path: file.path,
-        line: lineOf(file.text, match.index),
-        message: `arbitrary Tailwind value ${match[0]}`,
-        fix: 'use a named Tailwind step (add it to tailwind.config.js and docs/design-map.md)',
-      });
+    const regions = css ? [{ start: 0, end: code.length }] : strings;
+    for (const { start, end } of regions) {
+      for (const match of code.slice(start, end).matchAll(ARBITRARY)) {
+        add(
+          start + match.index,
+          `arbitrary Tailwind value ${match[0]}`,
+          'use a named Tailwind step (add it to tailwind.config.js and docs/design-map.md)',
+        );
+      }
     }
     violations.push(...applyIgnores(RULE, file, found));
   }
