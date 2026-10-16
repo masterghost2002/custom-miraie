@@ -9,8 +9,8 @@ import {
   readBoards,
 } from '../check-design-source.mjs';
 import { isEnvFile } from '../check-secrets.mjs';
-import { REPO_ROOT, isMain } from '../lib/gate.mjs';
-import { repoRelative, runHook } from './lib.mjs';
+import { isMain } from '../lib/gate.mjs';
+import { absoluteTarget, relativeTo, repoRootOf, runHook } from './lib.mjs';
 
 export const FILE_TOOLS = new Set(['Write', 'Edit', 'MultiEdit', 'NotebookEdit']);
 
@@ -44,20 +44,45 @@ export function contentAfter(toolName, input, current) {
   return text;
 }
 
-/** Pure decision: returns `{ exitCode, stderr? }` — exit 2 blocks the tool call. */
-export function decidePreToolUse(event, { root = REPO_ROOT, readFile, boards } = {}) {
+/** The board files of the checkout at `root`, or null when it has none (not a Chill checkout). */
+export function boardsFor(root) {
+  try {
+    return readBoards({ cwd: root });
+  } catch {
+    return null;
+  }
+}
+
+function readIfExists(absolute) {
+  return existsSync(absolute) ? readFileSync(absolute, 'utf8') : null;
+}
+
+/** Decision: returns `{ exitCode, stderr? }` — exit 2 blocks the tool call. */
+export function decidePreToolUse(
+  event,
+  { rootOf = repoRootOf, readFile = readIfExists, boards = boardsFor } = {},
+) {
   if (!FILE_TOOLS.has(event.tool_name)) return { exitCode: 0 };
   const input = event.tool_input ?? {};
-  const file = repoRelative(input.file_path ?? input.notebook_path, root);
-  if (!file) return { exitCode: 0 };
+  const absolute = absoluteTarget(input.file_path ?? input.notebook_path, event.cwd);
+  if (!absolute) return { exitCode: 0 };
+
+  // Env files are refused wherever they are, inside a repo or not.
+  const name = path.basename(absolute);
+  if (isEnvFile(name)) return { exitCode: 2, stderr: `Blocked: ${protectedReason(name)}\n` };
+
+  const root = rootOf(absolute);
+  if (!root) return { exitCode: 0 };
+  const file = relativeTo(root, absolute);
 
   const reason = protectedReason(file);
   if (reason) return { exitCode: 2, stderr: `Blocked: ${reason}\n` };
 
   if (needsDesignNote(file)) {
-    const after = contentAfter(event.tool_name, input, readFile(file));
-    if (after !== null) {
-      const violation = checkDesignNote({ path: file, text: after }, boards());
+    const known = boards(root);
+    const after = known && contentAfter(event.tool_name, input, readFile(absolute));
+    if (known && after !== null) {
+      const violation = checkDesignNote({ path: file, text: after }, known);
       if (violation) {
         return {
           exitCode: 2,
@@ -69,17 +94,4 @@ export function decidePreToolUse(event, { root = REPO_ROOT, readFile, boards } =
   return { exitCode: 0 };
 }
 
-if (isMain(import.meta.url)) {
-  await runHook('pre-tool-use', (event) => {
-    const root =
-      event.cwd && existsSync(path.join(event.cwd, 'package.json')) ? event.cwd : REPO_ROOT;
-    return decidePreToolUse(event, {
-      root,
-      readFile: (file) => {
-        const absolute = path.join(root, file);
-        return existsSync(absolute) ? readFileSync(absolute, 'utf8') : null;
-      },
-      boards: () => readBoards({ cwd: root }),
-    });
-  });
-}
+if (isMain(import.meta.url)) await runHook('pre-tool-use', (event) => decidePreToolUse(event));

@@ -19,14 +19,16 @@ export function decideStop(event, { unreviewedSrc }) {
 
 /** True when the change since origin/main touches src/ and the review stamp doesn't match it. */
 export function hasUnreviewedSrc({ cwd = REPO_ROOT } = {}) {
-  const { base, reviewId, empty } = currentReviewId({ cwd });
+  // The hook may start in a subfolder; the diff, the stamp and src/ are all at the top level.
+  const root = git(['rev-parse', '--show-toplevel'], { cwd }).trim();
+  const { base, reviewId, empty } = currentReviewId({ cwd: root });
   if (empty) return false;
   const changed = [
-    ...git(['diff', '--name-only', base], { cwd }).split('\n'),
-    ...git(['ls-files', '--others', '--exclude-standard'], { cwd }).split('\n'),
+    ...git(['diff', '--name-only', base], { cwd: root }).split('\n'),
+    ...git(['ls-files', '--others', '--exclude-standard'], { cwd: root }).split('\n'),
   ];
   if (!changed.some((f) => f.startsWith('src/'))) return false;
-  return checkReview({ stamp: readStamp({ cwd }), reviewId }).length > 0;
+  return checkReview({ stamp: readStamp({ cwd: root }), reviewId }).length > 0;
 }
 
 if (isMain(import.meta.url)) {

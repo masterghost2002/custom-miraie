@@ -1,8 +1,7 @@
-// Shared plumbing for the Claude Code hooks: read the JSON event from stdin, map an absolute tool
-// path to a repo-relative one, and never let a crashing hook block the agent (CHILL-001).
+// Shared plumbing for the Claude Code hooks: read the JSON event from stdin, find the repo a
+// target file belongs to, and never let a crashing hook block the agent (CHILL-001).
+import { existsSync } from 'node:fs';
 import path from 'node:path';
-
-import { REPO_ROOT } from '../lib/gate.mjs';
 
 /** Reads all of stdin as text. */
 export async function readStdin(stream = process.stdin) {
@@ -11,13 +10,29 @@ export async function readStdin(stream = process.stdin) {
   return text;
 }
 
-/** `file_path` from the tool input as a repo-relative POSIX path, or null if outside `root`. */
-export function repoRelative(filePath, root = REPO_ROOT) {
-  if (!filePath) return null;
-  const absolute = path.resolve(root, filePath);
-  const relative = path.relative(root, absolute);
-  if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) return null;
-  return relative.split(path.sep).join('/');
+/** The tool's target as an absolute path (relative paths are relative to the event's cwd). */
+export function absoluteTarget(filePath, cwd = process.cwd()) {
+  return filePath ? path.resolve(cwd, filePath) : null;
+}
+
+/**
+ * The checkout a file belongs to: the nearest folder at or above it holding `.git` (a folder in
+ * a repo, a file in a worktree), or null. Judged from the TARGET, never from the agent's cwd, so a
+ * write into a sibling worktree gets that worktree's rules.
+ */
+export function repoRootOf(absolute) {
+  let dir = path.dirname(absolute);
+  for (;;) {
+    if (existsSync(path.join(dir, '.git'))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
+  }
+}
+
+/** `absolute` relative to `root`, as a POSIX path. */
+export function relativeTo(root, absolute) {
+  return path.relative(root, absolute).split(path.sep).join('/');
 }
 
 /**
