@@ -18,7 +18,7 @@
 - [x] Task 6: MQTT session (connect, subscribe, publish, keep-alive, reconnect hook) + Node socket
       Check: AC-7 against aedes
       Files: src/lib/miraie/mqtt/{session,socket.node}.ts, `__tests__/session.test.ts`
-- [ ] Task 7: Live backend: re-login once, signed-out event, 5 s REST fallback
+- [x] Task 7: Live backend: re-login once, signed-out event, 5 s REST fallback
       Check: AC-8, AC-9
       Files: src/lib/miraie/{backend,live-backend}.ts, `__tests__/live-backend.test.ts`
 - [ ] Task 8: react-native-tcp-socket TLS socket, chosen at runtime (never imported on web/Expo Go)
