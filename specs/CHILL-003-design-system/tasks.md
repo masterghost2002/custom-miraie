@@ -9,10 +9,10 @@
 - [x] Task 3: `IconButton`, `PrimaryButton`, `Chip`, `PowerButton`
       Check: AC-10; pressed/disabled states
       Files: src/ui/{icon-button,primary-button,chip,power-button}.tsx
-- [ ] Task 4: `Toggle`, `PowerPill`
+- [x] Task 4: `Toggle`, `PowerPill`
       Check: AC-4, AC-5
       Files: src/ui/{toggle,power-pill}.tsx
-- [ ] Task 5: `SegmentedPill`, `ModeButton`, auto-mode icon
+- [x] Task 5: `SegmentedPill`, `ModeButton`, auto-mode icon
       Check: AC-3, AC-6
       Files: src/ui/{segmented-pill,mode-button}.tsx, src/ui/icons/auto-mode.tsx
 - [ ] Task 6: `AcUnit` (5 sizes) + `AcDisplay`

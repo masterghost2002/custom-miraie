@@ -1,6 +1,7 @@
 // Design: design/boards/Rooms.dc.html — round power button (.pw), accent while running
 import { Power } from 'lucide-react-native';
 import { useEffect } from 'react';
+import { StyleSheet, View } from 'react-native';
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -46,17 +47,23 @@ export function PowerButton({
       onPress={onPress}
       disabled={disabled}
       disabledOpacity={0.4}
+      className={`${size === 44 ? 'size-11' : 'size-12'} items-center justify-center rounded-full`}
     >
       <Animated.View
-        className={`${size === 44 ? 'size-11' : 'size-12'} items-center justify-center rounded-full`}
-        style={[fill, on ? { boxShadow: `0px 6px 16px ${fixed.powerShadow}` } : null]}
-      >
+        style={[
+          StyleSheet.absoluteFill,
+          { borderRadius: size / 2 },
+          fill,
+          on ? { boxShadow: `0px 6px 16px ${fixed.powerShadow}` } : null,
+        ]}
+      />
+      <View className="absolute inset-0 items-center justify-center">
         <Power
           size={size === 44 ? 18 : 20}
           strokeWidth={2.2}
           color={on ? tokens.onAccent : tokens.ink}
         />
-      </Animated.View>
+      </View>
     </PressScale>
   );
 }
