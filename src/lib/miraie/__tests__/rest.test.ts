@@ -87,9 +87,11 @@ describe('fetchHome', () => {
   it('AC-3: given a signed-in session, when getHome runs, then it returns the first home with its ACs, rooms, topics, models and statuses', async () => {
     const server = homeServer();
 
-    const { home, rawStatuses } = await fetchHome('token-1', { fetch: server.fetch });
+    const { homeId, home, rawStatuses } = await fetchHome('token-1', { fetch: server.fetch });
 
-    expect(home.homeId).toBe('home-1');
+    // The home id is the MQTT username: it stays inside the client, never in what screens see.
+    expect(homeId).toBe('home-1');
+    expect(home).not.toHaveProperty('homeId');
     expect(home.devices).toEqual([
       {
         id: 'd-bed',
@@ -127,8 +129,9 @@ describe('fetchHome', () => {
 
   it('given an account with no home, when getHome runs, then it returns an empty home', async () => {
     const server = fakeServer({ [HOMES_URL]: { body: [] } });
-    const { home } = await fetchHome('token-1', { fetch: server.fetch });
-    expect(home).toEqual({ homeId: '', devices: [], statuses: {} });
+    const { homeId, home } = await fetchHome('token-1', { fetch: server.fetch });
+    expect(homeId).toBe('');
+    expect(home).toEqual({ devices: [], statuses: {} });
   });
 
   it('given a device without a topic, when getHome runs, then that device is skipped', async () => {

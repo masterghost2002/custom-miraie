@@ -176,7 +176,6 @@ export function createDemoBackend(seed: DemoSeed = {}): DemoBackend {
       requireAccount();
       if (connection !== 'connected') setConnection('connected');
       return {
-        homeId: 'demo-home',
         devices: devices.map((d) => ({ ...d.device, model: { ...d.device.model } })),
         statuses: Object.fromEntries(devices.map((d) => [d.device.id, { ...d.status }])),
       };

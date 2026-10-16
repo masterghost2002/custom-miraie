@@ -311,7 +311,7 @@ export function createLiveBackend(options: LiveBackendOptions): MiraieBackend {
     const started = epoch;
     const loaded = await withToken((token) => fetchHome(token, { fetch }));
     if (!sameAccount(started)) throw new SignedOutError();
-    homeId = loaded.home.homeId;
+    homeId = loaded.homeId;
     devices = loaded.home.devices;
     raw = { ...loaded.rawStatuses };
     ensureSession();

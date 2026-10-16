@@ -165,7 +165,9 @@ describe('demo backend — accounts', () => {
     await backend.signIn('ravi@example.com', 'demo');
     expect(backend.getLoginId()).toBe('ravi@example.com');
     expect(credentials.peek()).toMatchObject({ loginId: 'ravi@example.com', password: 'demo' });
-    await expect(backend.getHome()).resolves.toMatchObject({ homeId: 'demo-home' });
+    const home = await backend.getHome();
+    expect(home.devices).toHaveLength(3);
+    expect(home).not.toHaveProperty('homeId');
   });
 
   it.each([

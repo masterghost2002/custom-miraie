@@ -255,7 +255,7 @@ describe('React glue', () => {
       return <BackendProvider backend={backend}>{children}</BackendProvider>;
     }
     const { result } = await renderHook(() => useHome(), { wrapper: Providers });
-    await waitFor(() => expect(result.current.data?.homeId).toBe('demo-home'));
+    await waitFor(() => expect(result.current.data?.devices).toHaveLength(3));
   });
 });
 

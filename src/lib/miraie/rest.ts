@@ -16,6 +16,8 @@ export interface RestDeps {
 export type RawStatus = Record<string, unknown>;
 
 export interface LoadedHome {
+  /** MQTT username; kept out of `Home` so it never reaches the screens. */
+  homeId: string;
   home: Home;
   /** The status JSON as MirAIe sent it, so later partial pushes can be merged into it. */
   rawStatuses: Record<string, RawStatus>;
@@ -105,7 +107,7 @@ export async function fetchHome(accessToken: string, deps: RestDeps = {}): Promi
   const fetch = deps.fetch ?? globalThis.fetch;
   const homes = parseOrThrow(homesSchema, await getJson(HOMES_URL, accessToken, fetch), 'homes');
   const first = homes[0];
-  if (!first) return { home: { homeId: '', devices: [], statuses: {} }, rawStatuses: {} };
+  if (!first) return { homeId: '', home: { devices: [], statuses: {} }, rawStatuses: {} };
 
   const candidates = first.spaces.flatMap((space) =>
     space.devices.flatMap((device) => {
@@ -143,8 +145,8 @@ export async function fetchHome(accessToken: string, deps: RestDeps = {}): Promi
 
   const acs = loaded.filter((x) => x !== null);
   return {
+    homeId: first.homeId,
     home: {
-      homeId: first.homeId,
       devices: acs.map((x) => x.device),
       statuses: Object.fromEntries(acs.map((x) => [x.device.id, x.status])),
     },

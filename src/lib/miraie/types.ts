@@ -41,8 +41,8 @@ export interface AcDevice {
   model: AcModel;
 }
 
+/** The home's ACs. Its MirAIe home id (the MQTT username) stays inside the client. */
 export interface Home {
-  homeId: string;
   devices: AcDevice[];
   /** Status of each AC when the home was loaded, by device id. Read live status with `useAcStatus`. */
   statuses: Record<string, AcStatus>;
