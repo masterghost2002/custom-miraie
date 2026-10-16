@@ -24,7 +24,7 @@
 - [x] Task 8: run-push-gates runner (parallel, per-gate timing, summary)
       Check: AC-11 — `pnpm gates` < 30 s on a clean tree
       Files: scripts/run-push-gates.mjs, package.json
-- [ ] Task 9: review stamp writer + check:review
+- [x] Task 9: review stamp writer + check:review
       Check: AC-10 — stamp written, extra commit makes the check fail
       Files: scripts/review-stamp.mjs, scripts/check-review.mjs (+ tests)
 - [ ] Task 10: husky pre-commit, commit-msg, pre-push

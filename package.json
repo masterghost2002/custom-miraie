@@ -79,7 +79,10 @@
     "check:handbook-size": "node scripts/check-handbook-size.mjs",
     "check:agent-rules": "node scripts/check-agent-rules.mjs",
     "check:commit-msg": "node scripts/check-commit-msg.mjs",
-    "gates": "node scripts/run-push-gates.mjs"
+    "gates": "node scripts/run-push-gates.mjs",
+    "check:review": "node scripts/check-review.mjs",
+    "gates:push": "node scripts/run-push-gates.mjs --push",
+    "review:stamp": "node scripts/review-stamp.mjs"
   },
   "private": true,
   "packageManager": "pnpm@10.33.0",
